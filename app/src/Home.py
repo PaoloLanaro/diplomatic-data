@@ -5,7 +5,7 @@ import world_bank_data as wb
 import matplotlib.pyplot as plt
 import numpy as np
 import plotly.express as px
-
+from modules.nav import FullNav
 
 
 add_logo("assets/logo.png", height=400)
@@ -26,6 +26,8 @@ st.write("""
         To be added: 
         - Realtime Inferencing 
         """)  
+
+FullNav()
 
 # st.header('World Bank Data')
 

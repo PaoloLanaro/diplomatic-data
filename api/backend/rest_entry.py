@@ -60,7 +60,7 @@ def create_app():
     app.logger.info('current_app(): registering blueprints with app object.')
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(customers,   url_prefix='/c')
+    app.register_blueprint(customers,   url_prefix='/user')
     app.register_blueprint(products,    url_prefix='/p')
 
     # Don't forget to return the app object
