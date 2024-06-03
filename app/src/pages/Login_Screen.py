@@ -1,27 +1,48 @@
-import pandas as pd
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
-import os
-
 
 st.set_page_config(page_title="World News")
 
-# set the header of the page
-st.header('World News Homepage')
+st.markdown("""
+            <style>
+            .centered {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .button-row {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            .image-row {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 100px;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-username = st.text_input("Enter your username")
-password = st.text_input("Enter your password", type="password")
+st.markdown("<h2 style='text-align: center;'>World News</h2>", unsafe_allow_html=True)
 
-st.button("Login In")
-st.button("New? Sign Up!")
-st.button("Forgot password?")
+username = st.text_input("Username")
+password = st.text_input("Password", type="password")
 
-st.image("app/src/assets/World_homepage.png", caption="Your Journey Awaits...", width=300)
-#st.image([image1, image2], caption=["Image 1", "Image 2"], width=300)
+col1, col2, col3 = st.columns(3)
+with col1:
+    login_button = st.button("Login")
+with col2:
+    st.button("New? Sign Up")
+with col3:
+    st.button("Forgot Username/Password")
 
+if login_button and username and password:
+    st.session_state['username'] = username
+    st.session_state['password'] = password
+    st.success("Login successful!")
+    st.write("[Go to Dashboard](?page=dashboard)")
 
+if login_button and not username:
+    st.error("Please enter your username.")
 
-
+if login_button and not password:
+    st.error("Please enter your password.")
