@@ -1,14 +1,13 @@
-
 drop database if exists todoApp;
 create database if not exists todoApp;
 
 use todoApp;
 
 CREATE TABLE if not exists users (
-    userId Integer AUTO_INCREMENT PRIMARY KEY,
-    firstName varchar(40),
-    lastName varchar(40),
-    email varchar(100) UNIQUE NOT NULL
+    userId INTEGER AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(40),
+    lastName VARCHAR(40),
+    email VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE if not exists tasks (

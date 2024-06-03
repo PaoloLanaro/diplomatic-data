@@ -29,6 +29,13 @@ st.write("""
 
 FullNav()
 
+st.session_state['authenticated'] = False
+
+if st.button("Act as Anton Müller, a Policy Maker",
+             type='primary',
+             use_container_width=True):
+    st.session_state['authenticated'] = True
+
 # st.header('World Bank Data')
 
 # with st.echo(code_location='above'):
