@@ -1,59 +1,40 @@
-import pandas as pd
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
-import world_bank_data as wb
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
-from modules.nav import FullNav
+from modules.nav import SideBarLinks
 
-
-add_logo("assets/logo.png", height=400)
-
-st.title('Welcome to the Brussels 2024 Dialogue Sample App')
-
-st.write("""
-        This is a sample application to 
-        demonstrate what you will be able to do by the 
-        end of the project.  
-
-        This may seem trivial as it is running in a
-        browser, but what you aren't seeing is that 
-        the code for this small app is bundled up in a 
-        Docker container and deployed to the public internet
-        using Fly.io.
-         
-        To be added: 
-        - Realtime Inferencing 
-        """)  
-
-FullNav()
+st.set_page_config(layout = 'wide')
 
 st.session_state['authenticated'] = False
+SideBarLinks(show_home=True)
 
-if st.button("Act as Anton Müller, a Policy Maker",
-             type='primary',
-             use_container_width=True):
+st.title('World News')
+
+st.write('\n\n')
+st.write('### Hello, which user would you like to login as?')
+
+if st.button("Anton Müller, a Foreign Policy Advisor at the EU", 
+            type = 'primary', 
+            use_container_width=True):
     st.session_state['authenticated'] = True
+    st.session_state['role'] = 'foriegn_policy_advisor'
+    st.session_state['first_name'] = 'Anton'
+    st.switch_page('pages/00_Foreign_Policy_Advisor.py')
 
-# st.header('World Bank Data')
+if st.button('Katerina Stepanov, a PR Specialist at Gazprom Oil', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'pr_specialist'
+    st.session_state['first_name'] = 'Katerina'
+    st.switch_page('pages/01_Pr_Specialist.py')
 
-# with st.echo(code_location='above'):
-#     countries:pd.DataFrame = wb.get_countries()
-   
-#     st.dataframe(countries)
-
-# with st.echo(code_location='above'):
-#     arr = np.random.normal(1, 1, size=100)
-#     test_plot, ax = plt.subplots()
-#     ax.hist(arr, bins=20)
-
-#     st.pyplot(test_plot)
-
-
-# with st.echo(code_location='above'):
-#     slim_countries = countries[countries['incomeLevel'] != 'Aggregates']
-#     data_crosstab = pd.crosstab(slim_countries['region'], 
-#                                 slim_countries['incomeLevel'],  
-#                                 margins = False) 
-#     st.table(data_crosstab)
+if st.button('Monika José, an unemployed traveler', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'Unemployed Traveler'
+    st.session_state['first_name'] = 'Monika'
+    st.switch_page('pages/02_Traveler.py')
