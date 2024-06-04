@@ -62,7 +62,4 @@ def create_app():
     # and give a url prefix to each
     app.register_blueprint(users,   url_prefix='/user')
     app.register_blueprint(products,    url_prefix='/p')
-
-    # Don't forget to return the app object
-    return app
-
+# Don't forget to return the app object return app
