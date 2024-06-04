@@ -13,3 +13,11 @@ st.title(f"Welcome PR Specialist, {st.session_state['first_name']}.")
 st.write('')
 st.write('')
 st.write('### What would you like to do today?')
+
+if st.button('View an Article!', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['first_name'] = 'Katerina'
+    st.session_state['last_name'] = 'Stepanov'
+    st.switch_page('pages/09_Article_View.py')

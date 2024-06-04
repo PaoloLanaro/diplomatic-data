@@ -1,6 +1,5 @@
 import logging
 logger = logging.getLogger()
-import requests
 import pandas as pd
 
 import streamlit as st
@@ -22,19 +21,19 @@ st.divider()
 
 st.date_input("Preferred Timeline")
 
-df = pd.read_csv('app/src/pages/Countries_Data.csv')
+df = pd.DataFrame(pd.read_csv('./pages/Countries_Data.csv'))
 
-country_names = [country['name'] for country in df]
+df['common_name'] = df['name'].apply(lambda x: eval(x).get('common') if pd.notna(x) else '')
 
-country_names.sort()
-st.selectbox("News Subject Country", country_names)
-st.selectbox("News Source Country", country_names)
+sorted_country_names = df['common_name'].sort_values()
 
-st.date_input("Preferred Timeline")
+st.selectbox("News Subject Country", sorted_country_names)
+st.selectbox("News Source Country", sorted_country_names)
 
-
-
-
+st.write('')
+st.button('Restore Defaults')
 
 
+
+    
 
