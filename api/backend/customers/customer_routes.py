@@ -12,7 +12,6 @@ customers = Blueprint('users', __name__)
 @customers.route('/users', methods=['GET'])
 def get_customers():
     current_app.logger.info('customer_routes.py: GET /customers')
-    print("hello")
     cursor = db.get_db().cursor()
     cursor.execute('select id, company, last_name,\
         first_name, job_title, business_phone from customers')

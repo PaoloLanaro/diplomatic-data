@@ -6,12 +6,14 @@ USE Diplomatic_Data;
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
 (
-  id INT PRIMARY KEY,
-  created_at DATETIME,
-  home_country_id INT, 
-  gender VARCHAR(255),
+  user_id INT PRIMARY KEY,
+  created_at DATETIME, 
+  gender VARCHAR(1),
   email VARCHAR(255),
-  travelling_country_id INT
+  birthdate DATETIME,
+  first_name VARCHAR(40),
+  username VARCHAR(15),
+  country VARCHAR(20)
 );
 
 DROP TABLE IF EXISTS user_interests;
@@ -32,18 +34,26 @@ DROP TABLE IF EXISTS country;
 CREATE TABLE IF NOT EXISTS country
 (
   id INT PRIMARY KEY,
-  country_name VARCHAR(255),
+  country_name VARCHAR(20),
   region VARCHAR(255)
 );
+
+DROP TABLE IF EXISTS country_tag;
+CREATE TABLE IF NOT EXISTS country_tag
+(
+  country_tag VARCHAR(2),
+  country_name VARCHAR(20)
+)
 
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article
 (
-  id INT PRIMARY KEY,
+  article_id INT PRIMARY KEY,
   content VARCHAR(15000),
   country_id INT,
   title VARCHAR(255),
   publication_date DATETIME,
+  article_link VARCHAR(100),
   FOREIGN KEY (country_id) REFERENCES country (id)
 );
 
@@ -120,3 +130,4 @@ CREATE TABLE IF NOT EXISTS shares
     ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS country_
