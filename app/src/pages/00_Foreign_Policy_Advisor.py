@@ -15,6 +15,14 @@ st.write('')
 st.write('')
 st.write('### What would you like to do today?')
 
+if st.button('View Your Profile', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['first_name'] = 'Anton'
+    st.session_state['last_name'] = 'Müller'
+    st.switch_page('pages/08_Profile_View.py')
+
 
 
 

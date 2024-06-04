@@ -20,4 +20,6 @@ if st.button('View an Article!',
     st.session_state['authenticated'] = True
     st.session_state['first_name'] = 'Katerina'
     st.session_state['last_name'] = 'Stepanov'
+    st.session_state['sentiment_score'] = '.86'
+    st.session_state['source_name'] = 'CNN'
     st.switch_page('pages/09_Article_View.py')
