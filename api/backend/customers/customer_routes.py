@@ -6,7 +6,7 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.db_connection import db
 
-customers = Blueprint('users', __name__)
+customers = Blueprint('customers', __name__)
 
 # Get all customers from the DB
 @customers.route('/users', methods=['GET'])
@@ -43,7 +43,7 @@ def update_customer():
     return 'customer updated!'
 
 # Get customer detail for customer with particular userID
-@customers.route('/users/<userID>', methods=['GET'])
+@customers.route('/customers/<userID>', methods=['GET'])
 def get_customer(userID):
     current_app.logger.info('GET /customers/<userID> route')
     cursor = db.get_db().cursor()

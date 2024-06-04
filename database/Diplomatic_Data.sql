@@ -33,17 +33,11 @@ CREATE TABLE IF NOT EXISTS user_interests
 DROP TABLE IF EXISTS country;
 CREATE TABLE IF NOT EXISTS country
 (
-  id INT PRIMARY KEY,
+  country_id INT PRIMARY KEY,
   country_name VARCHAR(20),
+  country_tag VARCHAR(2),
   region VARCHAR(255)
 );
-
-DROP TABLE IF EXISTS country_tag;
-CREATE TABLE IF NOT EXISTS country_tag
-(
-  country_tag VARCHAR(2),
-  country_name VARCHAR(20)
-)
 
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article

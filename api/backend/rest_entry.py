@@ -5,7 +5,6 @@ from flask import Flask
 
 from backend.db_connection import db
 
-from backend.users.users_routes import users
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 import os
@@ -60,6 +59,7 @@ def create_app():
     app.logger.info('current_app(): registering blueprints with app object.')
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(users,   url_prefix='/user')
+    app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
 # Don't forget to return the app object return app
+    return app

@@ -22,8 +22,8 @@ def json_to_sql(json_file, table_name, output_file):
         file.write(sql + '\n')
 
 # Example usage
-json_file = 'users.json'
-table_name = 'users'
-output_file = 'insert_user.sql'
+json_file = 'Mockaroo_manager.json'
+table_name = 'manager'
+output_file = 'dylan_manager.sql'
 json_to_sql(json_file, table_name, output_file)
 
