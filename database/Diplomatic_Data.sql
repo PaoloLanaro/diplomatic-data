@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS country;
 CREATE TABLE IF NOT EXISTS country
 (
   country_id INT PRIMARY KEY,
-  country_name VARCHAR(20),
+  country_name VARCHAR(50),
   country_tag VARCHAR(2),
   region VARCHAR(255)
 );
@@ -42,12 +42,12 @@ CREATE TABLE IF NOT EXISTS country
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article
 (
-  article_id INT PRIMARY KEY,
+  article_id INT AUTO_INCREMENT,
   content VARCHAR(15000),
   country_id INT,
-  title VARCHAR(255),
   publication_date DATETIME,
   article_link VARCHAR(100),
+  PRIMARY KEY (article_id)
   FOREIGN KEY (country_id) REFERENCES country (id)
 );
 

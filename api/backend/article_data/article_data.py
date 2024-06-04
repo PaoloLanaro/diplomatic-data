@@ -5,13 +5,13 @@ from backend.db_connection import db
 article_data = Blueprint('article_data', __name__)
 
 @article_data.route('/article_data', methods=['POST'])
-def update_articles():
-    current_app.logger.info('PUT /article_data route')
+def add_new_article():
+    current_app.logger.info('POST /article_data route')
     article_info = request.json
-    
+    current_app.logger.info(article_info)
+
     cursor = db.get_db().cursor()
     
-    article_id = article_info['id']
     date = article_info['date']
     sent_score = article_info['sent_score']
     text = article_info['text']
@@ -25,18 +25,18 @@ def update_articles():
     '''
 
     cursor.execute(country_code)
-
-    article_country_ID = cursor.fetchall()
-
+    article_country_ID = cursor.fetchone()
+    cursor.clear_attributes()
 
     query = '''
-    UPDATE article SET  article_id = %s, content = %s, country_id = %s, publication_date = %s, article_link = %s
+    INSERT INTO article (content, country_id, publication_date, article_link) VALUES (%s, %s, %s, %s)
     '''
+    data = (text, article_country_ID, date, url)
+    current_app.logger.info((query, data))
 
-    data = (article_id, text, article_country_ID, date, url)
     cursor.execute(query, data)
     db.get_db().commit()
-    return 'article updated'
+    return 'article added'
 
 
 
