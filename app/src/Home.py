@@ -8,52 +8,12 @@ import plotly.express as px
 from modules.nav import FullNav
 
 
-add_logo("assets/logo.png", height=400)
+import streamlit as st
 
-st.title('Welcome to the Brussels 2024 Dialogue Sample App')
+params = st.experimental_get_query_params()
+page = params.get("page", ["login"])[0]
 
-st.write("""
-        This is a sample application to 
-        demonstrate what you will be able to do by the 
-        end of the project.  
-
-        This may seem trivial as it is running in a
-        browser, but what you aren't seeing is that 
-        the code for this small app is bundled up in a 
-        Docker container and deployed to the public internet
-        using Fly.io.
-         
-        To be added: 
-        - Realtime Inferencing 
-        """)  
-
-FullNav()
-
-st.session_state['authenticated'] = False
-
-if st.button("Act as Anton Müller, a Policy Maker",
-             type='primary',
-             use_container_width=True):
-    st.session_state['authenticated'] = True
-
-# st.header('World Bank Data')
-
-# with st.echo(code_location='above'):
-#     countries:pd.DataFrame = wb.get_countries()
-   
-#     st.dataframe(countries)
-
-# with st.echo(code_location='above'):
-#     arr = np.random.normal(1, 1, size=100)
-#     test_plot, ax = plt.subplots()
-#     ax.hist(arr, bins=20)
-
-#     st.pyplot(test_plot)
-
-
-# with st.echo(code_location='above'):
-#     slim_countries = countries[countries['incomeLevel'] != 'Aggregates']
-#     data_crosstab = pd.crosstab(slim_countries['region'], 
-#                                 slim_countries['incomeLevel'],  
-#                                 margins = False) 
-#     st.table(data_crosstab)
+if page == "login":
+    import Login_Screen
+elif page == "dashboard":
+    import Dashboard
