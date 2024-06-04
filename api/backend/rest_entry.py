@@ -4,6 +4,7 @@ logging.basicConfig(level=logging.DEBUG)
 from flask import Flask
 
 from backend.db_connection import db
+
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 import os
@@ -14,8 +15,6 @@ def create_app():
 
     # Load environment variables
     load_dotenv()
-    testvar = os.getenv('TEST_VAR')
-    app.logger.info(f'testvar is {testvar}')
 
     # secret key that will be used for securely signing the session 
     # cookie and can be used for any other security related needs by 
@@ -40,10 +39,10 @@ def create_app():
     # Example: localhost:8001
     @app.route("/")
     def welcome():
-        return "<h1>Welcome to the Summer 2024 Belgium DoC Boilerplate App</h1>"
+        return "<h1>Welcome to the Algorithm Avenger's wonderful app!</h1>"
     
     # Example route for testing streamlit
-    @app.route("/data")
+    @app.route("/test")
     def getData():
         data = {              
                 "user1": {
@@ -60,9 +59,7 @@ def create_app():
     app.logger.info('current_app(): registering blueprints with app object.')
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(customers,   url_prefix='/user')
+    app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
-
-    # Don't forget to return the app object
+# Don't forget to return the app object return app
     return app
-
