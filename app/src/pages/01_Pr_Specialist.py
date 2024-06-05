@@ -14,6 +14,14 @@ st.write('')
 st.write('')
 st.write('### What would you like to do today?')
 
+if st.button('View a Country Sentiment Score!',
+             type = 'primary',
+             use_container_width=True):
+             st.session_state['authenticated']=True
+             st.session_state['first_name'] = 'Katerina',
+             st.session_state['last_name'] = 'Stepanov',
+             st.switch_page('pages/011_Predication.py')
+
 if st.button('View an Article!', 
             type = 'primary', 
             use_container_width=True):
