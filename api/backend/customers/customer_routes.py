@@ -4,9 +4,23 @@
 ########################################################
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
+from backend.ml_models.Linear_Perceptron import predict
 from backend.db_connection import db
 
 customers = Blueprint('customers', __name__)
+
+# to get a country value for the user asking for ML regression data
+@customers.route('/Prediction/<country01>', methods=['GET'])
+def predict_country_sentiment(country01):
+    current_app.logger.info(f'country01 = {country01}')
+    CountryVal = predict(country01)
+
+    countryVal_response = make_response(jsonify(CountryVal))
+    countryVal_response.status_code = 200
+    countryVal_response.mimetype = 'application/json'
+    return countryVal_response
+
+
 
 # Get all customers from the DB
 @customers.route('/users', methods=['GET'])
