@@ -10,6 +10,7 @@ from backend.db_connection import db
 customers = Blueprint('customers', __name__)
 
 # to get a country value for the user asking for ML regression data
+# THIS ROUTE CALLS THE ML MODEL 
 @customers.route('/Prediction/<country01>', methods=['GET'])
 def predict_country_sentiment(country01):
     current_app.logger.info(f'country01 = {country01}')
@@ -19,8 +20,6 @@ def predict_country_sentiment(country01):
     countryVal_response.status_code = 200
     countryVal_response.mimetype = 'application/json'
     return countryVal_response
-
-
 
 # Get all customers from the DB
 @customers.route('/users', methods=['GET'])
