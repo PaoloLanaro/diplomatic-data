@@ -189,7 +189,15 @@ CREATE TABLE IF NOT EXISTS recently_viewed
 );
 
 
--- 
+-- GET
+DROP TABLE IF EXISTS trending_articles;
+CREATE TABLE IF NOT EXISTS trending_articles
+(
+  article_id INT PRIMARY KEY,
+  relevance INT
+);
+
+
 
 
 
