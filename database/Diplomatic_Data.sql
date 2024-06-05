@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS shares
     ON DELETE RESTRICT
 );
 
+-- GET
 DROP TABLE IF EXISTS weight_vector;
 CREATE TABLE IF NOT EXISTS weight_vector
 (
@@ -132,4 +133,61 @@ CREATE TABLE IF NOT EXISTS weight_vector
 );
 
 INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
+
+-- POST/DELETE
+DROP TABLE IF EXISTS likes;
+CREATE TABLE IF NOT EXISTS lakes
+(
+  article_id INT PRIMARY KEY,
+  user_id INT,
+  date_liked datetime
+);
+
+-- POST/DELETE
+DROP TABLE IF EXISTS saves;
+CREATE TABLE IF NOT EXISTS saves
+(
+  article_id INT PRIMARY KEY,
+  user_id INT,
+  date_saved datetime
+);
+
+-- POST/DELETE
+DROP TABLE IF EXISTS shares;
+CREATE TABLE IF NOT EXISTS shares
+(
+  article_id INT PRIMARY KEY,
+  user_id INT,
+  date_shared datetime
+);
+
+
+-- PUT 
+DROP TABLE IF EXISTS filters;
+CREATE TABLE IF NOT EXISTS filters
+(
+  filter_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  start_date date,
+  end_date date,
+  country_about VARCHAR(50),
+  country_from VARCHAR(50)
+);
+
+
+-- GET
+DROP TABLE IF EXISTS recently_viewed;
+CREATE TABLE IF NOT EXISTS recently_viewed
+(
+  view_id INT PRIMARY KEY,
+  user_id INT,
+  article_id INT,
+  date_viewed datetime
+);
+
+
+-- 
+
+
+
 
