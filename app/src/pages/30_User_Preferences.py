@@ -11,7 +11,7 @@ SideBarLinks()
 
 st.title('Profile Information')
 st.divider()
-import streamlit as st
+
 st.markdown(f"<p style='font-size:24px;'>First Name: {st.session_state['first_name']}</p>", unsafe_allow_html=True)
 st.markdown(f"<p style='font-size:24px;'>Last Name: {st.session_state['last_name']}</p>", unsafe_allow_html=True)
 st.markdown(f"<p style='font-size:24px;'>Job Description: {st.session_state['role']}</p>", unsafe_allow_html=True)
