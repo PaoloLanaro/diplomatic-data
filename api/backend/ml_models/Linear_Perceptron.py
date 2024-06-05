@@ -39,14 +39,15 @@ def predict(country):
     """
     safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
     logger.info(f'safety_score = {safety_score}')
-    X = np.array([1, safety_score])
+    X = np.concatenate((1, safety_score), axis=None)
+    logger.info(f'current X= {X}')
 
     # get a database cursor 
     cursor = db.get_db().cursor()
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
     query = 'SELECT beta_vals FROM model1_params ORDER BY sequence_number DESC LIMIT 1'
-    cursor.execute(query)
+    cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
 
     w = return_val['w'] # params = dict
