@@ -47,7 +47,7 @@ def predict(country):
     cursor = db.get_db().cursor()
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT column FROM countries DESC LIMIT 1'
+    query = 'SELECT source_country FROM countries DESC LIMIT 1'
     cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
 
