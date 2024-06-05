@@ -7,6 +7,7 @@ from backend.db_connection import db
 import logging
 
 df = pd.read_csv('diplomatic-data\app\src\assets\Data News Sources.csv')
+df_ss = pd.read_csv('diplomatic-data\app\src\assets\safetycodes.csv')
 
 def train():
     """
@@ -31,8 +32,7 @@ def predict(country):
     Returns:
         sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
     """
-
-    safety_score = df.loc[df['queried_country'] == country][0]
+    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
 
     X = np.array([1, safety_score])
 

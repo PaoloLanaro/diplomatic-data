@@ -21,11 +21,9 @@ st.divider()
 
 st.date_input("Preferred Timeline")
 
-df = pd.DataFrame(pd.read_csv('./pages/Countries_Data.csv'))
+df = pd.DataFrame(pd.read_csv('./assets/safetycodes.csv'))
 
-df['common_name'] = df['name'].apply(lambda x: eval(x).get('common') if pd.notna(x) else '')
-
-sorted_country_names = df['common_name'].sort_values()
+sorted_country_names = df['Country'].sort_values()
 
 st.selectbox("News Subject Country", sorted_country_names)
 st.selectbox("News Source Country", sorted_country_names)
