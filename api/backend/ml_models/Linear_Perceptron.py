@@ -22,38 +22,6 @@ def train():
 
     return 'Training the model.'
 
-def predict(country):
-    """
-    Description: Using the provided country, predict the sentiment score via various news sources.
-
-    Args: 
-        country (str): user's intended country of interest
-
-    Returns:
-        sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
-    """
-    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
-
-    X = np.array([1, safety_score])
-
-    # get a database cursor 
-    cursor = db.get_db().cursor()
-
-    # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT beta_vals FROM model1_params ORDER BY sequence_number DESC LIMIT 1'
-    cursor.execute(query)
-    return_val = cursor.fetchone() # gets one value
-
-    w = return_val['w'] # params = dict
-    logging.info(f'params = {w}') # gets beta vals
-
-    # turn the values from the database into a numpy array
-    # expect to do some string parsing, typically what we're going to be getting back
-    params_array = np.array(list(map(float, w[1:-1].split(',')))) # turns string vars to float
-    logging.info(f'params array = {params_array}') # 
-    
-    return np.dot(X, w)
-
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """
     Description:
@@ -136,3 +104,36 @@ yp = label_y_values(df['sentiment'].to_numpy())
 w_test = np.array([0, 1])
 
 w = linear_perceptron(Xp, yp, w_test, alpha=1, max_iter=1000)
+
+def predict(country, w=np.array([ 0., -0.15115086])):
+    """
+    Description: Using the provided country, predict the sentiment score via various news sources.
+
+    Args: 
+        country (str): user's intended country of interest
+        w (1D array): weights of the intended sentiment score analysis
+
+    Returns:
+        sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
+    """
+    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
+
+    X = np.array([1, safety_score])
+
+    # # get a database cursor 
+    # cursor = db.get_db().cursor()
+
+    # # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
+    # query = 'SELECT beta_vals FROM model1_params ORDER BY sequence_number DESC LIMIT 1'
+    # cursor.execute(query)
+    # return_val = cursor.fetchone() # gets one value
+
+    # w = return_val['w'] # params = dict
+    # logging.info(f'params = {w}') # gets beta vals
+
+    # # turn the values from the database into a numpy array
+    # # expect to do some string parsing, typically what we're going to be getting back
+    # params_array = np.array(list(map(float, w[1:-1].split(',')))) # turns string vars to float
+    # logging.info(f'params array = {params_array}') # 
+    
+    return np.dot(X, w)
