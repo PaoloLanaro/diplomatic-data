@@ -12,6 +12,6 @@ if st.button("Get Prediction"):
     response = requests.get(f'http://localhost:4000/c/Prediction/{selected_country}')
     if response.status_code == 200:
         prediction = response.json()
-        st.write(f"Prediction for {country}: {prediction['result']}")
+        st.write(f"Prediction for {selected_country}: {prediction['result']}")
     else:
         st.write("Ran into an error retrieving a prediction score -- try again")

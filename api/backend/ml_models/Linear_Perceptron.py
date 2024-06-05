@@ -5,9 +5,14 @@ from pandas import Timestamp
 from collections import Counter
 from backend.db_connection import db
 import logging
+logger = logging.getLogger()
+import os
 
-df = pd.read_csv('diplomatic-data\app\src\assets\Data News Sources.csv')
-df_ss = pd.read_csv('diplomatic-data\app\src\assets\safetycodes.csv')
+logger.info(f'cwd = {os.getcwd()}')
+# df = pd.read_csv('../assets/Data News Sources.csv')
+# df_ss = pd.read_csv('../assets/safetycodes.csv')
+df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
+df_ss = pd.read_csv('/apicode/backend/assets/safetycodes.csv')
 
 def train():
     """
@@ -33,7 +38,7 @@ def predict(country):
         sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
     """
     safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
-
+    logger.info(f'safety_score = {safety_score}')
     X = np.array([1, safety_score])
 
     # get a database cursor 
