@@ -5,9 +5,14 @@ from pandas import Timestamp
 from collections import Counter
 from backend.db_connection import db
 import logging
+logger = logging.getLogger()
+import os
 
-df = pd.read_csv('diplomatic-data\app\src\assets\Data News Sources.csv')
-df_ss = pd.read_csv('diplomatic-data\app\src\assets\safetycodes.csv')
+logger.info(f'cwd = {os.getcwd()}')
+# df = pd.read_csv('../assets/Data News Sources.csv')
+# df_ss = pd.read_csv('../assets/safetycodes.csv')
+df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
+df_ss = pd.read_csv('/apicode/backend/assets/safetycodes.csv')
 
 def train():
     """
@@ -21,6 +26,39 @@ def train():
     """
 
     return 'Training the model.'
+
+def predict(country):
+    """
+    Description: Using the provided country, predict the sentiment score via various news sources.
+
+    Args: 
+        country (str): user's intended country of interest
+
+    Returns:
+        sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
+    """
+    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
+    logger.info(f'safety_score = {safety_score}')
+    X = np.concatenate((1, safety_score), axis=None)
+    logger.info(f'current X= {X}')
+
+    # get a database cursor 
+    cursor = db.get_db().cursor()
+
+    # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
+    query = 'SELECT beta_vals FROM model1_params ORDER BY sequence_number DESC LIMIT 1'
+    cursor.execute(query) #breaking here 
+    return_val = cursor.fetchone() # gets one value
+
+    w = return_val['w'] # params = dict
+    logging.info(f'params = {w}') # gets beta vals
+
+    # turn the values from the database into a numpy array
+    # expect to do some string parsing, typically what we're going to be getting back
+    params_array = np.array(list(map(float, w[1:-1].split(',')))) # turns string vars to float
+    logging.info(f'params array = {params_array}') # 
+    
+    return np.dot(X, w)
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """
