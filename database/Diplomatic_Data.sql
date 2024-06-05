@@ -138,7 +138,8 @@ INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
 DROP TABLE IF EXISTS likes;
 CREATE TABLE IF NOT EXISTS lakes
 (
-  article_id INT PRIMARY KEY,
+  likes_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
   user_id INT,
   date_liked datetime
 );
@@ -147,7 +148,8 @@ CREATE TABLE IF NOT EXISTS lakes
 DROP TABLE IF EXISTS saves;
 CREATE TABLE IF NOT EXISTS saves
 (
-  article_id INT PRIMARY KEY,
+  saves_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
   user_id INT,
   date_saved datetime
 );
@@ -156,7 +158,8 @@ CREATE TABLE IF NOT EXISTS saves
 DROP TABLE IF EXISTS shares;
 CREATE TABLE IF NOT EXISTS shares
 (
-  article_id INT PRIMARY KEY,
+  shares_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
   user_id INT,
   date_shared datetime
 );
