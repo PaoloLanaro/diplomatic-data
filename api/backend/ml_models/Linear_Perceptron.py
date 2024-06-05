@@ -47,11 +47,11 @@ def predict(country):
     cursor = db.get_db().cursor()
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT source_country FROM countries DESC LIMIT 1'
+    query = 'SELECT sequence_number FROM weight_vector DESC LIMIT 1'
     cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
 
-    w = return_val['w'] # params = dict
+    w = return_val['beta_vals'] # params = dict
     logging.info(f'params = {w}') # gets beta vals
 
     # turn the values from the database into a numpy array

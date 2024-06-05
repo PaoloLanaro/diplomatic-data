@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS country
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article
 (
-  article_id INT AUTO_INCREMENT,
+  article_id INT PRIMARY KEY AUTO INCREMENT,
   content VARCHAR(15000),
   country_id INT,
   publication_date DATETIME,
@@ -124,4 +124,12 @@ CREATE TABLE IF NOT EXISTS shares
     ON DELETE RESTRICT
 );
 
-DROP TABLE IF EXISTS country_
+DROP TABLE IF EXISTS weight_vector;
+CREATE TABLE IF NOT EXISTS weight_vector
+(
+    sequence_number INTEGER AUTO_INCREMENT PRIMARY KEY,
+    beta_vals varchar(100)
+);
+
+INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
+
