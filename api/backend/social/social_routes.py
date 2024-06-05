@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.ml_models.Linear_Perceptron import predict
 from backend.db_connection import db
 
 social = Blueprint("social", __name__)

@@ -1,14 +1,13 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.ml_models.Linear_Perceptron import predict
 from backend.db_connection import db
 
-user_activity = Blueprint('user_activity', __name__)
+activity = Blueprint('activity', __name__)
 
 # route to put data into filters table
-@user_activity.route('/filters', methods=['PUT'])
+@activity.route('/filters', methods=['PUT'])
 def put_filters():
-    current_app.logger.info('user_activity.py: PUT /filters')
+    current_app.logger.info('activity.py: PUT /filters')
     filter_info = request.json
     filter_id = filter_info['filter_id']
     user_id = filter_info['user_id']
@@ -20,14 +19,14 @@ def put_filters():
     query = 'UPDATE filters SET start_date = %s, end_date = %s, country_about = %s, country_from = %s'
     data = (filter_id, user_id, start_date, end_date, country_about, country_from)
     cursor = db.get_db().cursor
-    r = cursor.execute(query, data)
+    cursor.execute(query, data)
     db.get_db.commit()
     return 'filters_table updated'
 
 # route to get data from recently viewed table
-@user_activity.route('/filters', methods=['GET'])
+@activity.route('/filters', methods=['GET'])
 def get_recently_viewed():
-    current_app.logger.info('user_activity.py: GET /filters')
+    current_app.logger.info('activity.py: GET /filters')
     cursor = db.get_db().cursor()
     cursor.execute('view_id, user_id, article_id, date_viewed')
     row_headers = [x[0] for x in cursor.description]
@@ -42,9 +41,9 @@ def get_recently_viewed():
     
 
 # route to get data from trending_articles table
-@user_activity.route('/filters', methods=['GET'])
+@activity.route('/filters', methods=['GET'])
 def get_trending_articles():
-    current_app.logger.info('user_activity.py: GET /filters')
+    current_app.logger.info('activity.py: GET /filters')
     cursor = db.get_db().cursor()
     cursor.execute('article_id, relevance')
     row_headers = [x[0] for x in cursor.description]

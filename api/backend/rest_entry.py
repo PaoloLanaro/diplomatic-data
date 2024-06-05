@@ -9,7 +9,7 @@ from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.social.social_routes import social
-from backend.activity.user_activity import user_activity
+from backend.activity.activity_routes import activity
 import os
 from dotenv import load_dotenv
 
@@ -32,9 +32,7 @@ def create_app():
     app.config["MYSQL_DATABASE_PASSWORD"] = os.getenv("MYSQL_ROOT_PASSWORD")
     app.config["MYSQL_DATABASE_HOST"] = os.getenv("DB_HOST")
     app.config["MYSQL_DATABASE_PORT"] = int(os.getenv("DB_PORT"))
-    app.config["MYSQL_DATABASE_DB"] = os.getenv(
-        "DB_NAME"
-    )  # Change this to your DB name
+    app.config["MYSQL_DATABASE_DB"] = os.getenv("DB_NAME")  # Change this to your DB name
 
     # Initialize the database object with the settings above.
     db.init_app(app)
@@ -65,10 +63,10 @@ def create_app():
     app.logger.info("current_app(): registering blueprints with app object.")
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(customers, url_prefix="/c")
-    app.register_blueprint(products, url_prefix="/p")
-    app.register_blueprint(social, url_prefix="/s")
-    app.register_blueprint(user_activity, url_prefix="/a")
+    app.register_blueprint(customers, url_prefix="/customers")
+    app.register_blueprint(products, url_prefix="/products")
+    app.register_blueprint(social, url_prefix="/social")
+    app.register_blueprint(activity, url_prefix="/activity")
     # Don't forget to return the app object return app
     return app
 
