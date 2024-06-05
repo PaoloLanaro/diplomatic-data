@@ -40,13 +40,14 @@ def predict(country):
     safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
     logger.info(f'safety_score = {safety_score}')
     X = np.concatenate((1, safety_score), axis=None)
+    
     logger.info(f'current X= {X}')
 
     # get a database cursor 
     cursor = db.get_db().cursor()
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT beta_vals FROM model1_params ORDER BY sequence_number DESC LIMIT 1'
+    query = 'SELECT column FROM countries DESC LIMIT 1'
     cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
 
@@ -142,3 +143,5 @@ yp = label_y_values(df['sentiment'].to_numpy())
 w_test = np.array([0, 1])
 
 w = linear_perceptron(Xp, yp, w_test, alpha=1, max_iter=1000)
+
+pd.DataFrame(w).to_csv('Weight Vector.csv')
