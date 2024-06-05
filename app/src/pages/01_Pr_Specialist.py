@@ -20,7 +20,7 @@ if st.button('View a Country Sentiment Score!',
              st.session_state['authenticated']=True
              st.session_state['first_name'] = 'Katerina',
              st.session_state['last_name'] = 'Stepanov',
-             st.switch_page('pages/011_Predication.py')
+             st.switch_page('pages/11_Prediction.py')
 
 if st.button('View an Article!', 
             type = 'primary', 
