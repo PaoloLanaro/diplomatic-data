@@ -11,27 +11,30 @@ def AboutPageNav():
 
 #### ------------------------ foreign_policy_advisor page nav ------------------------
 def ForeignPolicyAdvHomeNav():
-    st.sidebar.page_link("pages/00_Foreign_Policy_Advisor.py", label="Foreign Policy Advisor Home", icon='👤')
+    st.sidebar.page_link("pages/00_Foreign_Policy_Advisor.py", label="Foreign Policy Advisor Home", icon='👮‍♂️')
 
 def ForeignPolicyProfileNav():
-    st.sidebar.page_link("pages/08_Profile_View.py", label="Profile")
-
-def testNav():
-    st.sidebar.page_link("pages/99_API_Test.py", label="Test")
+    st.sidebar.page_link("pages/01_Profile_View.py", label="Profile")
 
 ## ------------------------ pr_specialist page nav ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon='🛜')
+def PRHomeNav():
+    st.sidebar.page_link("pages/10_PR_Specialist_Home.py", label="Home", icon='🏠')
 
 def PredictionNav():
-    st.sidebar.page_link("pages/11_Prediction.py", label="Regression Prediction", icon='📈')
+    st.sidebar.page_link("pages/11_Prediction.py", label="Countries Predicted Sentiment Score")
 
-def ClassificationNav():
-    st.sidebar.page_link("pages/13_Classification.py", label="Classification Demo", icon='🌺')
+def ArticleViewNav():
+    st.sidebar.page_link("pages/12_Article_View.py", label="View an article")
+
+def ApiTestNav():
+    st.sidebar.page_link("pages/99_API_Test.py", label="Test the API", icon='🛜')
 
 #### ------------------------ travellers page nav ---------------------------
-def PRSpecialistHomeNav():
-    st.sidebar.page_link("pages/30_User_Preferences.py", label="User Preferences Home", icon='🏠')
+def TravelerHomeNav():
+    st.sidebar.page_link("pages/20_Traveler_Home.py", label="Home", icon='🏠')
+
+def UserPreferencesNav():
+    st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences", icon='🎭')
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -59,21 +62,19 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'foreign_policy_advisor':
             ForeignPolicyAdvHomeNav()
             ForeignPolicyProfileNav()
-            testNav()
             # WorldBankVizNav()
             # MapDemoNav()
 
         # If the user role is usaid worker, show the Api Testing page
         if st.session_state['role'] == 'pr_specialist':
-            PRSpecialistHomeNav()
+            PRHomeNav()
             PredictionNav()
-            # ApiTestNav() 
-            # ClassificationNav()
+            ArticleViewNav()
         
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state['role'] == 'traveler':
-            PRSpecialistHomeNav()
-            # AdminPageNav()
+            TravelerHomeNav()
+            UserPreferencesNav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()

@@ -22,10 +22,10 @@ CREATE TABLE IF NOT EXISTS user_interests
   interests_id INT PRIMARY KEY,
   user_id INT,
   country_id INT,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
-  FOREIGN KEY (country_id) REFERENCES country (country_id)
+  FOREIGN KEY (country_id) REFERENCES country (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -42,12 +42,13 @@ CREATE TABLE IF NOT EXISTS country
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article
 (
-  article_id INT AUTO_INCREMENT PRIMARY KEY,
+  article_id INT PRIMARY KEY AUTO INCREMENT,
   content VARCHAR(15000),
   country_id INT,
   publication_date DATETIME,
   article_link VARCHAR(100),
-  FOREIGN KEY (country_id) REFERENCES country (country_id)
+  PRIMARY KEY (article_id)
+  FOREIGN KEY (country_id) REFERENCES country (id)
 );
 
 DROP TABLE IF EXISTS filter;
@@ -55,11 +56,10 @@ CREATE TABLE IF NOT EXISTS filter
 (
   id INT PRIMARY KEY,
   user_id INT,
-  region VARCHAR(255),   -- You may need to reconsider the data type for multivalue attributes
-  subjects VARCHAR(255), -- You may need to reconsider the data type for multivalue attributes
-  start_date DATETIME,
-  end_date DATETIME,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  region VARCHAR(255),   # unsure how to make this a multi-value
+  subjects VARCHAR(255), # unsure how to make this a multi-value
+  # time frame attribute,  unsure if this should be two DATETIME values?
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS sentiment_analysis
   article_id INT,
   sentiment_score FLOAT,
   analysis_date DATETIME,
-  FOREIGN KEY (article_id) REFERENCES article (article_id)
+  FOREIGN KEY (article_id) REFERENCES article (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS news_source
   name VARCHAR(255), 
   political_leaning VARCHAR(255),
   article_id INT,
-  FOREIGN KEY (article_id) REFERENCES article (article_id)
+  FOREIGN KEY (article_id) REFERENCES article (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -91,29 +91,23 @@ CREATE TABLE IF NOT EXISTS news_source
 DROP TABLE IF EXISTS likes;
 CREATE TABLE IF NOT EXISTS likes
 (
-  like_id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT PRIMARY KEY,
   user_id INT,
-  article_id INT,
   like_date DATETIME,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  FOREIGN KEY (article_id) REFERENCES article (article_id)
+  article_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
 
 DROP TABLE IF EXISTS saves;
-CREATE TABLE IF NOT EXISTS saves
+CREATE TABLE IF NOT EXISTS saved
 (
-  save_id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
+  id INT PRIMARY KEY,
   article_id INT,
+  user_id INT,
   save_date DATETIME,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  FOREIGN KEY (article_id) REFERENCES article (article_id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -121,14 +115,11 @@ CREATE TABLE IF NOT EXISTS saves
 DROP TABLE IF EXISTS shares;
 CREATE TABLE IF NOT EXISTS shares
 (
-  share_id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT PRIMARY KEY,
   user_id INT,
-  article_id INT,
   share_date DATETIME,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  FOREIGN KEY (article_id) REFERENCES article (article_id)
+  article_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );
@@ -138,10 +129,54 @@ DROP TABLE IF EXISTS weight_vector;
 CREATE TABLE IF NOT EXISTS weight_vector
 (
     sequence_number INTEGER AUTO_INCREMENT PRIMARY KEY,
-    beta_vals VARCHAR(100)
+    beta_vals varchar(100)
 );
 
 INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
+
+-- POST/DELETE
+DROP TABLE IF EXISTS likes;
+CREATE TABLE IF NOT EXISTS likes
+(
+  likes_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
+  user_id INT,
+  date_liked datetime
+);
+
+-- POST/DELETE
+DROP TABLE IF EXISTS saves;
+CREATE TABLE IF NOT EXISTS saves
+(
+  saves_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
+  user_id INT,
+  date_saved datetime
+);
+
+-- POST/DELETE
+DROP TABLE IF EXISTS shares;
+CREATE TABLE IF NOT EXISTS shares
+(
+  shares_id INT PRIMARY KEY AUTO_INCREMENT,
+  article_id INT,
+  user_id INT,
+  date_shared datetime
+);
+
+
+-- PUT 
+DROP TABLE IF EXISTS filters;
+CREATE TABLE IF NOT EXISTS filters
+(
+  filter_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  start_date date,
+  end_date date,
+  country_about VARCHAR(50),
+  country_from VARCHAR(50)
+);
+
 
 -- GET
 DROP TABLE IF EXISTS recently_viewed;
@@ -150,8 +185,9 @@ CREATE TABLE IF NOT EXISTS recently_viewed
   view_id INT PRIMARY KEY,
   user_id INT,
   article_id INT,
-  date_viewed DATETIME
+  date_viewed datetime
 );
+
 
 -- GET
 DROP TABLE IF EXISTS trending_articles;
@@ -160,4 +196,9 @@ CREATE TABLE IF NOT EXISTS trending_articles
   article_id INT PRIMARY KEY,
   relevance INT
 );
+
+
+
+
+
 

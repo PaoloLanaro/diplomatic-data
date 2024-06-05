@@ -29,7 +29,7 @@ if st.button('Katerina Stepanov, a PR Specialist at Gazprom Oil',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'pr_specialist'
     st.session_state['first_name'] = 'Katerina'
-    st.switch_page('pages/20_PR_Specialist.py')
+    st.switch_page('pages/10_PR_Specialist_Home.py')
 
 if st.button('Monika José, an unemployed traveler', 
             type = 'primary', 
@@ -37,4 +37,4 @@ if st.button('Monika José, an unemployed traveler',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'traveler'
     st.session_state['first_name'] = 'Monika'
-    st.switch_page('pages/02_Traveler.py')
+    st.switch_page('pages/20_Traveler_Home.py')
