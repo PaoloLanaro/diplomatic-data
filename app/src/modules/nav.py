@@ -1,23 +1,25 @@
 import streamlit as st
+import logging
+logger = logging.getLogger()
 
 #### ------------------------ General ------------------------
 def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon='🏠')
 
 def AboutPageNav():
-    st.sidebar.page_link("pages/About.py", label="About", icon="🧠")
+    st.sidebar.page_link("pages/50_About.py", label="About", icon="🧠")
 
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
-def PolStratAdvHomeNav():
-    st.sidebar.page_link("pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon='👤')
+#### ------------------------ foreign_policy_advisor page nav ------------------------
+def ForeignPolicyAdvHomeNav():
+    st.sidebar.page_link("pages/00_Foreign_Policy_Advisor.py", label="Foreign Policy Advisor Home", icon='👤')
 
-def WorldBankVizNav():
-    st.sidebar.page_link("pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon='🏦')
+def ForeignPolicyProfileNav():
+    st.sidebar.page_link("pages/08_Profile_View.py", label="Profile")
 
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon='🗺️')
+def testNav():
+    st.sidebar.page_link("pages/99_API_Test.py", label="Test")
 
-## ------------------------ Examples for Role of usaid_worker ------------------------
+## ------------------------ pr_specialist page nav ------------------------
 def ApiTestNav():
     st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon='🛜')
 
@@ -27,10 +29,9 @@ def PredictionNav():
 def ClassificationNav():
     st.sidebar.page_link("pages/13_Classification.py", label="Classification Demo", icon='🌺')
 
-#### ------------------------ System Admin Role ------------------------
-def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon='🖥️')
-    st.sidebar.page_link("pages/21_ML_Model_Mgmt.py", label='ML Model Management', icon='🏢')
+#### ------------------------ travellers page nav ---------------------------
+def PRSpecialistHomeNav():
+    st.sidebar.page_link("pages/30_User_Preferences.py", label="User Preferences Home", icon='🏠')
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -39,42 +40,47 @@ def SideBarLinks(show_home=False):
     """    
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/logo.png", width = 150)
+    st.sidebar.image("assets/world_news_logo.png", width = 150)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
         st.switch_page('Home.py')
-        
-    if show_home:
-        # Show the Home page link (the landing page)
+       
+    # Show the Home page link (the landing page) if not logged in
+    if show_home and not st.session_state['authenticated']:  
         HomeNav()
+
 
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
-        if st.session_state['role'] == 'pol_strat_advisor':
-            PolStratAdvHomeNav()
-            WorldBankVizNav()
-            MapDemoNav()
+        if st.session_state['role'] == 'foreign_policy_advisor':
+            ForeignPolicyAdvHomeNav()
+            ForeignPolicyProfileNav()
+            testNav()
+            # WorldBankVizNav()
+            # MapDemoNav()
 
         # If the user role is usaid worker, show the Api Testing page
-        if st.session_state['role'] == 'usaid_worker':
+        if st.session_state['role'] == 'pr_specialist':
+            PRSpecialistHomeNav()
             PredictionNav()
-            ApiTestNav() 
-            ClassificationNav()
+            # ApiTestNav() 
+            # ClassificationNav()
         
         # If the user is an administrator, give them access to the administrator pages
-        if st.session_state['role'] == 'administrator':
-            AdminPageNav()
+        if st.session_state['role'] == 'traveler':
+            PRSpecialistHomeNav()
+            # AdminPageNav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
 
     if st.session_state["authenticated"]:
         # Always show a logout button if there is a logged in user
-        if st.sidebar.button("Logout"):
+        if st.sidebar.button("Logout & Home"):
             del st.session_state['role']
             del st.session_state['authenticated']
             st.switch_page('Home.py')

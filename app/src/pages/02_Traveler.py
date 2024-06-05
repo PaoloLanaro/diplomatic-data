@@ -20,4 +20,4 @@ if st.button('Configure your preferences',
     st.session_state['authenticated'] = True
     st.session_state['first_name'] = 'Monika'
     st.session_state['last_name'] = 'José'
-    st.switch_page('pages/10_User_Preferences.py')
+    st.switch_page('pages/30_User_Preferences.py')

@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_extras.app_logo import add_logo
 from modules.nav import SideBarLinks
 
-SideBarLinks()
+SideBarLinks(True)
 
 st.write("# About World News")
 
@@ -23,4 +23,10 @@ st.markdown (
     improve diplomatic efforts and manage their international image. Recognizing the biases and preconceptions 
     held by other nations is crucial for effective diplomacy and media engagement.
     """
-        )
+    )
+
+if st.session_state['authenticated']:
+    if st.button("Logout & Home", type = 'primary', use_container_width = True): 
+        del st.session_state['role']
+        del st.session_state['authenticated']
+        st.switch_page('Home.py')
