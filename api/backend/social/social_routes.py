@@ -16,7 +16,7 @@ def add_likes():
     date = the_data["date_liked"]
 
     # Constructing the query
-    query = 'INSERT INTO likes (article_id, user_id, date_liked) VALUES (%s, %s, %s)'
+    query = 'INSERT INTO likes (article_id, user_id, like_date) VALUES (%s, %s, %s)'
     cursor = db.get_db().cursor()
     data = (article_id, user_id, date)
     cursor.execute(query, data)
@@ -49,7 +49,7 @@ def add_shares():
     date = the_data["date_shared"]
 
     # Constructing the query 
-    query = 'INSERT INTO shares (article_id, user_id, date_shared) VALUES (%s, %s, %s)'
+    query = 'INSERT INTO shares (article_id, user_id, share_date) VALUES (%s, %s, %s)'
     cursor = db.get_db().cursor()
     data = (article_id, user_id, date)
     cursor.execute(query, data)
@@ -82,7 +82,7 @@ def add_saves():
     date = the_data["date_saved"]
 
     # Constructing the query 
-    query = 'INSERT INTO saved (article_id, user_id, date_saved) VALUES (%s, %s, %s)'
+    query = 'INSERT INTO saves (article_id, user_id, save_date) VALUES (%s, %s, %s)'
     cursor = db.get_db().cursor()
     data = (article_id, user_id, date)
     cursor.execute(query, data)

@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS article (
 -- Create filter table
 DROP TABLE IF EXISTS filter;
 CREATE TABLE IF NOT EXISTS filter (
-  id INT PRIMARY KEY,
+  filter_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT,
   region VARCHAR(255),
   subjects VARCHAR(255),
