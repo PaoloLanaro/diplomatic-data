@@ -44,11 +44,16 @@ def predict(country):
 
     # get a database cursor 
     cursor = db.get_db().cursor()
+    
+    logger.info('reached post cursor connection')
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT sequence_number FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
+    # query = 'SELECT sequence_number FROM weight_vector DESC LIMIT 1'
+    query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
     cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
+    
+    logger.info(f'beta vals: {return_val}')
 
     w = return_val['beta_vals'] # params = dict
     logging.info(f'params = {w}') # gets beta vals
@@ -57,8 +62,17 @@ def predict(country):
     # expect to do some string parsing, typically what we're going to be getting back
     params_array = np.array(list(map(float, w[1:-1].split(',')))) # turns string vars to float
     logging.info(f'params array = {params_array}') # 
+   
+    logging.info('')
+    logging.info(f'X val: {X}')
+    logging.info(f'w val: {params_array}')
+    logging.info(f'X datatype: {type(X)}')
+    logging.info(f'w datatype: {type(params_array)}')
+    logging.info('')
     
-    return np.dot(X, params_array)
+    Xp = np.column_stack([np.ones(np.array(df['Safety Index']).shape[0]), np.array(df['Safety Index'])])
+    
+    return np.where(np.dot(X, params_array) >= 0, -1, 1)[0]
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """

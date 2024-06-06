@@ -1,4 +1,4 @@
-USE Diplomatic_Data;do
+USE Diplomatic_Data;
 
 INSERT INTO users (user_id, created_at, gender, email, birthdate, first_name, username, country) VALUES
 (1, '2022-11-10', 'M', 'ktoffaloni0@ovh.net', '2002-08-24', 'Kylie', 'klichfield0', 'Greece'),
@@ -54,5 +54,5 @@ INSERT INTO users (user_id, created_at, gender, email, birthdate, first_name, us
 
 INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
 
-
+COMMIT;
 

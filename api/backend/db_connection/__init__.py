@@ -1,3 +1,4 @@
 from flaskext.mysql import MySQL
+from pymysql import cursors
 
-db = MySQL()
+db = MySQL(cursorclass=cursors.DictCursor)

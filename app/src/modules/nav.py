@@ -11,17 +11,17 @@ def AboutPageNav():
 
 #### ------------------------ foreign_policy_advisor page nav ------------------------
 def ForeignPolicyAdvHomeNav():
-    st.sidebar.page_link("pages/00_Foreign_Policy_Advisor.py", label="Foreign Policy Advisor Home", icon='👮‍♂️')
+    st.sidebar.page_link("pages/00_Foreign_Policy_Advisor.py", label="Anton's Home", icon='👮‍♂️')
 
 def ForeignPolicyProfileNav():
     st.sidebar.page_link("pages/01_Profile_View.py", label="Profile")
 
 ## ------------------------ pr_specialist page nav ------------------------
 def PRHomeNav():
-    st.sidebar.page_link("pages/10_PR_Specialist_Home.py", label="Home", icon='🏠')
+    st.sidebar.page_link("pages/10_PR_Specialist_Home.py", label="Katerina's Home", icon='👩‍💼')
 
 def PredictionNav():
-    st.sidebar.page_link("pages/11_Prediction.py", label="Countries Predicted Sentiment Score")
+    st.sidebar.page_link("pages/11_Prediction.py", label="Country Prediction")
 
 def ArticleViewNav():
     st.sidebar.page_link("pages/12_Article_View.py", label="View an article")
@@ -31,10 +31,10 @@ def ApiTestNav():
 
 #### ------------------------ travellers page nav ---------------------------
 def TravelerHomeNav():
-    st.sidebar.page_link("pages/20_Traveler_Home.py", label="Home", icon='🏠')
+    st.sidebar.page_link("pages/20_Traveler_Home.py", label="Monika's Home", icon='🏄‍♀️')
 
 def UserPreferencesNav():
-    st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences", icon='🎭')
+    st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences") 
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -43,7 +43,7 @@ def SideBarLinks(show_home=False):
     """    
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/world_news_logo.png", width = 150)
+    st.sidebar.image("assets/diplo_logo.png", width = 250)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if 'authenticated' not in st.session_state:

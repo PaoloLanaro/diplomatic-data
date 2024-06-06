@@ -14,13 +14,13 @@ CREATE TABLE IF NOT EXISTS country (
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
   user_id INT PRIMARY KEY,
-  created_at DATETIME, 
+  created_at DATE, 
   gender VARCHAR(1),
   email VARCHAR(255),
-  birthdate DATETIME,
+  birthdate DATE,
   first_name VARCHAR(40),
-  username VARCHAR(15),
-  country VARCHAR(20)
+  username VARCHAR(25),
+  country VARCHAR(50)
 );
 
 -- Create user_interests table
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS article (
 -- Create filter table
 DROP TABLE IF EXISTS filter;
 CREATE TABLE IF NOT EXISTS filter (
-  id INT PRIMARY KEY,
+  filter_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT,
   region VARCHAR(255),
   subjects VARCHAR(255),
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS sentiment_analysis (
 );
 
 -- Creates the news source table 
--- DROP TABLE IF NOT EXISTS news_source;
+DROP TABLE IF EXISTS news_source;
 CREATE TABLE IF NOT EXISTS news_source (
   id INT PRIMARY KEY,
   name VARCHAR(255),
@@ -142,8 +142,6 @@ CREATE TABLE IF NOT EXISTS weight_vector (
   beta_vals VARCHAR(100)
 );
 
-
---INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
 
 -- Create recently_viewed table
 -- NOT SHOWING 
