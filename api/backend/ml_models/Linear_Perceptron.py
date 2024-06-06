@@ -25,7 +25,7 @@ def train():
         msg (str): 'Training the model'
     """
 
-    return 'Training the model.'
+    return 1.235
 
 def predict(country):
     """
@@ -75,9 +75,9 @@ def predict(country):
 
     # less then -1.3 is good, greater is bad
 
-    anal = -1 if prediction >= -.13 else 1
+    analysis = -1 if prediction >= -.13 else 1
     
-    return anal
+    return analysis
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """

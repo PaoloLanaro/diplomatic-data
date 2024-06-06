@@ -29,6 +29,5 @@ if st.button("Get Prediction"):
         else:
             st.write("Your country has a negative sentiment score meaning people think poorly about it :(")
     else:
-        st.write("Ran into an error retrieving a prediction score -- try again")
-    
-    
+        st.write("Ran into an error retrieving a prediction score -- try again")    
+
