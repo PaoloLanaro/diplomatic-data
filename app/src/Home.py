@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 st.set_page_config(layout = 'wide')
 
-st.session_state['authenticated'] = False
+st.session_state['authenticated'] = False # faking real passworded access
 SideBarLinks(show_home=True)
 
 st.title('World News')

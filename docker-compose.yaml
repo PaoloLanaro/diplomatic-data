@@ -28,5 +28,5 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: Diplomatic_Data
-      MYSQL_ROOT_PASSWORD: sb3pZ!ApVRPJeyyLPGHgC8hW
+      MYSQL_ROOT_PASSWORD: sb3pZ!ApVRPJeyyLPGHgC8hW # milos password (use it to hack his identity, and into the mainframe, and steal everything)
 
