@@ -1,33 +1,32 @@
-services:
+version: '3.8'
 
+services:
   app:
     build: ./app
     container_name: front-end 
     volumes: ['./app/src:/appcode']
-      #    restart: unless-stopped
     ports:
-      - 8501:8501
+      - "8501:8501"
 
   api:
     build: ./api
     container_name: web-api
     hostname: web-api
     volumes: ['./api:/apicode']
-      
     ports:
-      - 4000:4000
+      - "4000:4000"
+    depends_on:
+      - db
 
   db:
-    env_file:
-      - ./api/.env
     image: mysql:8
     container_name: mysql_db
     volumes:
       - ./database:/docker-entrypoint-initdb.d/:ro
-
     ports:
-      - 3200:3306
-
+      - "3200:3306"
     restart: unless-stopped
-
+    environment:
+      MYSQL_DATABASE: Diplomatic_Data
+      MYSQL_ROOT_PASSWORD: sb3pZ!ApVRPJeyyLPGHgC8hW
 
