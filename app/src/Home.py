@@ -19,7 +19,7 @@ if st.button("Anton Müller, a Foreign Policy Advisor at the EU",
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'foriegn_policy_advisor'
+    st.session_state['role'] = 'foreign_policy_advisor'
     st.session_state['first_name'] = 'Anton'
     st.switch_page('pages/00_Foreign_Policy_Advisor.py')
 
@@ -29,12 +29,12 @@ if st.button('Katerina Stepanov, a PR Specialist at Gazprom Oil',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'pr_specialist'
     st.session_state['first_name'] = 'Katerina'
-    st.switch_page('pages/01_Pr_Specialist.py')
+    st.switch_page('pages/10_PR_Specialist_Home.py')
 
 if st.button('Monika José, an unemployed traveler', 
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'Unemployed Traveler'
+    st.session_state['role'] = 'traveler'
     st.session_state['first_name'] = 'Monika'
-    st.switch_page('pages/02_Traveler.py')
+    st.switch_page('pages/20_Traveler_Home.py')

@@ -11,11 +11,10 @@ customers = Blueprint('customers', __name__)
 
 # to get a country value for the user asking for ML regression data
 # THIS ROUTE CALLS THE ML MODEL 
-@customers.route('/Prediction/<country01>', methods=['GET'])
+@customers.route('/prediction/<country01>', methods=['GET'])
 def predict_country_sentiment(country01):
     current_app.logger.info(f'country01 = {country01}')
     CountryVal = predict(country01)
-
     countryVal_response = make_response(jsonify(CountryVal))
     countryVal_response.status_code = 200
     countryVal_response.mimetype = 'application/json'

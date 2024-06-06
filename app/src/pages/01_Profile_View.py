@@ -36,3 +36,5 @@ st.write('')
 st.write('')
 st.write('')
 
+if st.button("Return to your personalized home", type="primary"):
+    st.switch_page("pages/00_Foreign_Policy_Advisor.py")
