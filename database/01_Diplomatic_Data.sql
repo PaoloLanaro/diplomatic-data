@@ -143,7 +143,9 @@ CREATE TABLE IF NOT EXISTS weight_vector (
 );
 
 
---INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
+INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
+
+COMMIT;
 
 -- Create recently_viewed table
 -- NOT SHOWING 
