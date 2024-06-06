@@ -16,6 +16,9 @@ def ForeignPolicyAdvHomeNav():
 def ForeignPolicyProfileNav():
     st.sidebar.page_link("pages/01_Profile_View.py", label="Profile")
 
+def ForeignPolicyArticleNav():
+    st.sidebar.page_link("pages/02_Add_Article.py", label="Add an Article")
+
 ## ------------------------ pr_specialist page nav ------------------------
 def PRHomeNav():
     st.sidebar.page_link("pages/10_PR_Specialist_Home.py", label="Katerina's Home", icon='👩‍💼')
@@ -71,8 +74,7 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'foreign_policy_advisor':
             ForeignPolicyAdvHomeNav()
             ForeignPolicyProfileNav()
-            # WorldBankVizNav()
-            # MapDemoNav()
+            ForeignPolicyArticleNav()
 
         # If the user role is usaid worker, show the Api Testing page
         if st.session_state['role'] == 'pr_specialist':
