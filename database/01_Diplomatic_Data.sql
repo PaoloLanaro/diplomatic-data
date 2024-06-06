@@ -38,15 +38,17 @@ CREATE TABLE IF NOT EXISTS user_interests (
     ON DELETE RESTRICT
 );
 
--- Create article table
+
 DROP TABLE IF EXISTS article;
 CREATE TABLE IF NOT EXISTS article (
   article_id INT AUTO_INCREMENT PRIMARY KEY,
-  content VARCHAR(15000),
-  country_id INT,
+  content MEDIUMTEXT,
   publication_date DATETIME,
-  article_link VARCHAR(100),
-  FOREIGN KEY (country_id) REFERENCES country (country_id)
+  article_link VARCHAR(200),
+  saftey_index FLOAT, -- make this the forigen key 
+  source_country VARCHAR(100),
+  sentiment FLOAT,
+  queried_country VARCHAR(100)
 );
 
 

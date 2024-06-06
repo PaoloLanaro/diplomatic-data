@@ -4,6 +4,7 @@ from backend.db_connection import db
 
 article_data = Blueprint('article_data', __name__)
 
+# to add the user's article to the article table 
 @article_data.route('/article_data', methods=['POST'])
 def add_new_article():
     current_app.logger.info('POST /article_data route')
@@ -13,15 +14,13 @@ def add_new_article():
     cursor = db.get_db().cursor()
     
     date = article_info['date']
-    sent_score = article_info['sent_score']
     text = article_info['text']
     article_country = article_info['article_country']
-    query_country = article_info['query_country']
+    queried_country = article_info['query_country']
     url = article_info['url']
-    safety_index = article_info['safety_index']
 
     country_code = '''
-    SELECT country_id FROM country WHERE UPPER(country_name) = UPPER(article_country)  
+    INSERT 
     '''
 
     cursor.execute(country_code)
@@ -29,7 +28,7 @@ def add_new_article():
     cursor.clear_attributes()
 
     query = '''
-    INSERT INTO article (content, country_id, publication_date, article_link) VALUES (%s, %s, %s, %s)
+    INSERT INTO article (content, publication_date, article_link, article_country, queried_country) VALUES (%s, %s, %s, %s, %s)
     '''
     data = (text, article_country_ID, date, url)
     current_app.logger.info((query, data))
