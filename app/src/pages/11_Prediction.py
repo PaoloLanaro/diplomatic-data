@@ -4,32 +4,31 @@ import pandas as pd
 import requests
 from modules.nav import SideBarLinks
 
+df = pd.read_csv("./assets/safetycodes.csv")
+
 logger = logging.getLogger()
 
 st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-# could be a database but we don't want to bc it would be easier!!!!!!!
 st.title("Country Sentiment Prediction")
-df = pd.read_csv("./assets/safetycodes.csv")
 
-st.write("Please enter your country of interest below.")
+# making 2 columns for the general layout
+col1, col2 = st.columns(2)
 
-sorted_countries = df["Country"].sort_values()
-selected_country = st.selectbox("Country to Predict", sorted_countries)
 
-if st.button("Get Prediction"):
-    response = requests.get(f"http://api:4000/c/prediction/{selected_country}")
-    if response.status_code == 200:
-        prediction = response.json()
-        st.write(f"Prediction for {selected_country}: {prediction}")
-        st.write("The above score is the sentiment analysis for your country of interest!")
-        if (response.json() > 0):
-            st.write("Your country has a positive sentiment score meaning people think positively about it!")
-        else:
-            st.write("Your country has a negative sentiment score meaning people think poorly about it :(")
-    else:
-        st.write("Ran into an error retrieving a prediction score -- try again")
-    
-    
+# 1st column: text input, country dropdown
+with col1:
+    country = st.selectbox("Country to Predict", df["Country"])
+    text = st.text_input("Article Text")
+
+# 2nd column: two sliders
+with col2:
+    month = st.slider('Month of Publishing', 0, 12)
+    hour = st.slider('Hour of Publishing', 0, 24)
+
+
+if st.button('Calculate Sentiment', type='primary', use_container_width=True):
+    sentiment = requests.get(f'INSERT API CALL HERE') # TODO HERE
+    st.write('The information of the article you provided indicates that it has a sentiment score of {sentiment}.')
