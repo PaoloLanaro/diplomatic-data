@@ -24,7 +24,12 @@ if st.button("Get Prediction"):
     if response.status_code == 200:
         prediction = response.json()
         st.write(f"Prediction for {selected_country}: {prediction}")
+        st.write("The above score is the sentiment analysis for your country of interest!")
+        if (response.json() > 0):
+            st.write("Your country has a positive sentiment score meaning people think positively about it!")
+        else:
+            st.write("Your country has a negative sentiment score meaning people think poorly about it :(")
     else:
         st.write("Ran into an error retrieving a prediction score -- try again")
     
-    st.write("Please ")
+    

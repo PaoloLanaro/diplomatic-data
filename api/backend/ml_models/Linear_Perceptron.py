@@ -36,7 +36,7 @@ def predict(country):
     Returns:
         sentiment (float): value of +/- 1 that allows for the user to understand general sentiment of their country
     """
-    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index'] 
+    safety_score = df_ss.loc[df_ss['Country'] == country]['Safety Index']
     logger.info(f'safety_score = {safety_score}') # records and stores the current country
     X = np.concatenate((1, safety_score), axis=None) # [1 safety_score]
     
@@ -70,9 +70,13 @@ def predict(country):
     logging.info(f'w datatype: {type(params_array)}')
     logging.info('')
     
-    Xp = np.column_stack([np.ones(np.array(df['Safety Index']).shape[0]), np.array(df['Safety Index'])])
+    prediction = np.dot(X, params_array)
+
+    # less then -1.3 is good, greater is bad
+
+    anal = -1 if prediction >= -.13 else 1
     
-    return np.where(np.dot(X, params_array) >= 0, -1, 1)[0]
+    return anal
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """
