@@ -46,7 +46,7 @@ sorted_countries = df["Country"].sort_values()
 selected_country = st.selectbox("Country to Predict", sorted_countries)
 
 if st.button("Get Prediction"):
-    response = requests.get(f"http://web-api:4000/c/prediction/{selected_country}")
+    response = requests.get(f"http://api:4000/c/prediction/{selected_country}")
     st.write("Response status code: ", response.status_code)
     st.write("Response content: ", response.content)
     if response.status_code == 200:
