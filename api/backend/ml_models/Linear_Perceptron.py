@@ -70,8 +70,10 @@ def predict(country):
     logging.info(f'X datatype: {type(X)}')
     logging.info(f'w datatype: {type(params_array)}')
     logging.info('')
-
-    return np.dot(X, params_array)
+    
+    Xp = np.column_stack([np.ones(np.array(df['Safety Index']).shape[0]), np.array(df['Safety Index'])])
+    
+    return np.where(np.dot(X, params_array) >= 0, -1, 1)[0]
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """
