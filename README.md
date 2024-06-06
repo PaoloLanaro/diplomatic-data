@@ -1,13 +1,6 @@
-# Template Project Repo for 2024 DoC
+# [Diplomatic Data](https://github.com/PaoloLanaro/diplomatic-data)
+<img src="https://i.imgur.com/7luirma.png" align="right" alt="diplomatic data logo by copilot image generator" width="84" height="84">
 
-## About
+by [Paolo Lanaro](https://github.com/PaoloLanaro), [Sydney Schulz](https://github.com/sydneygschulz), [Nia Quinn](https://github.com/niaquinn), and [Milo Margolis](https://github.com/MiloMargolis)
 
-This is a sample app being developed for the Summer 2024 DoC in Leuven, Belgium titled Data and Software in International Government and Politics.
-
-Currently, there are two major components:
-- Streamlit App (in the `./app` directory)
-- Flask REST api (in the `./api` directory)
-- MySQL setup files (in the `./database` directory)
-
-
- 
+placeholder
