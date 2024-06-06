@@ -63,8 +63,15 @@ def predict(country):
     # expect to do some string parsing, typically what we're going to be getting back
     params_array = np.array(list(map(float, w[1:-1].split(',')))) # turns string vars to float
     logging.info(f'params array = {params_array}') # 
-    
-    return np.dot(X, w)
+   
+    logging.info('')
+    logging.info(f'X val: {X}')
+    logging.info(f'w val: {params_array}')
+    logging.info(f'X datatype: {type(X)}')
+    logging.info(f'w datatype: {type(params_array)}')
+    logging.info('')
+
+    return np.dot(X, params_array)
 
 def linear_perceptron(X, y, w, alpha = 1, max_iter = None):
     """
