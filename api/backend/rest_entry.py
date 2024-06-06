@@ -10,10 +10,7 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.social.social_routes import social
 from backend.activity.activity_routes import activity
-<<<<<<< HEAD
 from backend.models.model_routes import models
-=======
->>>>>>> 6082d2c70efd6268ada209d7203d2988fbff3a29
 from backend.article_data.article_data import article
 import os
 from dotenv import load_dotenv
