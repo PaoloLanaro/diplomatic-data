@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger()
 
+
+df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
+
 # train 
 def train():
     """takes in 2 arrays and gives the vector containing the coefficients for the line of best fit
@@ -26,13 +29,16 @@ def train():
     return m # needs to be stored and then queried from the function below
 
 # predict
-def predict(X):
+def predict(text, country, hour, month):
     """
     Description:
         With the user specified values, we predict the sentiment of an article.
 
     Args:
-        X(1D array): of values where X = [word_count, hour_of_day, month, Safety Index]
+        text(str): corpus for analysis of both library version of sentiment and for finding the word count as feature of model
+        country(str): intended country of safety score for use in sentiment prediction
+        hour(int): hour of publication, [0, 23]
+        month(int): month of publication, [1, 12]
 
     Returns:
         sentiment(float): of a hypothetical article

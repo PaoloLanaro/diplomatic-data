@@ -10,6 +10,7 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.social.social_routes import social
 from backend.activity.activity_routes import activity
+from backend.models.model_routes import models
 import os
 from dotenv import load_dotenv
 
@@ -58,6 +59,7 @@ def create_app():
     app.register_blueprint(products, url_prefix="/p")
     app.register_blueprint(social, url_prefix="/s")
     app.register_blueprint(activity, url_prefix="/a")
+    app.register_blueprint(models, url_prefix="/models")
 
     return app
 

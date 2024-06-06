@@ -25,10 +25,9 @@ with col1:
 
 # 2nd column: two sliders
 with col2:
-    month = st.slider('Month of Publishing', 0, 12)
-    hour = st.slider('Hour of Publishing', 0, 24)
-
+    month = st.slider('Month of Publishing', 1, 12)
+    hour = st.slider('Hour of Publishing', 0, 23)
 
 if st.button('Calculate Sentiment', type='primary', use_container_width=True):
-    sentiment = requests.get(f'INSERT API CALL HERE') # TODO HERE
+    sentiment = requests.get(f'http://api:4000/c/sentiment_prediction/{text}/{country}/{month}/{hour}')
     st.write('The information of the article you provided indicates that it has a sentiment score of {sentiment}.')

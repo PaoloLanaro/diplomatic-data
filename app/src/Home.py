@@ -38,3 +38,13 @@ if st.button('Monika José, an unemployed traveler',
     st.session_state['role'] = 'traveler'
     st.session_state['first_name'] = 'Monika'
     st.switch_page('pages/20_Traveler_Home.py')
+
+if st.button('Login as system administrator',
+             type = 'primary',
+             use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'sysadmin'
+    st.session_state['first_name'] = 'Sysadmin'
+    st.switch_page('pages/30_SysAdmin_Home.py')
+
+

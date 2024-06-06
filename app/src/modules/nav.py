@@ -36,6 +36,15 @@ def TravelerHomeNav():
 def UserPreferencesNav():
     st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences") 
 
+#### ------------------------ sysadmin page nav ------------------------------
+def SystemAdminHomeNav():
+    st.sidebar.page_link("pages/30_SysAdmin_Home.py", label="Sysadmin's Home", icon='👩‍💻')
+
+def SystemAdminTestModelOneNav():
+    st.sidebar.page_link("pages/32_Test_Model_One.py", label="Test model 1")
+
+def SystemAdminTestModelTwoNav():
+    st.sidebar.page_link("pages/33_Test_Model_Two.py", label="Test model 2")
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
     """
@@ -76,6 +85,10 @@ def SideBarLinks(show_home=False):
             TravelerHomeNav()
             UserPreferencesNav()
 
+        if st.session_state['role'] == 'sysadmin':
+            SystemAdminHomeNav()
+            SystemAdminTestModelOneNav()
+            SystemAdminTestModelTwoNav()
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
 

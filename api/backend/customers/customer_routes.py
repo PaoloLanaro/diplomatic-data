@@ -4,21 +4,39 @@
 ########################################################
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.ml_models.Linear_Perceptron import predict
+# from backend.ml_models.Linear_Perceptron import predict
+from backend.ml_models.Multiple_Lin_Reg import predict
 from backend.db_connection import db
+import numpy as np
 
 customers = Blueprint('customers', __name__)
 
-# to get a country value for the user asking for ML regression data
-# THIS ROUTE CALLS THE ML MODEL 
-@customers.route('/prediction/<country01>', methods=['GET'])
-def predict_country_sentiment(country01):
-    current_app.logger.info(f'country01 = {country01}')
-    CountryVal = predict(country01)
-    countryVal_response = make_response(jsonify(CountryVal))
-    countryVal_response.status_code = 200
-    countryVal_response.mimetype = 'application/json'
-    return countryVal_response
+# gets the user's various input values for the multi linear regression --> model
+# calls the ml model
+@customers.route('/sentiment_prediction/<text>/<country>/<month>/<hour>', methods=['GET'])
+def predict_sentiment(text, country, month, hour):
+    # logging the user input values
+    current_app.logger.info(f'text: {text}')
+    current_app.logger.info(f'country: {country}')
+    current_app.logger.info(f'month: {month}')
+    current_app.logger.info(f'hour: {hour}')
+    sentiment = predict(text, country, month, hour)
+    response = make_response(jsonify(sentiment))
+    response.status_code = 200
+    # mimetype: tells user the kind of data being returned, in this case JSON
+    response.mimetype = 'application/json' 
+    return response
+
+# # to get a country value for the user asking for ML regression data
+# # THIS ROUTE CALLS THE ML MODEL 
+# @customers.route('/prediction/<country01>', methods=['GET'])
+# def predict_country_sentiment(country01):
+#     current_app.logger.info(f'country01 = {country01}')
+#     CountryVal = predict(country01)
+#     countryVal_response = make_response(jsonify(CountryVal))
+#     countryVal_response.status_code = 200
+#     countryVal_response.mimetype = 'application/json'
+#     return countryVal_response
 
 # Get all customers from the DB
 @customers.route('/users', methods=['GET'])

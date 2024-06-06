@@ -39,4 +39,7 @@ st.selectbox("News Subject Country", sorted_country_names)
 st.selectbox("News Source Country", sorted_country_names)
 
 st.write("")
+
+col1, col2 = st.columns(2)
+
 st.button("Restore Defaults")
