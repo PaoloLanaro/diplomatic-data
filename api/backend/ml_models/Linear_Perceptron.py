@@ -47,7 +47,8 @@ def predict(country):
     cursor = db.get_db().cursor()
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    query = 'SELECT sequence_number FROM weight_vector DESC LIMIT 1'
+    # query = 'SELECT sequence_number FROM weight_vector DESC LIMIT 1'
+    query = 'SELECT sequence_number FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
     cursor.execute(query) #breaking here 
     return_val = cursor.fetchone() # gets one value
 
