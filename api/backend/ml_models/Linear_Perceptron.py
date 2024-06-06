@@ -8,9 +8,8 @@ import logging
 logger = logging.getLogger()
 import os
 
-logger.info(f'cwd = {os.getcwd()}')
-# df = pd.read_csv('../assets/Data News Sources.csv')
-# df_ss = pd.read_csv('../assets/safetycodes.csv')
+logger.info(f'cwd = {os.getcwd()}') # grabs current working directory
+
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 df_ss = pd.read_csv('/apicode/backend/assets/safetycodes.csv')
 
@@ -161,5 +160,3 @@ yp = label_y_values(df['sentiment'].to_numpy())
 w_test = np.array([0, 1])
 
 w = linear_perceptron(Xp, yp, w_test, alpha=1, max_iter=1000)
-
-pd.DataFrame(w).to_csv('Weight Vector.csv')

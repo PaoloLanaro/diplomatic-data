@@ -10,6 +10,7 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
+# could be a database but we don't want to bc it would be easier!!!!!!!
 st.title("Country Sentiment Prediction")
 df = pd.read_csv("./assets/safetycodes.csv")
 

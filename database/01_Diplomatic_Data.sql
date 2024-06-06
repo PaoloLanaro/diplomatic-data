@@ -4,11 +4,12 @@ USE Diplomatic_Data;
 -- Create country table first
 DROP TABLE IF EXISTS country;
 CREATE TABLE IF NOT EXISTS country (
-  country_id INT PRIMARY KEY,
-  country_name VARCHAR(50),
-  country_tag VARCHAR(2),
-  region VARCHAR(255)
+  country_id INT PRIMARY KEY AUTO_INCREMENT,
+  country_name VARCHAR(100),
+  saftey_index FLOAT,
+  country_code VARCHAR(2)
 );
+
 
 -- Create users table
 DROP TABLE IF EXISTS users;
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS article (
   article_link VARCHAR(100),
   FOREIGN KEY (country_id) REFERENCES country (country_id)
 );
+
 
 -- Create filter table
 DROP TABLE IF EXISTS filter;
@@ -166,5 +168,14 @@ DROP TABLE IF EXISTS trending_articles;
 CREATE TABLE IF NOT EXISTS trending_articles (
   article_id INT PRIMARY KEY,
   relevance INT
+);
+
+DROP TABLE IF EXISTS beta_values;
+CREATE TABLE IF NOT EXISTS beta_values (
+  intercept FLOAT,
+  word_count FLOAT,
+  hour_of_day FLOAT,
+  month_ts FLOAT,
+  saftey FLOAT
 );
 
