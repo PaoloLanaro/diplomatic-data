@@ -21,8 +21,14 @@ def train():
     Returns:
         m (array): coefficents for the line of best fit
     """
-    
-    X = add_bias_column(X)
+    # grabbing the y values and X values
+    cursor = db.get_db().cursor()
+    X_query = 'SELECT x_vals FROM #whichever database the X values are in#'
+    cursor.execute(X_query)
+    X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
+    # where we parse all of the strings from the database
+
+    X = add_bias_column(X_train)
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
     m = np.matmul(XtXinv, np.matmul(X.T, y))
     
@@ -48,6 +54,10 @@ def predict(text, country, hour, month):
     cursor = db.get_db().cursor()
 
     m = [] # the sequal qeury of the bias vector
+
+    safety_score = 0 # also the sequal query to the country codes thing!!!!
+
+    X = np.array([1, len(text.split()), safety_score, hour, month])
 
     return np.dot(add_bias_column(X), m)
 
