@@ -61,19 +61,20 @@ def train_prediction1():
     query = 'SELECT * FROM article'
     cursor = db.get_db().cursor()
     cursor.execute(query)
-
+    current_app.logger.info(f'executed query {query} succsefully')
+    
+    query_return = cursor.fetchall()
+    current_app.logger.info(f'query_return type: {type(query_return)}')
     # rows = cursor.fetchall()
     # column_names = [desc[0] for desc in cursor.description]
     # df = pd.DataFrame(rows, columns=column_names)
 
-    current_app.logger.info(f"the dataframe that we found: {cursor.fetchall()}")
+    # current_app.logger.info(f'called train function from backend, response {returnVal}')
+    # current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 
-    returnVal = train(cursor.fetchall());
+    in = train()
 
-    current_app.logger.info(f'called train function from backend, response {returnVal}')
-    current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
-
-    response = make_response(jsonify(returnVal))
+    response = make_response(jsonify(penis))
     response.status_code = 200
     response.mimetype = 'application/json'
     return response

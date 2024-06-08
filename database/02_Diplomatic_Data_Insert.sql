@@ -101,11 +101,11 @@ INSERT INTO country (country_name, safety_index, country_code) VALUES
 ('Uruguay', 0.48, 'uy'),
 ('Uzbekistan', 0.7, 'uz');
 
-INSERT INTO trending_articles (article_id, views_last_24_hours) VALUES
-(391, 100),
-(300, 50),
-(199, 0),
-(123, 1000000);
+-- INSERT INTO trending_articles (article_id, views_last_24_hours) VALUES
+-- (391, 100),
+-- (300, 50),
+-- (199, 0),
+-- (123, 1000000);
 
 
 COMMIT;

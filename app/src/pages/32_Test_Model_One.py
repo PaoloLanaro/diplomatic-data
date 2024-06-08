@@ -22,4 +22,4 @@ if st.button(
         test = response.json()
         st.write(f"Test for input {test}")
     else:
-        st.write("Ran into an error retrieving a prediction score -- try again")
+        st.write("Ran into an error retrieving a prediction score -- try again. Hi")
