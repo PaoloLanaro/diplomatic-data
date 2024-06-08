@@ -19,7 +19,7 @@ def clean(news_data):
     """cleans the data and extracts the X and y values that will be used for the model
     
     Args:
-        news_data (df): idk the format but its just like all of the data to be cleaned
+        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
         
     
     Returns:
@@ -45,7 +45,6 @@ def clean(news_data):
     X = news_data.drop(columns=['source_country']) 
     y = news_data['source_country']
 
-
     return X, y
 
 def train(news_data):
@@ -59,7 +58,6 @@ def train(news_data):
     Returns:
         source_country (string): the country that the model believes it came from
     """
-    X, y = clean(news_data)
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -76,11 +74,9 @@ def train(news_data):
     return classifier 
 
 
-def predict_rf(text, queried, classifier):
+def predict_rf(text, queried):
     """
-    Description: Using the sentiment score, word count, and queried country, predicting the source country. All of the values
-    are obtained from the user in the front end. Sentiment score and word count are from the text, and the queried country is from the user.
-    The format must be that queried country must be Russia, China, or US
+    Description: Using the sentiment score, word count, and queried country, predicting the source country using 
 
     Args: 
         text(string): text used to find the sentiment score and word count
@@ -100,8 +96,6 @@ def predict_rf(text, queried, classifier):
 
     cursor = db.get_db().cursor()
 
-    # somehow get the queried country. Idk grab it from the front end jazz
-
-    prediction = classifier.predict(X)
+    prediction = rf.predict(X)
 
     return prediction
