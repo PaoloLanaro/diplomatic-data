@@ -18,6 +18,8 @@ def test_model_one(text, country_origin, country_query):
     sentiment_guess, sentiment_actual = predict(text, country_origin, country_query, query)
 
     row_headers = [x[0] for x in cursor.description]
+    current_app.logger.info(f'row_headers: {row_headers}')
+    json_data = []
     theData = cursor.fetchall()
 
 # rows = cursor.fetchall()
@@ -79,7 +81,7 @@ def train_prediction1():
 @models.route('/train_prediction2', methods=['GET']) # trains random forest
 def train_prediction2():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
-    returnVal = train();
+    returnVal = train()
     current_app.logger.info(f'called train function from backend, response {returnVal}')
     current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 
