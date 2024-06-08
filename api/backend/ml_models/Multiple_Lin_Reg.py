@@ -5,6 +5,41 @@ from textblob import TextBlob
 
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
+def clean(news_data):
+    """cleans the data and extracts the X and y values that will be used for the model
+    
+    Args:
+        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
+        
+    
+    Returns:
+        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
+        y_raw (string): a 1-d array whcich includes all corresponding response values to X
+    """
+
+    # dropping unnseccassary columns
+    news_data = news_data.drop(columns=['Unnamed: 0', 'date', 'url'])
+
+    # adding word count
+    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
+
+    # standardizing values
+    not_list = ['text', 'source_country', 'queried_country']
+    col_num_list = [col for col in news_data.columns if col not in not_list]
+
+    for feat in col_num_list:
+        news_data[feat] = ((news_data[feat] - news_data[feat].mean()) / news_data[feat].std()).round(3)
+
+    # one hot encoding source_country
+    news_data = pd.get_dummies(news_data, columns=['source_country'], drop_first=True)
+
+    # isolating X and y values
+    X = (news_data.drop(columns=['sentiment', 'text', 'queried_country'])).values 
+    y = (news_data['sentiment']).values
+
+
+    return X, y
+
 # train 
 def train(df):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
