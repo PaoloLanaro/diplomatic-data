@@ -15,11 +15,42 @@ from collections import Counter
 from textblob import TextBlob
 from sklearn.ensemble import RandomForestClassifier
 
-logger = logging.getLogger()
+def clean(news_data):
+    """cleans the data and extracts the X and y values that will be used for the model
+    
+    Args:
+        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
+        
+    
+    Returns:
+        X (array): can be either 1-d or 2-d array containing information regarding the training X values
+        y (array): a 1-d array whcich includes all corresponding response values to X
+    """
+
+    # drop the columns im not using
+    news_data.drop(['Unnamed: 0', 'date', 'url', 'Safety Index'], axis=1, inplace=True)
+    news_data.dropna(axis=0, inplace=True)
+
+    # adding word count
+    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
+
+    # drop the columns im not using
+    news_data.drop(['text'], axis=1, inplace=True)
+    news_data.dropna(axis=0, inplace=True)
+
+    # one hot encoding
+    news_data = pd.get_dummies(news_data, columns=['queried_country'], drop_first=True)
+
+    # X and y
+    X = news_data.drop(columns=['source_country']) 
+    y = news_data['source_country']
+
+
+    return X, y
 
 def train(news_data):
     """
-    Description: Training the model and then I believe storing it in SQL somewhere instead of just importing it as a csv? idk though 
+    Description: Training the model agh 
 
     Args: 
         text(string): text used to find the sentiment score and word count
@@ -29,31 +60,19 @@ def train(news_data):
         source_country (string): the country that the model believes it came from
     """
 
-    # rn the data is just in as like the big main csv that we're using, come back to this late bc i know this isn't right
-
-    # DATA ClEANING JAZZ
-    # drop the columns im not using
-    news_data.drop(['Unnamed: 0', 'date', 'text', 'url', 'Safety Index', 'source_country', 'month', 'hour_of_day', 'source_to_queried_count'], axis=1, inplace=True)
-    news_data.dropna(axis=0, inplace=True)
-
-    # one hot encoding
-    news_data = pd.get_dummies(news_data, columns=['queried_country'], drop_first=True)
-    news_data
-    
-    # X and y
-    X = news_data.drop(columns=['source_country']) 
-    y = news_data['source_country']
-
-    # splitting the data
+    # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # implement the random forest regressor
     rf = RandomForestClassifier(n_estimators=10, max_depth=3, random_state=42)
 
     # fit the model
+    rf.fit(X_train, y_train)
+
+    # fit the model
     classifier = rf.fit(X_train, y_train)
 
-    return classifier # this is a numpy array. idk if thats the form that is needed
+    return classifier 
 
 
 def predict_rf(text, queried):
