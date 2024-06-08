@@ -72,7 +72,7 @@ def train_prediction1():
     # current_app.logger.info(f'called train function from backend, response {returnVal}')
     # current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 
-    in = train()
+    # in = train()
 
     response = make_response(jsonify(penis))
     response.status_code = 200
