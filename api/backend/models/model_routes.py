@@ -65,6 +65,7 @@ def train_prediction1():
     
     query_return = cursor.fetchall()
     current_app.logger.info(f'query_return type: {type(query_return)}')
+    current_app.logger.info(f'query_return keys: {query_return[1].keys()}')
     # rows = cursor.fetchall()
     # column_names = [desc[0] for desc in cursor.description]
     # df = pd.DataFrame(rows, columns=column_names)
@@ -72,9 +73,9 @@ def train_prediction1():
     # current_app.logger.info(f'called train function from backend, response {returnVal}')
     # current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 
-    in = train()
-
-    response = make_response(jsonify(penis))
+    train_response = train(query_return)
+    
+    response = make_response(jsonify(train_response))
     response.status_code = 200
     response.mimetype = 'application/json'
     return response
