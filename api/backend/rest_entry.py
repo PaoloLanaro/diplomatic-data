@@ -10,7 +10,6 @@ from backend.social.social_routes import social
 from backend.activity.activity_routes import activity
 from backend.models.model_routes import models
 from backend.article_data.article_data import article
-from backend.assets.country_route import country
 from backend.assets.utils.utils_route import utils
 import os
 from dotenv import load_dotenv

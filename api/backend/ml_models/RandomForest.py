@@ -96,6 +96,31 @@ def predict_rf(text, queried):
 
     cursor = db.get_db().cursor()
 
-    prediction = rf.predict(X)
+    # somehow get the queried country. Idk grab it from the front end jazz
+    # country = HERE
+
+    # the initial array for the classifier
+    initial_array = [sentiment, words, 0, 0, 0]
+
+    # making sure everything is good with the one hot encoding stuff, don't worry 
+    def country_to_array(country):
+        array = initial_array  
+        if country == 'China':
+            array[2] = 1
+        elif country == 'Russia':
+            array[3] = 1
+        elif country == 'United States':
+            array[4] = 1
+        return array
+
+    # calling the function for the one hot encoding
+    country_to_array(country)
+
+    # full array
+    X = np.array([initial_array])
+
+
+    # calling the predictor
+    prediction = classifier.predict(X)
 
     return prediction
