@@ -26,7 +26,7 @@ def get_random_article():
     cursor = db.get_db().cursor()
 
     # country code to country name
-    country_code = str(random_article['source_country']).upper()
+    country_code = str(random_article['country_written_from']).upper()
     country_name_query = 'SELECT country_name FROM country WHERE UPPER(country_code) = %s'
     cursor.execute(country_name_query, country_code)
     cursor_country_name = cursor.fetchone()

@@ -6,13 +6,12 @@ from flask import Flask
 
 from backend.db_connection import db
 
-from backend.customers.customer_routes import customers
-from backend.products.products_routes import products
 from backend.social.social_routes import social
 from backend.activity.activity_routes import activity
 from backend.models.model_routes import models
 from backend.article_data.article_data import article
 from backend.assets.country_route import country
+from backend.assets.utils.utils_route import utils
 import os
 from dotenv import load_dotenv
 
@@ -64,6 +63,7 @@ def create_app():
     app.register_blueprint(models, url_prefix="/models")
     app.register_blueprint(article, url_prefix='/article')
     app.register_blueprint(country, url_prefix='/country')
+    app.register_blueprint(utils, url_prefix='/utils')
     
     # Don't forget to return the app! actually allows the api to function :P
     return app
