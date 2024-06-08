@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
-import json
 from backend.db_connection import db
+from textblob import TextBlob
 
 article = Blueprint('article', __name__)
 
@@ -60,31 +60,32 @@ def add_new_article():
 
     cursor = db.get_db().cursor()
     
+    # to get the date and time written
     calendar_date = article_info['YYYY-MM-DD']
     day_time = article_info['HH:MM:SS']
     date = calendar_date + ' ' + day_time
+
+    # to get the article text
     text = article_info['text']
-    article_country = article_info['article_country']
-    queried_country = article_info['query_country']
+
+    # to get the the country written about/from
+    country_written_about = article_info['country_written_about']
+    country_written_from = article_info['country_written_from']
+
+    # to get the article info 
     url = article_info['url']
 
-    country_code = 'INSERT'
+    sentiment = TextBlob(text).sentiment.polarity 
 
-    cursor.execute(country_code)
-    article_country_ID = cursor.fetchone()
-    cursor.clear_attributes()
+    # country_code = 'INSERT'
 
-    query = 'INSERT INTO article (content, publication_date, article_link, article_country, queried_country) VALUES (%s, %s, %s, %s, %s)'
-    data = (text, article_country_ID, date, url)
+    # cursor.execute(country_code)
+    # article_country_ID = cursor.fetchone()
+    # cursor.clear_attributes()
+
+    query = 'INSERT INTO article (content, publication_date, article_link, country_written_from, sentiment, country_written_about) VALUES (%s, %s, %s, %s, %s, %s)'
+    data = (text, date, url, country_written_about, sentiment, country_written_from)
     current_app.logger.info((query, data))
-
-#   content MEDIUMTEXT,
-#   publication_date DATETIME,
-#   article_link VARCHAR(200),
-#   saftey_index FLOAT, -- make this the forigen key 
-#   source_country VARCHAR(100),
-#   sentiment FLOAT,
-#   queried_country VARCHAR(100)
 
     cursor.execute(query, data)
     db.get_db().commit()
