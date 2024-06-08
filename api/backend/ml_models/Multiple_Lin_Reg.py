@@ -4,6 +4,7 @@ from backend.db_connection import db
 import logging
 import os
 from sklearn.model_selection import train_test_split
+from textblob import TextBlob
 
 logger = logging.getLogger()
 
@@ -44,12 +45,21 @@ def predict(text, country, hour, month):
         sentiment(float): of a hypothetical article
     """
 
+    # word count
+    words = text.split()
+    count = len(words)
+    
+    # sentiment
+    blob = TextBlob(text)
+    sentiment = blob.sentiment.polarity
+    
+
     # grab database curson
     cursor = db.get_db().cursor()
 
     m = [] # the sequal qeury of the bias vector
 
-    return np.dot(add_bias_column(X), m)
+    return np.dot(add_bias_column(X), m), sentiment
 
 # adding bias column
 def add_bias_column(X):
