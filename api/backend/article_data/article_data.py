@@ -31,6 +31,14 @@ def add_new_article():
     data = (text, article_country_ID, date, url)
     current_app.logger.info((query, data))
 
+#   content MEDIUMTEXT,
+#   publication_date DATETIME,
+#   article_link VARCHAR(200),
+#   saftey_index FLOAT, -- make this the forigen key 
+#   source_country VARCHAR(100),
+#   sentiment FLOAT,
+#   queried_country VARCHAR(100)
+
     cursor.execute(query, data)
     db.get_db().commit()
     return 'article added'
