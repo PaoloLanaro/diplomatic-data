@@ -4,8 +4,6 @@ from backend.db_connection import db
 import logging
 import os
 from sklearn.model_selection import train_test_split
-from textblob import TextBlob
-from textblob import TextBlob
 
 logger = logging.getLogger()
 
