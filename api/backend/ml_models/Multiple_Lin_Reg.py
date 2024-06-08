@@ -17,41 +17,70 @@ def clean(news_data):
     """
     df = pd.DataFrame()
 
-    # dropping unnseccassary columns
-    news_data = news_data.drop(columns=['Unnamed: 0', 'date', 'url'])
+    data = {
+        'article_id': [], 
+        'content': [], 
+        'publication_date': [], 
+        'article_link': [],
+        'country_written_from': [], 
+        'sentiment': [],
+        'country_written_about': []
+    }
 
-    # adding word count
-    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
+    for item in news_data:
+        data['article_id'].append(news_data[item]['article'])
+        data['content'].append(news_data[item]['content'])
+        data['publication_date'].append(news_data[item]['publication_date'])
+        data['article_link'].append(news_data[item]['article_link'])
+        data['country_written_from'].append(news_data[item]['country_written_from'])
+        data['sentiment'].append(news_data[item]['sentiment'])
+        data['country_written_about'].append(news_data[item]['country_written_about'])
 
-    # standardizing values
-    not_list = ['text', 'source_country', 'queried_country']
-    col_num_list = [col for col in news_data.columns if col not in not_list]
+    return pd.DataFrame.from_dict(data)
 
-    for feat in col_num_list:
-        news_data[feat] = ((news_data[feat] - news_data[feat].mean()) / news_data[feat].std()).round(3)
+def clean_safety_score(ss_data):
+    """
+    Takes in raw json for the safety score json and produces a dataframe of each country with each different associated safety score.
 
-    # one hot encoding source_country
-    news_data = pd.get_dummies(news_data, columns=['source_country'], drop_first=True)
+    Args:
+        ss_data (json): contains contents of countries database
 
-    # isolating X and y values
-    X = (news_data.drop(columns=['sentiment', 'text', 'queried_country'])).values
-    y = (news_data['sentiment']).values
-    return X, y
+    Returns:
+        df (DataFrame): contains contents of countries database in easy to use dataframe format
+    """
+    df = pd.DataFrame()
+
+    data = {
+        'country_id': [], 
+        'country_name': [], 
+        'safety_index': [], 
+        'country_code': []
+    }
+
+    for country in ss_data:
+        data['country_id'].append(ss_data[country][''])
+
+    return df
 
 # train 
+# def train(data, ss_data):
 def train(data):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
         data (json): return of the api request
+        ss_data(json): return of the ss request
     
     Returns:
         m (array): coefficents for the line of best fit
     """
 
-    X, y = clean(data)
+    df = clean(data)
 
-    so
+    X = add_bias_column(np.array([df['content'], ]))
+
+    XtXinv = np.linalg.inv(np.matmul(X.T, X))
+    m = np.matmul(XtXinv, np.matmul(X.T, y_train))
     
     return m # needs to be stored and then queried from the function below
 
