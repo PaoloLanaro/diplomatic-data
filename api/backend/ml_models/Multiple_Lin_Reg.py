@@ -23,10 +23,14 @@ def train():
     """
     # grabbing the y values and X values
     cursor = db.get_db().cursor()
-    X_query = 'SELECT x_vals FROM #whichever database the X values are in#'
+    X_query = 'SELECT x_vals FROM #whichever database the X values are in#' # TODO this sql query
     cursor.execute(X_query)
     X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
     # where we parse all of the strings from the database
+
+    X_pre_parse = X_return['x_vals']
+
+    X_train = np.array(list(map(float, X_pre_parse[1:, -1].split(','))))
 
     X = add_bias_column(X_train)
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
@@ -53,9 +57,19 @@ def predict(text, country, hour, month):
     # grab database curson
     cursor = db.get_db().cursor()
 
-    m = [] # the sequal qeury of the bias vector
+    # grabbing the M vector
+    m_query = 'SELECT m_vals FROM weight_vector ' # TODO flesh this out, not finished
+    cursor.execute(m_query)
+    m_return = cursor.fetchone()
+    m_pre_parse = m_return['m_vals']
+    m = np.array(list(map(float, m_pre_parse[1:-1].split(','))))
 
-    safety_score = 0 # also the sequal query to the country codes thing!!!!
+    # grabbing the safety score
+    ss_query = 'SELECT ss FROM something' # TODO flesh this out and pimp out this db
+    cursor.execute(ss_query)
+    ss_return = cursor.fetchone()
+    ss_pre_parse = ss_return['ss'] # also likely wrong
+    safety_score = np.array(list(map(float, ss_pre_parse[1:-1].split(',')))) # also the sequal query to the country codes thing!!!!
 
     X = np.array([1, len(text.split()), safety_score, hour, month])
 

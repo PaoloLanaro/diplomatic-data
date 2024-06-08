@@ -29,5 +29,6 @@ with col2:
     hour = st.slider('Hour of Publishing', 0, 23)
 
 if st.button('Calculate Sentiment', type='primary', use_container_width=True):
-    sentiment = requests.get(f'http://api:4000/c/sentiment_prediction/{text}/{country}/{month}/{hour}')
-    st.write('The information of the article you provided indicates that it has a sentiment score of {sentiment}.')
+    sentiment_calc, sentiment_real = requests.get(f'http://api:4000/c/sentiment_prediction/{text}/{country}/{month}/{hour}')
+    st.write(f'The information of the article you provided indicates that it has a sentiment score of {sentiment_calc} based on our calculations.')
+    st.write(f'The actual sentiment calculated from the article\'s text is {sentiment_real}')
