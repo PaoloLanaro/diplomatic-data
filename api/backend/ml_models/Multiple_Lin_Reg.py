@@ -7,78 +7,67 @@ df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
 def clean(news_data):
     """cleans the data and extracts the X and y values that will be used for the model
-
+    
     Args:
-        news_data (list of json): list of json values with each item being its own separate article
-
+        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
+        
+    
     Returns:
-        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
-        y_raw (string): a 1-d array whcich includes all corresponding response values to X
+        X (array): can be either 1-d or 2-d array containing information regarding the training X values
+        y (array): a 1-d array whcich includes all corresponding response values to X
     """
-    df = pd.DataFrame()
 
-    data = {
-        'article_id': [], 
-        'content': [], 
-        'publication_date': [], 
-        'article_link': [],
-        'country_written_from': [], 
-        'sentiment': [],
-        'country_written_about': []
-    }
+    # dropping unnseccassary columns
+    news_data = news_data.drop(columns=['Unnamed: 0', 'date', 'url'])
 
-    for item in news_data:
-        data['article_id'].append(news_data[item]['article'])
-        data['content'].append(news_data[item]['content'])
-        data['publication_date'].append(news_data[item]['publication_date'])
-        data['article_link'].append(news_data[item]['article_link'])
-        data['country_written_from'].append(news_data[item]['country_written_from'])
-        data['sentiment'].append(news_data[item]['sentiment'])
-        data['country_written_about'].append(news_data[item]['country_written_about'])
+    # adding word count
+    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
 
-    return pd.DataFrame.from_dict(data)
+    # standardizing values
+    not_list = ['text', 'source_country', 'queried_country']
+    col_num_list = [col for col in news_data.columns if col not in not_list]
 
-def clean_safety_score(ss_data):
-    """
-    Takes in raw json for the safety score json and produces a dataframe of each country with each different associated safety score.
+    for feat in col_num_list:
+        news_data[feat] = ((news_data[feat] - news_data[feat].mean()) / news_data[feat].std()).round(3)
 
-    Args:
-        ss_data (json): contains contents of countries database
+    # one hot encoding source_country
+    news_data = pd.get_dummies(news_data, columns=['source_country'], drop_first=True)
 
-    Returns:
-        df (DataFrame): contains contents of countries database in easy to use dataframe format
-    """
-    df = pd.DataFrame()
+    # isolating X and y values
+    X = (news_data.drop(columns=['sentiment', 'text', 'queried_country'])).values 
+    y = (news_data['sentiment']).values
 
-    data = {
-        'country_id': [], 
-        'country_name': [], 
-        'safety_index': [], 
-        'country_code': []
-    }
 
-    for country in ss_data:
-        data['country_id'].append(ss_data[country][''])
-
-    return df
+    return X, y
 
 # train 
-# def train(data, ss_data):
-def train(data):
+def train(df):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
-        data (json): return of the api request
-        ss_data(json): return of the ss request
+        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
+        y_raw (string): a 1-d array whcich includes all corresponding response values to X
     
     Returns:
         m (array): coefficents for the line of best fit
     """
 
-    df = clean(data)
+    # TODO  P AND M GET DATA BASE THINGS
 
-    X = add_bias_column(np.array([df['content'], ]))
+    # # grabbing the y values and X values
+    # cursor = db.get_db().cursor()
+    # X_query = 'SELECT x_vals FROM #whichever database the X values are in#' # TODO this sql query
+    # cursor.execute(X_query)
+    # X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
+    # # where we parse all of the strings from the database
 
+    # X_pre_parse = X_return['x_vals'] 
+
+    # X_train = np.array(list(map(float, X_raw[1:, -1].split(','))))
+    # y_train = np.array(list(map(float, y_raw[1:, -1].split(','))))
+
+
+    X = add_bias_column(X_train)
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
     m = np.matmul(XtXinv, np.matmul(X.T, y_train))
     
