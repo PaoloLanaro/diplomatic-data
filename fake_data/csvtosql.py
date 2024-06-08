@@ -24,22 +24,21 @@ def csv_to_sql(csv_file):
             publication_date = row['date']
             sentiment = row['sentiment']
             article_link = row['url']
-            source_country = row ['source_country']
+            country_written_from = row ['country_written_from']
             content = escape_single_quotes(row['text'])
-            saftey_index = (row['Safety Index'])
-            queried_country = escape_single_quotes(row['queried_country'])
-            insert_stmt = f"INSERT INTO article (content, publication_date, article_link, saftey_index, source_country, sentiment, queried_country) VALUES ('{content}', '{publication_date}', '{article_link}', {saftey_index}, '{source_country}', {sentiment}, '{queried_country}');"
+            country_written_about = escape_single_quotes(row['country_written_about'])
+            insert_stmt = f"INSERT INTO article (content, publication_date, article_link, country_written_from, sentiment, country_written_about) VALUES ('{content}', '{publication_date}', '{article_link}', '{country_written_from}', {sentiment}, '{country_written_about}');"
             insert_statements.append(insert_stmt)
 
 
 # Write the INSERT INTO statements to a .sql file
         print(f"insert statements object={insert_statements}")
-        with open('database/insert_article.sql', 'w') as f:
+        with open('../database/insert_article.sql', 'w') as f:
             f.write('\n'.join(insert_statements))
 
         print("SQL file created successfully.")
 
-csv_to_sql('api/backend/assets/Data News Sources.csv')
+csv_to_sql('../api/backend/assets/Data News Sources.csv')
 
 
         
