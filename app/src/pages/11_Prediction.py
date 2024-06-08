@@ -14,21 +14,18 @@ SideBarLinks()
 
 st.title("Country Sentiment Prediction")
 
-# making 2 columns for the general layout
+# 2 columns for the two dropboxes
 col1, col2 = st.columns(2)
 
+with col1: 
+    country_origin = st.selectbox("Country of Article's Origin", df["Country"])
 
-# 1st column: text input, country dropdown
-with col1:
-    country = st.selectbox("Country to Predict", df["Country"])
-    text = st.text_input("Article Text")
-
-# 2nd column: two sliders
 with col2:
-    month = st.slider('Month of Publishing', 1, 12)
-    hour = st.slider('Hour of Publishing', 0, 23)
+    country_query = st.selectbox("Country of Article's Intention", ['Russia', 'China', 'Belgium', 'United States']) # TODO make the 5 options the ones in the training set
+
+text = st.text_area("Article Text", "Placeholder")
 
 if st.button('Calculate Sentiment', type='primary', use_container_width=True):
-    sentiment_calc, sentiment_real = requests.get(f'http://api:4000/c/sentiment_prediction/{text}/{country}/{month}/{hour}')
+    sentiment_calc, sentiment_real = requests.get(f'http://api:4000/models/prediction1/{text}/{country_origin}/{country_query}')
     st.write(f'The information of the article you provided indicates that it has a sentiment score of {sentiment_calc} based on our calculations.')
-    st.write(f'The actual sentiment calculated from the article\'s text is {sentiment_real}')
+    st.write(f'The actual sentiment calculated from the article\'s text is {sentiment_real}.')

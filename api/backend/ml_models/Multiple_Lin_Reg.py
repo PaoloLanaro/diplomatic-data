@@ -1,79 +1,79 @@
 import pandas as pd
 import numpy as np
 from backend.db_connection import db
-import logging
-import os
-from sklearn.model_selection import train_test_split
 
-logger = logging.getLogger()
 
 
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
 # train 
-def train():
-    """takes in 2 arrays and gives the vector containing the coefficients for the line of best fit
+def train(X_raw, y_raw):
+    """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
-        X (array): can be either 1-d or 2-d
-        y (array): a 1-d array whcich includes all corresponding response values to X
+        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
+        y_raw (string): a 1-d array whcich includes all corresponding response values to X
     
     Returns:
         m (array): coefficents for the line of best fit
     """
-    # grabbing the y values and X values
-    cursor = db.get_db().cursor()
-    X_query = 'SELECT x_vals FROM #whichever database the X values are in#' # TODO this sql query
-    cursor.execute(X_query)
-    X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
-    # where we parse all of the strings from the database
+    # TODO  P AND M GET DATA BASE THINGS
 
-    X_pre_parse = X_return['x_vals']
+    # # grabbing the y values and X values
+    # cursor = db.get_db().cursor()
+    # X_query = 'SELECT x_vals FROM #whichever database the X values are in#' # TODO this sql query
+    # cursor.execute(X_query)
+    # X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
+    # # where we parse all of the strings from the database
 
-    X_train = np.array(list(map(float, X_pre_parse[1:, -1].split(','))))
+    # X_pre_parse = X_return['x_vals'] 
+
+    X_train = np.array(list(map(float, X_raw[1:, -1].split(','))))
+    y_train = np.array(list(map(float, y_raw[1:, -1].split(','))))
 
     X = add_bias_column(X_train)
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
-    m = np.matmul(XtXinv, np.matmul(X.T, y))
+    m = np.matmul(XtXinv, np.matmul(X.T, y_train))
     
     return m # needs to be stored and then queried from the function below
 
 # predict
-def predict(text, country, hour, month):
+def predict(text, ss_pre_parse, m_pre_parse):
     """
     Description:
         With the user specified values, we predict the sentiment of an article.
 
     Args:
         text(str): corpus for analysis of both library version of sentiment and for finding the word count as feature of model
-        country(str): intended country of safety score for use in sentiment prediction
-        hour(int): hour of publication, [0, 23]
-        month(int): month of publication, [1, 12]
+        ss_pre_parse (str): intended country of safety score for use in sentiment prediction, to be parsed for a value
+ 
 
     Returns:
-        sentiment(float): of a hypothetical article
+        dot prod (float): calculation of the provided x values with the m values
+        sentiment(float): of a hypothetical article using textblob library
     """
 
-    # grab database curson
-    cursor = db.get_db().cursor()
+    # sentiment
+    blob = TextBlob(text)
+    sentiment = blob.sentiment.polarity
 
-    # grabbing the M vector
-    m_query = 'SELECT m_vals FROM weight_vector ' # TODO flesh this out, not finished
-    cursor.execute(m_query)
-    m_return = cursor.fetchone()
-    m_pre_parse = m_return['m_vals']
+    # # grabbing the M vector
+    # m_query = 'SELECT m_vals FROM weight_vector ' # TODO flesh this out, not finished
+    # cursor.execute(m_query)
+    # m_return = cursor.fetchone()
+    # m_pre_parse = m_return['m_vals']
     m = np.array(list(map(float, m_pre_parse[1:-1].split(','))))
 
-    # grabbing the safety score
-    ss_query = 'SELECT ss FROM something' # TODO flesh this out and pimp out this db
-    cursor.execute(ss_query)
-    ss_return = cursor.fetchone()
-    ss_pre_parse = ss_return['ss'] # also likely wrong
-    safety_score = np.array(list(map(float, ss_pre_parse[1:-1].split(',')))) # also the sequal query to the country codes thing!!!!
+    # # grabbing the safety score
+    # ss_query = 'SELECT safety_index FROM country' # TODO flesh this out and pimp out this db
+    # cursor.execute(ss_query)
+    # ss_return = cursor.fetchone()
+    # ss_pre_parse = ss_return['ss'] # also likely wrong
+    safety_score = map(float, ss_pre_parse[1:-1].split(',')) # also the sequal query to the country codes thing!!!!
 
     X = np.array([1, len(text.split()), safety_score, hour, month])
 
-    return np.dot(add_bias_column(X), m)
+    return np.dot(add_bias_column(X), m), sentiment
 
 # adding bias column
 def add_bias_column(X):

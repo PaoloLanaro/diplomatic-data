@@ -176,8 +176,7 @@ DROP TABLE IF EXISTS beta_values;
 CREATE TABLE IF NOT EXISTS beta_values (
   intercept FLOAT,
   word_count FLOAT,
-  hour_of_day FLOAT,
-  month_ts FLOAT,
-  saftey FLOAT
+  country_origin FLOAT,
+  country_origin FLOAT,
 );
 
