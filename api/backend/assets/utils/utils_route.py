@@ -3,11 +3,11 @@ import json
 from backend.ml_models.Linear_Perceptron import predict, train
 from backend.db_connection import db
 
-country = Blueprint('country', __name__)
+utils = Blueprint('utils', __name__)
 
-@country.route('/sorted_list', methods=['GET'])
+@utils.route('/countries/sorted_list', methods=['GET'])
 def get_all_countries_sorted():
-    current_app.logger.info('country routes: GET /country/sorted_list')
+    current_app.logger.info('country routes: GET utils/countries/sorted_list')
     current_app.logger.info('This route should return all countries sorted lexicographically')
     
     # Establish a connection to the database
@@ -26,9 +26,9 @@ def get_all_countries_sorted():
     return response
 
 
-@country.route('/unsorted_list', methods=['GET'])
+@utils.route('/countries/unsorted_list', methods=['GET'])
 def get_all_countries_unsorted():
-    current_app.logger.info('country routes: GET /country/unsorted_list')
+    current_app.logger.info('country routes: GET utils/countries/unsorted_list')
     current_app.logger.info('This route should return all countries unsorted')
     
     # Establish a connection to the database
