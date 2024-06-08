@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.ml_models.Multiple_Lin_Reg import predict, train
 from backend.db_connection import db
+import pandas as pd
 
 models = Blueprint('models', __name__)
 
@@ -11,14 +12,22 @@ def test_model_one(text, country_origin, country_query):
     current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin} \country_query: {country_query}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vector table
-    m_query = 'SELECT * FROM article;'
-    cursor.execute(m_query)
-    m = [x[0] for x in cursor.description]
+    query = 'SELECT * FROM article;'
+    cursor.execute(query)
 
-    sentiment_guess, sentiment_actual = predict(text, country_origin, country_query, m)
+    sentiment_guess, sentiment_actual = predict(text, country_origin, country_query, query)
 
     row_headers = [x[0] for x in cursor.description]
     theData = cursor.fetchall()
+
+# rows = cursor.fetchall()
+
+# # Get column names from cursor.description
+# column_names = [desc[0] for desc in cursor.description]
+
+# # Create a DataFrame
+# df = pd.DataFrame(rows, columns=column_names)
+
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
     the_response = make_response(jsonify(json_data))
@@ -46,13 +55,21 @@ def test_model_two(possibleVar):
 @models.route('/train_prediction1', methods=['GET']) # trains lin reg
 def train_prediction1():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
-    returnVal = train();
+
+    query = 'SELECT * FROM article'
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+
+    # rows = cursor.fetchall()
+    # column_names = [desc[0] for desc in cursor.description]
+    # df = pd.DataFrame(rows, columns=column_names)
+
+    current_app.logger.info(f"the dataframe that we found: {cursor.fetchall()}")
+
+    returnVal = train(cursor.fetchall());
+
     current_app.logger.info(f'called train function from backend, response {returnVal}')
     current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
-
-    # query = 'INSERT INTO weight_vector (beta_vals) VALUES %s'
-    # cursor = db.get_db().cursor()
-    # cursor.execute(query, (returnVal))
 
     response = make_response(jsonify(returnVal))
     response.status_code = 200

@@ -6,7 +6,7 @@ from textblob import TextBlob
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
 # train 
-def train(X_raw, y_raw):
+def train(df):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
@@ -16,6 +16,7 @@ def train(X_raw, y_raw):
     Returns:
         m (array): coefficents for the line of best fit
     """
+
     # TODO  P AND M GET DATA BASE THINGS
 
     # # grabbing the y values and X values
@@ -27,8 +28,9 @@ def train(X_raw, y_raw):
 
     # X_pre_parse = X_return['x_vals'] 
 
-    X_train = np.array(list(map(float, X_raw[1:, -1].split(','))))
-    y_train = np.array(list(map(float, y_raw[1:, -1].split(','))))
+    # X_train = np.array(list(map(float, X_raw[1:, -1].split(','))))
+    # y_train = np.array(list(map(float, y_raw[1:, -1].split(','))))
+
 
     X = add_bias_column(X_train)
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
@@ -45,7 +47,7 @@ def predict(text, ss_pre_parse, m_pre_parse):
     Args:
         text(str): corpus for analysis of both library version of sentiment and for finding the word count as feature of model
         ss_pre_parse (str): intended country of safety score for use in sentiment prediction, to be parsed for a value
- 
+        m_pre_parse (str): weight vectors of the linear regression
 
     Returns:
         dot prod (float): calculation of the provided x values with the m values
