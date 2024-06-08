@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from backend.db_connection import db
-
-
+from textblob import TextBlob
 
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
@@ -54,8 +53,7 @@ def predict(text, ss_pre_parse, m_pre_parse):
     """
 
     # sentiment
-    blob = TextBlob(text)
-    sentiment = blob.sentiment.polarity
+    sentiment = TextBlob(text).sentiment.polarity
 
     # # grabbing the M vector
     # m_query = 'SELECT m_vals FROM weight_vector ' # TODO flesh this out, not finished
@@ -71,7 +69,7 @@ def predict(text, ss_pre_parse, m_pre_parse):
     # ss_pre_parse = ss_return['ss'] # also likely wrong
     safety_score = map(float, ss_pre_parse[1:-1].split(',')) # also the sequal query to the country codes thing!!!!
 
-    X = np.array([1, len(text.split()), safety_score, hour, month])
+    X = np.array([1, len(text.split()), safety_score])
 
     return np.dot(add_bias_column(X), m), sentiment
 

@@ -11,7 +11,7 @@ def test_model_one(text, country_origin, country_query):
     current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin} \country_query: {country_query}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vector table
-    m_query = 'SELECT * FROM beta_vals;'
+    m_query = 'SELECT * FROM article;'
     cursor.execute(m_query)
     m = [x[0] for x in cursor.description]
 
