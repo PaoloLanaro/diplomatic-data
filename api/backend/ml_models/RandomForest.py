@@ -97,6 +97,6 @@ def predict_rf(text, queried):
 
     cursor = db.get_db().cursor()
 
-    predictions = rf.predict(X)
+    prediction = rf.predict(X)
 
-    return np.dot(add_bias_column(X), m)
+    return prediction
