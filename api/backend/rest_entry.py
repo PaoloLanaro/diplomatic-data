@@ -57,9 +57,9 @@ def create_app():
         return data
 
     app.logger.info("current_app(): registering blueprints with app object.")
-    app.register_blueprint(customers, url_prefix="/c")
-    app.register_blueprint(products, url_prefix="/p")
-    app.register_blueprint(social, url_prefix="/s")
+    # app.register_blueprint(customers, url_prefix="/c")
+    # app.register_blueprint(products, url_prefix="/p")
+    # app.register_blueprint(social, url_prefix="/s")
     app.register_blueprint(activity, url_prefix="/a")
     app.register_blueprint(models, url_prefix="/models")
     app.register_blueprint(article, url_prefix='/article')

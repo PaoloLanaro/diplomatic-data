@@ -8,13 +8,14 @@ models = Blueprint('models', __name__)
 @models.route('/prediction1/<text>/<country>/<month>/<hour>', methods=['GET'])
 def test_model_one(text, country, month, hour):
     current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country>/<month>/<hour>')
-    current_app.logger.info(f'text: {text} \ncountry: {country} \nmonth: {month} \nhour: {hour}')
+    current_app.logger.info(f'\ntext: {text} \ncountry: {country} \nmonth: {month} \nhour: {hour}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vecto table
     # query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
     query = 'SELECT * from users'
     cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
+    current_app.logger.info(f'row_headers: {row_headers}')
     json_data = []
     theData = cursor.fetchall()
     for row in theData:

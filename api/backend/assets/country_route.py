@@ -17,7 +17,6 @@ def get_all_countries_sorted():
     cursor.execute(query)
     
     # Get the mapping from 'country_name' to each country's string
-    country_names = []
     country_names = cursor.fetchall()
 
     # Make a success response to the request
