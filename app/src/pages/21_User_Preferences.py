@@ -29,6 +29,7 @@ st.markdown(
 st.write("### User Preferences")
 st.divider()
 
+# range based select -- research this 
 st.date_input("Preferred Timeline")
 
 df = pd.DataFrame(pd.read_csv("./assets/safetycodes.csv"))

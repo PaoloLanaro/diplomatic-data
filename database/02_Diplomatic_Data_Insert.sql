@@ -52,30 +52,60 @@ INSERT INTO users (user_id, created_at, gender, email, birthdate, first_name, us
 (49, '2022-08-05', 'M', 'bjuppe1c@uiuc.edu', '2003-05-12', 'Bruno', 'blaste1c', 'Philippines'),
 (50, '2021-07-29', 'F', 'abox1d@cargocollective.com', '2001-06-01', 'Audry', 'amccoole1d', 'Kazakhstan');
 
-INSERT INTO weight_vector (beta_vals) VALUES ("[0.0, -0.21913580557953766]");
 
-INSERT INTO country (country_name, saftey_index, country_code) VALUES
+INSERT INTO country (country_name, safety_index, country_code) VALUES
 ('United States', 0.535, 'us'),
-('Russia', 0.585, 'ru'),
+('Russia', 0.59, 'ru'),
 ('Ukraine', 0.64, 'ua'),
-('Australia', 0.80666667, 'au'),
+('Australia', 0.81, 'au'),
 ('Switzerland', 0.875, 'ch'),
 ('United Kingdom', 0.75, 'gb'),
-('China', 0.78428571, 'cn'),
+('China', 0.78, 'cn'),
 ('UAE', 0.835, 'ae'),
-('Canada', 0.78333333, 'ca'),
-('France', 0.745, 'fr'),
-('Germany', 0.80333333, 'de'),
+('Canada', 0.78, 'ca'),
+('France', 0.75, 'fr'),
+('Germany', 0.8, 'de'),
 ('Egypt', 0.67, 'eg'),
 ('Brazil', 0.2025, 'br'),
 ('Belgium', 0.7, 'be'),
 ('Colombia', 0.22, 'co'),
 ('DR', 0.23, 'do'),
-('India', 0.68166667, 'in'),
+('India', 0.635, 'in'),
 ('Iran', 0.6, 'ir'),
 ('Mexico', 0.42, 'mx'),
 ('Japan', 0.89, 'jp'),
-('South Africa', 0.005, 'za');
+('South Africa', 0.005, 'za'),
+('Bahrain', 0.85, 'bh'),
+('Bermuda', 0.52, 'bm'),
+('Ethiopia', 0.54, 'et'),
+('Europe', 0.73, 'eu'),
+('Guyana', 0.56, 'gy'),
+('Hong Kong', 0.87, 'hk'),
+('Ireland', 0.75, 'ie'),
+('Italy', 0.75, 'it'),
+('Kazakhstan', 0.55, 'kz'),
+('Kenya', 0.53, 'ke'),
+('Lebanon', 0.61, 'lb'),
+('Malaysia', 0.57, 'my'),
+('Maldives', 0.53, 'mv'),
+('Micronesia, Federated States Of', 0.53, 'fm'),
+('Nigeria', 0.37, 'ng'),
+('Pakistan', 0.52, 'pk'),
+('Qatar', 0.82, 'qa'),
+('Singapore', 0.9, 'sg'),
+('Somalia', 0.53, 'so'),
+('Spain', 0.795, 'es'),
+('Sri Lanka', 0.74, 'lk'),
+('Sweden', 0.78, 'se'),
+('Tuvalu', 0.53, 'tv'),
+('Uruguay', 0.48, 'uy'),
+('Uzbekistan', 0.7, 'uz');
+
+INSERT INTO trending_articles (article_id, views_last_24_hours) VALUES
+(391, 100),
+(300, 50),
+(199, 0),
+(123, 1000000);
 
 
 COMMIT;
