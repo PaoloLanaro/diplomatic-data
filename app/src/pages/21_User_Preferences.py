@@ -32,7 +32,7 @@ next_year = date1.year + 1
 range_cutoff = date(next_year, 12, 31)
 next_week = datetime.now() + timedelta(days=7)
 
-st.date_input("Preferred Timeline", (date1, date2), date1, range_cutoff, format="MM.DD.YYYY")
+st.date_input("Preferred Timeline", (date1, date2), datetime.today(), format="MM.DD.YYYY")
 
 # --------------- get countries w/o csv --------------------
 # you will have to change anywhere on this page that has something like df["Country"].

@@ -39,6 +39,9 @@ def TravelerHomeNav():
 def UserPreferencesNav():
     st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences") 
 
+def ArticleSearchNav():
+    st.sidebar.page_link("pages/22_Traveler_Search.py", label="Search for Articles")
+
 #### ------------------------ sysadmin page nav ------------------------------
 def SystemAdminHomeNav():
     st.sidebar.page_link("pages/30_SysAdmin_Home.py", label="Sysadmin's Home", icon='👩‍💻')
@@ -86,6 +89,7 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'traveler':
             TravelerHomeNav()
             UserPreferencesNav()
+            ArticleSearchNav()
 
         if st.session_state['role'] == 'sysadmin':
             SystemAdminHomeNav()

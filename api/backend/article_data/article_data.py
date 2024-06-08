@@ -48,9 +48,6 @@ def get_random_article():
     response.mimetype = 'application/json'
     return response
 
-
-    
-
 # to add the user's article to the article table 
 @article.route('/article_data', methods=['POST'])
 def add_new_article():
@@ -91,6 +88,20 @@ def add_new_article():
     db.get_db().commit()
     return 'article added'
 
+@article.route('/articles', methods=['POST'])
+def get_articles_matching_search():
+    current_app.logger.info('POST /article_data route')
+    search_words = request.json
+    # should return a python list of data
+    current_app.logger.info(search_words)
+    # search for articles that have content that contains all search words
+    # return those articles somehow?
+    conditions = " AND ".join([f'content LIKE "%{keyword}%"' for keyword in search_words])
+    get_articles_query = f'SELECT content, publication_date, article_link AS url, country_written_from FROM article WHERE {conditions} LIMIT 10'
+    current_app.logger.info(f'get_article_query: {get_articles_query}')
+    cursor = db.get_db().cursor()
+    cursor.execute(get_articles_query)
 
-
+    results = cursor.fetchall()
+    current_app.logger.info(f'results of query: {results}')
 

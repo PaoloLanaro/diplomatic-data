@@ -25,7 +25,6 @@ def get_all_countries_sorted():
     response.mimetype = 'application/json'
     return response
 
-
 @utils.route('/countries/unsorted_list', methods=['GET'])
 def get_all_countries_unsorted():
     current_app.logger.info('country routes: GET utils/countries/unsorted_list')

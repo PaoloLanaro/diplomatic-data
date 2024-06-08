@@ -18,6 +18,10 @@ if st.button('Configure your preferences',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['first_name'] = 'Monika'
-    st.session_state['last_name'] = 'José'
     st.switch_page('pages/21_User_Preferences.py')
+
+if st.button('Search for articles',
+             type='primary',
+             use_container_width=True):
+    st.switch_page('pages/22_Traveler_Search.py')
+
