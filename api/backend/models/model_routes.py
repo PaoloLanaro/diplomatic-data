@@ -11,7 +11,8 @@ def test_model_one(text, country, month, hour):
     current_app.logger.info(f'text: {text} \ncountry: {country} \nmonth: {month} \nhour: {hour}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vecto table
-    query = 'SELECT * from users;'
+    # query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
+    query = 'SELECT * from users'
     cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
     json_data = []
@@ -43,7 +44,7 @@ def test_model_two(possibleVar):
 @models.route('/train_prediction1', methods=['GET'])
 def train_prediction1():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
-    returnVal = train();
+    returnVal = train()
     current_app.logger.info(f'called train function from backend, response {returnVal}')
     current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 
@@ -59,7 +60,7 @@ def train_prediction1():
 @models.route('/train_prediction2', methods=['GET'])
 def train_prediction2():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
-    returnVal = train();
+    returnVal = train()
     current_app.logger.info(f'called train function from backend, response {returnVal}')
     current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
 

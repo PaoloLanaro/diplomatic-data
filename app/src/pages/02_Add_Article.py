@@ -18,16 +18,19 @@ sorted_country_names = df["Country"].sort_values()
 st.title("Hello! Please add your article information below and submit!")
 
 # what's the difference between this and other st.text_input? we aren't using this for data... why do we have it?
-st.text_area('Info about this page')
+content = st.text_area('Info about this page', 'Milo Margolis waz here')
 
 publication_date = st.date_input("When did you write this?")
 publication_time = st.time_input("What time did you write this?")
 
+PLACEHOLDER_URL = 'https://www.nytimes.com/'
+
+url_val = st.text_input('Please provide the URL', placeholder = PLACEHOLDER_URL)
+st.write('note to paolo: check if placeholder gets sent if you submit without anything')
 # would have liked to combine into datetime at once and send in JSON post request, but datetime, dates, and time
 # data types are not JSON serializable. This means we package each individually and then unpack them at the endpoint
 # publication_datetime = datetime.combine(publication_date, publication_time)
 
-content = st.text_input("Add all of the body text (the content) here", 'Include auto filled text here to do sentiment analysis on without having to actually input')
 queried_country = st.selectbox("What country are you writing about?", sorted_country_names)
 source_country = st.selectbox("What country are you writing from?", sorted_country_names)
 
