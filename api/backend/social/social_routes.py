@@ -205,6 +205,25 @@ def add_user_likes():
     response.mimetype = 'application/json'
     return response
 
+@social.route("/user_views", methods=["POST"])
+def add_user_views():
+    current_app.logger.info("POST /user_views")
+    response = request.json
+    current_app.logger.info(f'response: {response}')
+    user_id = response['user_id']
+    article_id = response['article_id']
+    view_date = response['viewed_at']
+
+    add_dates_query = 'INSERT INTO views (user_id, article_id, view_date) VALUES (%s, %s, %s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(add_dates_query, (user_id, article_id, view_date))
+    db.get_db().commit()
+
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+
 @social.route("/user_saves", methods=["POST"])
 def add_user_saves():
     current_app.logger.info("POST /user_saves")

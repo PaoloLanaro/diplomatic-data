@@ -1,6 +1,11 @@
 import streamlit as st
 from streamlit_extras.app_logo import add_logo
 from modules.nav import SideBarLinks
+import requests
+import pandas as pd
+import random
+from dotenv import load_dotenv
+import os
 
 SideBarLinks(True)
 
@@ -24,6 +29,17 @@ st.markdown (
     held by other nations is crucial for effective diplomacy and media engagement.
     """
     )
+
+response = requests.get('http://api:4000/utils/coordinates')
+
+latitude, longitude = [], []
+for city in response.json():
+    latitude.append(city['latitude'])
+    longitude.append(city['longitude'])
+
+city_df = pd.DataFrame({'latitude': latitude, 'longitude': longitude})
+
+st.map(city_df, zoom=1.2)
 
 if st.session_state['authenticated']:
     if st.button("Logout & Home", type = 'primary', use_container_width = True): 

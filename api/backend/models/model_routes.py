@@ -7,19 +7,29 @@ import pandas as pd
 models = Blueprint('models', __name__)
 
 @models.route('/prediction1/<text>/<country_origin>', methods=['GET'])
-def test_model_one(text, country_origin, country_query):
+def test_model_one(text, country_origin):
     current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country_origin>/')
     current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin}')
-    cursor = db.get_db().cursor()
+
+    beta_cursor = db.get_db().cursor()
+    # beta_val_query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
+    beta_val_query = 'SELECT beta_vals FROM weight_vector'
+    beta_cursor.execute(beta_val_query)
+    beta_val = beta_cursor.fetchall()
+
+    current_app.logger.info(f"ss_query returns: {beta_val}")
+
+    # grabbing the ss values
+    ss_cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vector table
-    query = 'SELECT * FROM beta_vals;' # TODO check with paolo if this is correct
-    cursor.execute(query)
+    ss_query = 'SELECT * FROM country;'
+    ss_cursor.execute(ss_query)
+    ss_result = ss_cursor.fetchall()
 
-    m_result = cursor.fetchall()
+    sentiment = predict(text, country_origin, ss_result, beta_val)
+    current_app.logger.info(f'printing out type {type(sentiment)}')
 
-    sentiment_guess, sentiment_actual = predict(text, country_origin, m_result)
-
-    the_response = make_response(jsonify({'sentiment_guess': sentiment_guess, 'sentiment_actual': sentiment_actual}))
+    the_response = make_response(jsonify({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]}))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
@@ -44,15 +54,14 @@ def test_model_two(possibleVar):
 @models.route('/train_prediction1', methods=['GET']) # trains lin reg
 def train_prediction1():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
-    cursor = db.get_db().cursor()
 
-    query = 'SELECT content, country_written_from, sentiment, country_written_about, safety_index FROM article JOIN country ON country.country_name = article.country_written_about;'
-    cursor.execute(query)
-    current_app.logger.info(f'executed query {query} succsefully')
-    
-    query_return = cursor.fetchall()
-
-    train_response = train(query_return)
+    # grabbing all x values
+    X_cursor = db.get_db().cursor()
+    X_query = 'SELECT content, country_written_from, sentiment, country_written_about, safety_index FROM article JOIN country ON country.country_name = article.country_written_about;'
+    X_cursor.execute(X_query)
+    current_app.logger.info(f'executed query {X_query} succsefully')
+    X_query_return = X_cursor.fetchall()
+    train_response = train(X_query_return)
     
     response = make_response(jsonify(train_response.tolist()))
     response.status_code = 200

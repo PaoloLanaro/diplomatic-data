@@ -14,4 +14,5 @@ seaborn
 scikit-learn
 textblob
 shap
-
+shapely
+python-dotenv==1.0.1

@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 article = Blueprint('article', __name__)
 
+
 @article.route('/random_article', methods=['GET'])
 def get_random_article():
     current_app.logger.info('GET /random_article route')
