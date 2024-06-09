@@ -1,12 +1,14 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
 from textblob import TextBlob
+import requests
+from bs4 import BeautifulSoup
 
 article = Blueprint('article', __name__)
 
 @article.route('/random_article', methods=['GET'])
 def get_random_article():
-    current_app.logger.info('POST /random_article route')
+    current_app.logger.info('GET /random_article route')
     # GET request
     # get random article from database
       # possibly try and get a title and summary
@@ -37,6 +39,7 @@ def get_random_article():
         country_name = cursor_country_name['country_name']
 
     data = {
+            'article_id': random_article['article_id'],
             'text': random_article['content'],
             'YYYY-MM-DD': date,
             'link': random_article['article_link'],
@@ -94,8 +97,8 @@ def get_articles_matching_search():
     search_words = request.json
     # should return a python list of data
     current_app.logger.info(search_words)
-    # return those articles somehow?
-    conditions = " AND ".join([f'content LIKE "%{keyword}%"' for keyword in search_words])
+    conditions = " AND ".join([f'content LIKE "% {keyword} %"' for keyword in search_words])
+
     # Get atricles, publication dates, URLs, and country_names for articles that match all serach terms
     get_articles_query = f'''
     SELECT content, publication_date, article_link AS url, country_name 
@@ -107,34 +110,43 @@ def get_articles_matching_search():
     cursor = db.get_db().cursor()
     cursor.execute(get_articles_query)
 
-    row_headers = [x[0] for x in cursor.description]
-    current_app.logger.info(f'row_headers: {row_headers}')
     searched_articles = cursor.fetchall()
 
-    current_app.logger.info(f'json_data: {searched_articles}')
     the_response = make_response(jsonify(searched_articles))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
 
-    # row_headers = [x[0] for x in cursor.description]
-    # json_data = []
-    # theData = cursor.fetchall() 
-    # for row in theData:
-        # current_app.logger.info(f'current row: {row}')
-        # json_data.append(dict(zip(row_headers, row))) 
-    # current_app.logger.info(f'json_data: {json_data}')
-    # the_response = make_response(jsonify(json_data))
-    # the_response.status_code = 200
-    # return the_response
-    # results = cursor.fetchall()
-    # current_app.logger.info(f'results of query: {results}')
+@article.route('/title/<path:url>', methods=['GET'])
+def get_articles_title_from_url(url):
+    current_app.logger.info('GET /title route')
+    try:
+        # Send a GET request to the URL
+        current_app.logger.info(f'url: {url}')
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad status codes
 
-    # row_headers = [x[0] for x in cursor.description]
-    # json_data = []
-    # for row in results:
-        # json_data.append(dict(zip(row_headers, row))) 
-    # response = make_response(jsonify(json_data))
-    # current_app.logger.info(f'response: {response}')
-    # response.status_code = 200
-    # return response
+        # Parse the HTML content using BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Extract the title tag
+        title_tag = soup.find('title')
+        if title_tag:
+            title = title_tag.get_text(strip=True)
+        else:
+            title = None
+            response.raise_for_status()
+        
+        data = {'title': title}
+        response = make_response(jsonify(data))
+        response.status_code = 200
+        response.mimetype = 'application/json'
+        return response
+    
+    except requests.exceptions.RequestException as e:
+        error_message = f"An error occurred: {e}"
+        data = {'error': error_message}
+        response = make_response(jsonify(data))
+        response.status_code = 400
+        response.mimetype = 'application/json'
+        return response

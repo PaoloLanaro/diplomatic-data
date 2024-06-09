@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger()
 
-
 df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
 def clean(news_data):

@@ -10,3 +10,5 @@ pandas
 scikit-learn
 datetime
 textblob
+requests
+beautifulsoup4

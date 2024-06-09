@@ -49,11 +49,7 @@ if st.button('Search for articles',
     num_articles = len(articles_json)
     
 if show_articles:
-    if num_articles != 0:
-        if st.button('Next article'):
-            article_idx += 1
-            if article_idx >= num_articles:
-                article_idx = 0
+    if num_articles != 0: 
         st.write('# Title')
         st.write(f'#### Published on {articles_json[article_idx]["publication_date"]}')
         st.write(f'{articles_json[article_idx]["url"]}')
@@ -61,5 +57,10 @@ if show_articles:
         st.write('### Article Content')
         st.write(articles_json[article_idx]['content'])
         st.write(f'#### From: {articles_json[article_idx]["country_name"]}')
+        if st.button('Next article',
+                     use_container_width = True):
+            article_idx += 1
+            if article_idx >= num_articles:
+                article_idx = 0
     else:
         st.write('# --No articles matched your search terms--')
