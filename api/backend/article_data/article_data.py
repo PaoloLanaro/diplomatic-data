@@ -72,19 +72,24 @@ def add_new_article():
     country_written_about = article_info['country_written_about']
     country_written_from = article_info['country_written_from']
 
+    # convert country written about to short form
+    country_name_query = 'SELECT country_code FROM country WHERE UPPER(country_name) = %s'
+    cursor.execute(country_name_query, country_written_from.upper())
+    cursor_country_name = cursor.fetchone()
+    current_app.logger.info(f'cursor_country_name: {cursor_country_name}')
+    if cursor_country_name is None:
+        country_code = 'error'
+    else:
+        country_code = cursor_country_name['country_code']
+ 
+
     # to get the article info 
     url = article_info['url']
 
     sentiment = TextBlob(text).sentiment.polarity 
 
-    # country_code = 'INSERT'
-
-    # cursor.execute(country_code)
-    # article_country_ID = cursor.fetchone()
-    # cursor.clear_attributes()
-
     query = 'INSERT INTO article (content, publication_date, article_link, country_written_from, sentiment, country_written_about) VALUES (%s, %s, %s, %s, %s, %s)'
-    data = (text, date, url, country_written_about, sentiment, country_written_from)
+    data = (text, date, url, country_code, sentiment, country_written_about)
     current_app.logger.info((query, data))
 
     cursor.execute(query, data)
