@@ -70,14 +70,14 @@ def train(data):
     return m # needs to be stored and then queried from the function below
 
 # predict
-def predict(text, ss_pre_parse, m_pre_parse):
+def predict(text, country, m_pre_parse):
     """
     Description:
         With the user specified values, we predict the sentiment of an article.
 
     Args:
         text(str): corpus for analysis of both library version of sentiment and for finding the word count as feature of model
-        ss_pre_parse (str): intended country of safety score for use in sentiment prediction, to be parsed for a value
+        country (str): intended country of safety score for use in sentiment prediction, to be parsed for a value
         m_pre_parse (str): weight vectors of the linear regression
 
     Returns:
@@ -85,24 +85,12 @@ def predict(text, ss_pre_parse, m_pre_parse):
         sentiment(float): of a hypothetical article using textblob library
     """
 
-    # sentiment
+    # actual sentiment
     sentiment = TextBlob(text).sentiment.polarity
 
-    # # grabbing the M vector
-    # m_query = 'SELECT m_vals FROM weight_vector ' # TODO flesh this out, not finished
-    # cursor.execute(m_query)
-    # m_return = cursor.fetchone()
-    # m_pre_parse = m_return['m_vals']
     m = np.array(list(map(float, m_pre_parse[1:-1].split(','))))
 
-    # # grabbing the safety score
-    # ss_query = 'SELECT safety_index FROM country' # TODO flesh this out and pimp out this db
-    # cursor.execute(ss_query)
-    # ss_return = cursor.fetchone()
-    # ss_pre_parse = ss_return['ss'] # also likely wrong
-    safety_score = map(float, ss_pre_parse[1:-1].split(',')) # also the sequal query to the country codes thing!!!!
-
-    X = np.array([1, len(text.split()), safety_score])
+    X = []
 
     return np.dot(add_bias_column(X), m), sentiment
 
