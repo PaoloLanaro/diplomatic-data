@@ -2,7 +2,15 @@ import pandas as pd
 import numpy as np
 from backend.db_connection import db
 from textblob import TextBlob
+<<<<<<< HEAD
 from flask import current_app
+=======
+import logging
+import os
+from sklearn.model_selection import train_test_split
+
+logger = logging.getLogger()
+>>>>>>> bdbebe061c09d1d7c4b53d1e0d12befe6d4a2894
 
 # df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 

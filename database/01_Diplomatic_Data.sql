@@ -166,20 +166,3 @@ CREATE TABLE IF NOT EXISTS forest_vector
     source_country  VARCHAR(50)
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
