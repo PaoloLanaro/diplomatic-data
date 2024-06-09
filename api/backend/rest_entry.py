@@ -12,7 +12,6 @@ from backend.models.model_routes import models
 from backend.article_data.article_data import article
 from backend.assets.utils.utils_route import utils
 from backend.article_data.trending_data import trending
-from backend.assets.country_route import country
 import os
 from dotenv import load_dotenv
 
@@ -57,15 +56,14 @@ def create_app():
         return data
 
     app.logger.info("current_app(): registering blueprints with app object.")
-    # app.register_blueprint(customers, url_prefix="/c")
-    # app.register_blueprint(products, url_prefix="/p")
-    # app.register_blueprint(social, url_prefix="/s")
+    #app.register_blueprint(customers, url_prefix="/c")
+    #app.register_blueprint(products, url_prefix="/p")
+    app.register_blueprint(social, url_prefix="/s")
     app.register_blueprint(activity, url_prefix="/a")
     app.register_blueprint(models, url_prefix="/models")
     app.register_blueprint(article, url_prefix='/article')
     app.register_blueprint(utils, url_prefix='/utils')
     app.register_blueprint(trending, url_prefix='/trending')
-    app.register_blueprint(country, url_prefix='/country')
     
     # Don't forget to return the app! actually allows the api to function :P
     return app
