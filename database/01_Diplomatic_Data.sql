@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS likes
 (
     like_id    INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT,
-    article_id INT,
+    article_id INT UNIQUE NOT NULL,
     like_date  DATETIME,
     FOREIGN KEY (user_id) REFERENCES users (user_id)
         ON UPDATE CASCADE
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS saves
 (
     save_id    INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT,
-    article_id INT,
+    article_id INT UNIQUE NOT NULL,
     save_date  DATETIME,
     FOREIGN KEY (user_id) REFERENCES users (user_id)
         ON UPDATE CASCADE
