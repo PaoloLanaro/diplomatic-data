@@ -18,18 +18,7 @@ st.title('ML Model Administration Page')
 st.write('\n\n')
 st.write('## Model 1 Maintenance')
 
-if st.button('Train model',
-             type = 'primary',
-             use_container_width=True):
-    response = requests.get("http://api:4000/models/train_prediction1")
-    if response.status_code == 200:
-        test = response.json()
-        st.write(f"Test is {test}")
-        st.write('note to self: insert sql from train1 function to the database')
-    else:
-        st.write("Ran into an error retrieving a prediction score -- try again")
-
-if st.button('Test predictions',
+if st.button('Train Multiple Linear Regression Model',
              type = 'primary',
              use_container_width=True):
     st.switch_page('pages/32_Test_Model_One.py')

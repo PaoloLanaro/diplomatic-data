@@ -6,28 +6,23 @@ import pandas as pd
 
 models = Blueprint('models', __name__)
 
-@models.route('/prediction1/<text>/<country_origin>/<country_query>', methods=['GET'])
+@models.route('/prediction1/<text>/<country_origin>', methods=['GET'])
 def test_model_one(text, country_origin, country_query):
-    current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country_origin>/<country_query>')
-    current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin} \country_query: {country_query}')
+    current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country_origin>/')
+    current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vector table
-    query = 'SELECT content, country_written_from, sentiment, country_written_about, safety_index FROM article JOIN country ON country.country_name = article.country_written_about;'
+    query = 'SELECT * FROM beta_vals;' # TODO check with paolo if this is correct
     cursor.execute(query)
 
-    sentiment_guess, sentiment_actual = predict(text, country_origin, country_query, query)
+    m_result = cursor.fetchall()
 
-    row_headers = [x[0] for x in cursor.description]
-    current_app.logger.info(f'row_headers: {row_headers}')
-    json_data = []
-    theData = cursor.fetchall()
+    sentiment_guess, sentiment_actual = predict(text, country_origin, m_result)
 
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
+    the_response = make_response(jsonify({'sentiment_guess': sentiment_guess, 'sentiment_actual': sentiment_actual}))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
-    return the_response # TODO need to actually call the predict function
+    return the_response
 
 @models.route('/prediction2/<possibleVar>', methods=['GET'])
 def test_model_two(possibleVar):
