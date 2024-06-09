@@ -162,3 +162,13 @@ CREATE TABLE IF NOT EXISTS forest_vector
     source_country  VARCHAR(50)
 );
 
+DROP TABLE IF EXISTS city_coordinates;
+CREATE TABLE IF NOT EXISTS city_coordinates
+(
+  coordinate_id INT PRIMARY KEY AUTO_INCREMENT,
+  latitude FLOAT,
+  longitude FLOAT,
+  city VARCHAR(100),
+  country_name VARCHAR(50),
+  FOREIGN KEY (country_name) REFERENCES country (country_code)
+)

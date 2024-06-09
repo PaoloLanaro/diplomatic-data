@@ -46,3 +46,30 @@ def get_all_countries_unsorted():
     response.mimetype = 'application/json'
     return response
 
+@utils.route('/countries/codes', methods=['GET'])
+def get_all_country_codes():
+    cursor = db.get_db().cursor()
+    # Get a cursor to all the country names from the country table
+    query = 'SELECT country_code FROM country'
+    cursor.execute(query)
+    
+    # Get the mapping from 'country_name' to each country's string
+    country_names = cursor.fetchall()
+    
+    response = make_response(country_names)
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+
+@utils.route('/coordinates', methods=['GET'])
+def get_country_coordinates(): 
+    cursor = db.get_db().cursor()
+    query = 'SELECT latitude, longitude FROM city_coordinates'
+    cursor.execute(query)
+
+    latitude_longitude = cursor.fetchall()
+
+    response = make_response(latitude_longitude)
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
