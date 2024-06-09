@@ -152,4 +152,40 @@ def remove_saves(savesID):
 
     return "removed saves entry"
 
+@social.route("/user_likes", methods=["POST"])
+def add_user_likes():
+    current_app.logger.info("POST /user_likes")
+    response = request.json
+    current_app.logger.info(f'response: {response}')
+    user_id = response['user_id']
+    article_id = response['article_id']
+    like_date = response['like_date']
 
+    add_likes_query = 'INSERT INTO likes (user_id, article_id, like_date) VALUES (%s, %s, %s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(add_likes_query, (user_id, article_id, like_date))
+    db.get_db().commit()
+
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+
+@social.route("/user_saves", methods=["POST"])
+def add_user_saves():
+    current_app.logger.info("POST /user_saves")
+    response = request.json
+    current_app.logger.info(f'response: {response}')
+    user_id = response['user_id']
+    article_id = response['article_id']
+    save_date = response['save_date']
+
+    add_likes_query = 'INSERT INTO saves (user_id, article_id, save_date) VALUES (%s, %s, %s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(add_likes_query, (user_id, article_id, save_date))
+    db.get_db().commit()
+
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
