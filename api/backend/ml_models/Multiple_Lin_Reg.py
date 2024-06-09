@@ -2,15 +2,7 @@ import pandas as pd
 import numpy as np
 from backend.db_connection import db
 from textblob import TextBlob
-<<<<<<< HEAD
 from flask import current_app
-=======
-import logging
-import os
-from sklearn.model_selection import train_test_split
-
-logger = logging.getLogger()
->>>>>>> bdbebe061c09d1d7c4b53d1e0d12befe6d4a2894
 
 # df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
@@ -97,8 +89,7 @@ def train(data, ss_data):
     X_prep = (df.drop(columns=['sentiment', 'content', 'country_written_about'])).values
     X = add_bias_column(X_prep)
 
-    current_app.logger.info(f"checking the datatypes of various elements of the dataframe: {type(df['country_written_from_uz'][0])}")
-
+    current_app.logger.info(f"checking the datatypes of various elements of the dataframe: {df['country_written_from_uz'][0]}")
 
     # # Define the columns to cast to float
     # cols_to_cast = ['', 'C']
