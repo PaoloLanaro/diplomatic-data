@@ -2,75 +2,105 @@ import pandas as pd
 import numpy as np
 from backend.db_connection import db
 from textblob import TextBlob
+from flask import current_app
 
-df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
+# df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
 
 def clean(news_data):
-    """cleans the data and extracts the X and y values that will be used for the model
-    
-    Args:
-        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
-        
-    
-    Returns:
-        X (array): can be either 1-d or 2-d array containing information regarding the training X values
-        y (array): a 1-d array whcich includes all corresponding response values to X
+    data = {
+        'article_id': [], 
+        'content': [], 
+        'publication_date': [], 
+        'article_link': [],
+        'country_written_from': [], 
+        'sentiment': [],
+        'country_written_about': []
+    }
+
+    for item in range(len(news_data) - 1):
+        data['article_id'].append(news_data[item]['article_id'])
+        data['content'].append(news_data[item]['content'])
+        data['publication_date'].append(news_data[item]['publication_date'])
+        data['article_link'].append(news_data[item]['article_link'])
+        data['country_written_from'].append(news_data[item]['country_written_from'])
+        data['sentiment'].append(news_data[item]['sentiment'])
+        data['country_written_about'].append(news_data[item]['country_written_about'])
+
+    df = pd.DataFrame().from_dict(data)
+
+    df['word_count'] = df['content'].apply(lambda x: len(x.split())) # adding word count
+
+    return df
+
+def clean_safety_score(ss_data):
     """
+    Takes in raw json for the safety score json and produces a dataframe of each country with each different associated safety score.
+    Args:
+        ss_data (json): contains contents of countries database
+    Returns:
+        df (DataFrame): contains contents of countries database in easy to use dataframe format
+    """
+    df = pd.DataFrame()
 
-    # dropping unnseccassary columns
-    news_data = news_data.drop(columns=['Unnamed: 0', 'date', 'url'])
+    data = {
+        'country_id': [], 
+        'country_name': [], 
+        'safety_index': [], 
+        'country_code': []
+    }
 
-    # adding word count
-    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
+    for country in range(len(ss_data) - 1):
+        data['country_id'].append(ss_data[country]['country_id'])
+        data['country_name'].append(ss_data[country]['country_name'])
+        data['safety_index'].append(ss_data[country]['safety_index'])
+        data['country_code'].append(ss_data[country]['country_code'])
 
-    # standardizing values
-    not_list = ['text', 'source_country', 'queried_country']
-    col_num_list = [col for col in news_data.columns if col not in not_list]
+    return df
 
-    for feat in col_num_list:
-        news_data[feat] = ((news_data[feat] - news_data[feat].mean()) / news_data[feat].std()).round(3)
-
-    # one hot encoding source_country
-    news_data = pd.get_dummies(news_data, columns=['source_country'], drop_first=True)
-
-    # isolating X and y values
-    X = (news_data.drop(columns=['sentiment', 'text', 'queried_country'])).values 
-    y = (news_data['sentiment']).values
-
-
-    return X, y
-
-# train 
-def train(df):
+def train(data, ss_data):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
-        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
-        y_raw (string): a 1-d array whcich includes all corresponding response values to X
+        data (json): return of the api request
+        ss_data(json): return of the ss request
     
     Returns:
         m (array): coefficents for the line of best fit
     """
 
-    # TODO  P AND M GET DATA BASE THINGS
+    df = clean(data)
+    ss_df = clean_safety_score(ss_data)
 
-    # # grabbing the y values and X values
-    # cursor = db.get_db().cursor()
-    # X_query = 'SELECT x_vals FROM #whichever database the X values are in#' # TODO this sql query
-    # cursor.execute(X_query)
-    # X_return = cursor.fetchone() # could very well be wrong, just copying other stuff
-    # # where we parse all of the strings from the database
+    for index_results, row_results in df.iterrows():
+        for index_look, row_look in ss_df.iterrows():
+            if row_results['country_written_about'] == row_look['country_name']:
+                df.loc[index_results, 'safety_index'] = row_look['safety_index']
 
-    # X_pre_parse = X_return['x_vals'] 
+    df = df.drop(columns=['publication_date', 'article_link'], axis=1)
 
-    # X_train = np.array(list(map(float, X_raw[1:, -1].split(','))))
-    # y_train = np.array(list(map(float, y_raw[1:, -1].split(','))))
+    not_list = ['content', 'country_written_from', 'country_written_about']
+    col_num_list = [col for col in df.columns if col not in not_list]
 
-
-    X = add_bias_column(X_train)
-    XtXinv = np.linalg.inv(np.matmul(X.T, X))
-    m = np.matmul(XtXinv, np.matmul(X.T, y_train))
+    for feat in col_num_list:
+        df[feat] = ((df[feat] - df[feat].mean()) / df[feat].std()).round(3)
     
+    df = pd.get_dummies(df, columns=['country_written_from'], drop_first=True)
+
+    X_prep = (df.drop(columns=['sentiment', 'content', 'country_written_about'])).values
+    X = add_bias_column(X_prep)
+
+    current_app.logger.info(f"checking the datatypes of various elements of the dataframe: {type(df['country_written_from_uz'][0])}")
+
+
+    # # Define the columns to cast to float
+    # cols_to_cast = ['', 'C']
+
+    # # Apply casting to float for specified columns
+    # df[cols_to_cast] = df[cols_to_cast].apply(lambda x: x.astype(float))
+
+    XtXinv = np.linalg.inv(np.matmul(X.T, X))
+    m = np.matmul(XtXinv, np.matmul(X.T, df['sentiment'].values))
+
     return m # needs to be stored and then queried from the function below
 
 # predict

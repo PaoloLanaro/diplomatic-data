@@ -58,13 +58,14 @@ def train_prediction1():
     query_return = cursor.fetchall()
     current_app.logger.info(f'query_return type: {type(query_return)}')
     current_app.logger.info(f'query_return keys: {query_return[1].keys()}')
+    current_app.logger.info(f'checking data type: {type(query_return[1]["sentiment"])}')
 
-    # ss_query = 'SELECT * FROM country'
-    # cursor.execute(ss_query)
-    # ss_return = cursor.fetchall()
-    # current_app.logger.info(f'grabbed the ss: {ss_return[1].keys()}')
+    ss_query = 'SELECT * FROM country'
+    cursor.execute(ss_query)
+    ss_return = cursor.fetchall()
+    current_app.logger.info(f'grabbed the ss: {ss_return[1].keys()}')
 
-    train_response = train(query_return)
+    train_response = train(query_return, ss_return)
     
     response = make_response(jsonify(train_response))
     response.status_code = 200
