@@ -70,3 +70,24 @@ def train_prediction2():
     response.status_code = 200
     response.mimetype = 'application/json'
     return response
+
+@models.route('/weight_vector', methods=['POST'])
+def add_beta_vals():
+    current_app.logger.info('model_routes.py: POST weight_vector') 
+    current_app.logger.info(f'request type: {type(request)}')
+
+    beta_vals_list = request.json
+    current_app.logger.info(f'response: {beta_vals_list}\ntype(response): {type(beta_vals_list)}')
+    beta_vals_string = str(beta_vals_list)
+
+    query = 'INSERT INTO weight_vector (beta_vals) VALUES (%s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (beta_vals_string))
+    current_app.logger.info(f'query: {query}')
+    db.get_db().commit()
+    
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+
