@@ -101,4 +101,21 @@ def SideBarLinks(show_home=False):
             del st.session_state['role']
             del st.session_state['authenticated']
             del st.session_state['user_id']
+
+            if 'random_current_article' in st.session_state:
+                del st.session_state['random_current_article']
+
+            if 'random_next_article' in st.session_state:
+                del st.session_state['random_next_article']
+
+            if 'search_terms' in st.session_state:
+                del st.session_state['search_terms']
+
+            if 'num_articles' in st.session_state:
+                del st.session_state['num_articles']
+
+            if 'article_idx' in st.session_state:
+                del st.session_state['article_idx'] 
+            if 'articles' in st.session_state:
+                del st.session_state['articles']
             st.switch_page('Home.py')

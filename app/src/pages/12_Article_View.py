@@ -12,15 +12,21 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-# get a random article from the databaser
-random_article = requests.get("http://api:4000/article/random_article").json()
+# get a random article from the database to display, and the next one to display. save these in a session_state
+if 'random_current_article' not in st.session_state:
+    st.session_state['random_current_article'] = requests.get("http://api:4000/article/random_article").json()
+if 'random_next_article' not in st.session_state:
+    st.session_state['random_next_article'] = requests.get("http://api:4000/article/random_article").json()
+
+# get the article's json for displaying and accessing the data
+random_article = st.session_state['random_current_article']
 random_article_title = requests.get(f"http://api:4000/article/title/{random_article['link']}")
 
+# format the date from the table correctly
 split_date = random_article["YYYY-MM-DD"].split("-")
-
 corrected_date = split_date[1] + "-" + split_date[2] + "-" + split_date[0]
 
-# display the article content
+# display the article content -------------------------------------------------------------
 if random_article_title.status_code != 200 or random_article_title.json()['title'] is None:
     st.title('Read the article below!')
 else:
@@ -49,9 +55,10 @@ date_saved = "2024-06-05T12:00:00"
 API_BASE_URL = "http://api:4000"
 
 col1, col2, col3 = st.columns(3)
+# --------------------------------------------------------------------------------------------
 
 with col1:
-    if st.button("Save Article", use_container_width=True):
+    if st.button("Save Article", use_container_width=True, type="primary"):
         data = {"article_id": article_id, "user_id": user_id, "date_saved": date_saved}
         st.write("Sending data to /s/saves:", data)
         response = requests.post("http://api:4000/s/saves", json=data)
@@ -63,7 +70,7 @@ with col1:
             st.error(f"Failed to save article. Status code: {response.status_code}")
 
 with col2:
-    if st.button("Like Article", use_container_width=True):
+    if st.button("Like Article", use_container_width=True, type="primary"):
         data = {"article_id": article_id, "user_id": user_id, "date_liked": date_liked}
         response = requests.post("http://api:4000/s/likes", json=data)
         if response.status_code == 200:
@@ -72,4 +79,6 @@ with col2:
             st.error("Failed to like article.")
 
 with col3:
-    st.button("Next Article", use_container_width=True)
+    if st.button("Next Article", use_container_width=True, type="primary"):
+        st.session_state['random_current_article'] = st.session_state['random_next_article']
+        del st.session_state['random_next_article']
