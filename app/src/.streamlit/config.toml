@@ -1,0 +1,14 @@
+# app/src/.streamlit/config.toml
+[client]
+showSidebarNavigation = false
+
+[theme]
+base="dark"
+primaryColor="#8e9aaf"
+backgroundColor="#212529"
+secondaryBackgroundColor="#343a40"
+textColor="#e9ecef"
+font="serif"
+
+[server]
+fileWatcherType = "poll"

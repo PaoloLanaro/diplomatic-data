@@ -3,5 +3,4 @@ secrets.toml
 __pycache__
 secrets/
 .env
-config.toml
 get_coordinates.py
