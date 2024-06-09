@@ -63,11 +63,14 @@ def get_all_country_codes():
 
 @utils.route('/coordinates', methods=['GET'])
 def get_country_coordinates(): 
+    current_app.logger.info('GET /coordinates route')
     cursor = db.get_db().cursor()
     query = 'SELECT latitude, longitude FROM city_coordinates'
     cursor.execute(query)
+    current_app.logger.info(f'coordinate query: {query}')
 
     latitude_longitude = cursor.fetchall()
+    current_app.logger.info(f'lat and long: {latitude_longitude}')
 
     response = make_response(latitude_longitude)
     response.status_code = 200
