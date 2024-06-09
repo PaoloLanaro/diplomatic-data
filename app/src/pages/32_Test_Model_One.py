@@ -15,8 +15,12 @@ if st.button(
     "Train the Model",
     use_container_width=True,
 ):
-    response = requests.get(f"http://api:4000/models/train_prediction1")
-    requests.post(f'http://api:4000/article/articles', json=response.json())
+    response = requests.get("http://api:4000/models/train_prediction1")
+    
+    requests.post('http://api:4000/models/weight_vector', json=response.json())
+
+
+
     if response.status_code == 200:
         train = response.json()
         st.write(f"The bias vector for the training input after cross validation: {train}.")
