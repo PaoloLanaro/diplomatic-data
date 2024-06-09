@@ -16,6 +16,59 @@ from textblob import TextBlob
 from sklearn.ensemble import RandomForestClassifier
 
 def clean(news_data):
+    """
+    Cleans up the incoming news data that represents each article.
+
+    Args: 
+        news_data(list): list of json such that each item represents an article
+
+    Returns:
+        df(pd.DataFrame): containing the above info in readily accessible format
+    """
+
+    data = {
+        'content': [], 
+        'country_written_from': [], 
+        'sentiment': [],
+        'country_written_about': []
+    }
+
+    for item in range(len(news_data) - 1):
+        data['content'].append(news_data[item]['content'])
+        data['country_written_from'].append(news_data[item]['country_written_from'])
+        data['sentiment'].append(news_data[item]['sentiment'])
+        data['country_written_about'].append(news_data[item]['country_written_about'])
+
+    df = pd.DataFrame().from_dict(data)
+
+    df['word_count'] = df['content'].apply(lambda x: len(x.split())) # adding word count
+
+    # drop the columns im not using
+    df.drop(['content'], axis=1, inplace=True)
+    df.dropna(axis=0, inplace=True)
+
+    return df
+
+
+    # # drop the columns im not using
+    # df.drop(['Unnamed: 0', 'date', 'url', 'Safety Index'], axis=1, inplace=True)
+    # df.dropna(axis=0, inplace=True)
+
+
+    # # drop the columns im not using
+    # df.drop(['content'], axis=1, inplace=True)
+    # df.dropna(axis=0, inplace=True)
+
+    # # one hot encoding
+    # df = pd.get_dummies(news_data, columns=['country_written_about'], drop_first=True)
+
+    # # X and y
+    # X = news_data.drop(columns=['source_country']) 
+    # y = news_data['source_country']
+
+    # return X, y
+
+def extract_x_y(df):
     """cleans the data and extracts the X and y values that will be used for the model
     
     Args:
@@ -27,25 +80,17 @@ def clean(news_data):
         y (array): a 1-d array whcich includes all corresponding response values to X
     """
 
-    # drop the columns im not using
-    news_data.drop(['Unnamed: 0', 'date', 'url', 'Safety Index'], axis=1, inplace=True)
-    news_data.dropna(axis=0, inplace=True)
-
-    # adding word count
-    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
-
-    # drop the columns im not using
-    news_data.drop(['text'], axis=1, inplace=True)
-    news_data.dropna(axis=0, inplace=True)
 
     # one hot encoding
-    news_data = pd.get_dummies(news_data, columns=['queried_country'], drop_first=True)
+    df = pd.get_dummies(df, columns=['country_written_about'], drop_first=True)
 
     # X and y
-    X = news_data.drop(columns=['source_country']) 
-    y = news_data['source_country']
+    X = df.drop(columns=['source_country']) 
+    y = df['source_country']
+
 
     return X, y
+
 
 def train(news_data):
     """
@@ -58,6 +103,11 @@ def train(news_data):
     Returns:
         source_country (string): the country that the model believes it came from
     """
+
+    df = clean(news_data)
+
+    y = df['country_written_about'].values
+    X = df.drop(columns=['country_written_about'])
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -74,13 +124,13 @@ def train(news_data):
     return classifier 
 
 
-def predict_rf(text, queried):
+def predict_rf(text, classifier):
     """
-    Description: Using the sentiment score, word count, and queried country, predicting the source country using 
+    Description: Using the sentiment score, word count, and queried country, predicting the source country 
 
     Args: 
         text(string): text used to find the sentiment score and word count
-        queried(string): the country of interest that the article is related to
+        classifier(idk): the rf classifier that was made in the training function
 
     Returns:
         source_country (string): the country that the model believes it came from
@@ -96,7 +146,7 @@ def predict_rf(text, queried):
 
     cursor = db.get_db().cursor()
 
-    # somehow get the queried country. Idk grab it from the front end jazz
+    # somehow get the queried country. Idk 
     # country = HERE
 
     # the initial array for the classifier

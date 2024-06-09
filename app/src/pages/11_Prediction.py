@@ -30,13 +30,13 @@ col1, col2 = st.columns(2)
 
 # 1st column: country dropdown and text input 
 with col1:
-    country = st.selectbox("Country to Predict", country_names, index=None, placeholder='Where was the article written?')
+    country_from = st.selectbox("Country Article's Origin", country_names, index=None, placeholder='Where was the article written?')
+    country_about = st.selectbox("Country Written About", country_names, index=None, placeholder="What country is the article about?")
 
 # 2nd column: month slider and hour slider
 with col2:
     text = st.text_area("Article Text", 'Please add your text here', placeholder='Add the body of your article here.')
 
-
 if st.button('Calculate Sentiment', type='primary', use_container_width=True):
-    sentiment = requests.get(f'http://api:4000/models/prediction1/{text}/{country}')
-    st.write(f'The information of the article you provided indicates that it has a sentiment score of {sentiment.json()["sentiment_guess"]} with an actual sentiment score of {sentiment.json()["sentiment_actual"]}.')
+    sentiment = requests.get(f'http://api:4000/models/prediction1/{text}/{country_from}/{country_about}').json()
+    st.write(f"The information of the article you provided indicates that it has a sentiment score {sentiment['sentiment_guess']} of with an actual sentiment of {sentiment['sentiment_actual']}.") 
