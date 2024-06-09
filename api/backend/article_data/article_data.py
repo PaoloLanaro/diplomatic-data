@@ -50,7 +50,6 @@ def get_random_article():
 
 
 
-
 # to add the user's article to the article table 
 @article.route('/article_data', methods=['POST'])
 def add_new_article():

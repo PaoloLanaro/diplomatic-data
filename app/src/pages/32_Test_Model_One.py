@@ -17,9 +17,9 @@ if st.button(
     "Test Model on sample input?",
     use_container_width=True,
 ):
-    response = requests.get(f"http://api:4000/models/prediction1/{number1}")
+    response = requests.get(f"http://api:4000/models/train_prediction1")
     if response.status_code == 200:
         test = response.json()
-        st.write(f"Test for input {number1} is {test}")
+        st.write(f"Test for input {test}")
     else:
         st.write("Ran into an error retrieving a prediction score -- try again")

@@ -48,7 +48,6 @@ def predict(country):
     logger.info('reached post cursor connection')
 
     # get the model params from the database #### TODO LOOK AT THIS SHIT THIS IS IMPORTANT
-    # query = 'SELECT sequence_number FROM weight_vector DESC LIMIT 1'
     query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
     cursor.execute(query) 
     return_val = cursor.fetchone() # gets one value
@@ -72,7 +71,7 @@ def predict(country):
     
     prediction = np.dot(X, params_array)
 
-    # less then -1.3 is good, greater is bad
+    # less then -1.3 is good, greater is bad (this is so funny)
 
     analysis = -1 if prediction >= -.13 else 1
     
