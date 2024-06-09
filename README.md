@@ -11,9 +11,7 @@ When opening the app, the user can enter as three different personas, in additio
 
 Another persona can enter as is Katerina Stepanov, a PR specialist at Gasprom Oil in Russia. As Katerina, you can calculate an article's sentiment score based off of various attributes about the article. Additionally, you can view articles in the database to then save, share, and like them for later viewing.
 
-Finally, one can enter as Monika José, a young traveller. As Monika, one can configure your preferences that allow for 
-
-# TODO MONIKA
+Finally, one can enter as Monika José, a young traveller. As Monika, one can configure their preferences that allow for 
 
 ## Structure
 
