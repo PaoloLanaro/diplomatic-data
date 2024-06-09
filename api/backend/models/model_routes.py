@@ -12,7 +12,7 @@ def test_model_one(text, country_origin, country_query):
     current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin} \country_query: {country_query}')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1; -- for beta vals that are gonna be added to a weight_vector table
-    query = 'SELECT * FROM article;'
+    query = 'SELECT content, country_written_from, sentiment, country_written_about, safety_index FROM article JOIN country ON country.country_name = article.country_written_about;'
     cursor.execute(query)
 
     sentiment_guess, sentiment_actual = predict(text, country_origin, country_query, query)
@@ -51,23 +51,15 @@ def train_prediction1():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
     cursor = db.get_db().cursor()
 
-    query = 'SELECT * FROM article'
+    query = 'SELECT content, country_written_from, sentiment, country_written_about, safety_index FROM article JOIN country ON country.country_name = article.country_written_about;'
     cursor.execute(query)
     current_app.logger.info(f'executed query {query} succsefully')
     
     query_return = cursor.fetchall()
-    current_app.logger.info(f'query_return type: {type(query_return)}')
-    current_app.logger.info(f'query_return keys: {query_return[1].keys()}')
-    current_app.logger.info(f'checking data type: {type(query_return[1]["sentiment"])}')
 
-    ss_query = 'SELECT * FROM country'
-    cursor.execute(ss_query)
-    ss_return = cursor.fetchall()
-    current_app.logger.info(f'grabbed the ss: {ss_return[1].keys()}')
-
-    train_response = train(query_return, ss_return)
+    train_response = train(query_return)
     
-    response = make_response(jsonify(train_response))
+    response = make_response(jsonify(train_response.tolist()))
     response.status_code = 200
     response.mimetype = 'application/json'
     return response
@@ -78,10 +70,6 @@ def train_prediction2():
     returnVal = train()
     current_app.logger.info(f'called train function from backend, response {returnVal}')
     current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
-
-    # query = 'INSERT INTO weight_vector (beta_vals) VALUES %s'
-    # cursor = db.get_db().cursor()
-    # cursor.execute(query, (returnVal))
 
     response = make_response(jsonify(returnVal))
     response.status_code = 200

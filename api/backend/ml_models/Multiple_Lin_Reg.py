@@ -4,27 +4,23 @@ from backend.db_connection import db
 from textblob import TextBlob
 from flask import current_app
 
-# df = pd.read_csv('/apicode/backend/assets/Data News Sources.csv')
-
 def clean(news_data):
+
+    # content, country_written_from, sentiment, country_written_about, safety_index
     data = {
-        'article_id': [], 
         'content': [], 
-        'publication_date': [], 
-        'article_link': [],
         'country_written_from': [], 
         'sentiment': [],
-        'country_written_about': []
+        'country_written_about': [], 
+        'safety_index': []
     }
 
     for item in range(len(news_data) - 1):
-        data['article_id'].append(news_data[item]['article_id'])
         data['content'].append(news_data[item]['content'])
-        data['publication_date'].append(news_data[item]['publication_date'])
-        data['article_link'].append(news_data[item]['article_link'])
         data['country_written_from'].append(news_data[item]['country_written_from'])
         data['sentiment'].append(news_data[item]['sentiment'])
         data['country_written_about'].append(news_data[item]['country_written_about'])
+        data['safety_index'].append(news_data[item]['safety_index'])
 
     df = pd.DataFrame().from_dict(data)
 
@@ -32,32 +28,7 @@ def clean(news_data):
 
     return df
 
-def clean_safety_score(ss_data):
-    """
-    Takes in raw json for the safety score json and produces a dataframe of each country with each different associated safety score.
-    Args:
-        ss_data (json): contains contents of countries database
-    Returns:
-        df (DataFrame): contains contents of countries database in easy to use dataframe format
-    """
-    df = pd.DataFrame()
-
-    data = {
-        'country_id': [], 
-        'country_name': [], 
-        'safety_index': [], 
-        'country_code': []
-    }
-
-    for country in range(len(ss_data) - 1):
-        data['country_id'].append(ss_data[country]['country_id'])
-        data['country_name'].append(ss_data[country]['country_name'])
-        data['safety_index'].append(ss_data[country]['safety_index'])
-        data['country_code'].append(ss_data[country]['country_code'])
-
-    return df
-
-def train(data, ss_data):
+def train(data):
     """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
     
     Args:
@@ -69,14 +40,8 @@ def train(data, ss_data):
     """
 
     df = clean(data)
-    ss_df = clean_safety_score(ss_data)
 
-    for index_results, row_results in df.iterrows():
-        for index_look, row_look in ss_df.iterrows():
-            if row_results['country_written_about'] == row_look['country_name']:
-                df.loc[index_results, 'safety_index'] = row_look['safety_index']
-
-    df = df.drop(columns=['publication_date', 'article_link'], axis=1)
+    current_app.logger.info(f"checking df cols: {df.columns}")
 
     not_list = ['content', 'country_written_from', 'country_written_about']
     col_num_list = [col for col in df.columns if col not in not_list]
@@ -86,19 +51,21 @@ def train(data, ss_data):
     
     df = pd.get_dummies(df, columns=['country_written_from'], drop_first=True)
 
-    X_prep = (df.drop(columns=['sentiment', 'content', 'country_written_about'])).values
+    for col in df.select_dtypes(include='bool').columns:
+        df[col] = df[col].astype(float)
+
+    y = df['sentiment'].values
+
+    df = df.drop(columns=['content', 'sentiment', 'country_written_about'])
+
+    current_app.logger.info(f"checking df cols: {df.columns}")
+
+    X_prep = (df).values
+
     X = add_bias_column(X_prep)
 
-    current_app.logger.info(f"checking the datatypes of various elements of the dataframe: {df['country_written_from_uz'][0]}")
-
-    # # Define the columns to cast to float
-    # cols_to_cast = ['', 'C']
-
-    # # Apply casting to float for specified columns
-    # df[cols_to_cast] = df[cols_to_cast].apply(lambda x: x.astype(float))
-
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
-    m = np.matmul(XtXinv, np.matmul(X.T, df['sentiment'].values))
+    m = np.matmul(XtXinv, np.matmul(X.T, y))
 
     return m # needs to be stored and then queried from the function below
 

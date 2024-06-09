@@ -9,17 +9,16 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-st.title("Test model 1")
-
-number1 = st.slider("Observation 1", 0, 10, 5)
+st.title("Train Multiple Linear Regression Model")
 
 if st.button(
-    "Test Model on sample input?",
+    "Train the Model",
     use_container_width=True,
 ):
     response = requests.get(f"http://api:4000/models/train_prediction1")
+    requests.post(f'http://api:4000/article/articles', json=response.json())
     if response.status_code == 200:
-        test = response.json()
-        st.write(f"Test for input {test}")
+        train = response.json()
+        st.write(f"The bias vector for the training input after cross validation: {train}.")
     else:
-        st.write("Ran into an error retrieving a prediction score -- try again. Hi")
+        st.write("Ran into an error retrieving a prediction score -- try again.")
