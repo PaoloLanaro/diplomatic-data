@@ -26,13 +26,14 @@ if st.button('Train Multiple Linear Regression Model',
 st.write('\n\n')
 st.write('## Model 2 Maintenance')
 
-if st.button('Train model',
+if st.button('Train Model',
              type = 'primary',
              use_container_width=True,
              key = 128):
-    st.write('PLACEHOLDER todo')
+    training = requests.get(f'http://api:4000/models/train_prediction2')
+    st.write(f'This is how we trained the random forst classifier. {training.json()}')
 
-if st.button('Test predictions',
+if st.button('Test Predictions',
              type = 'primary',
              use_container_width=True,
              key = 127):

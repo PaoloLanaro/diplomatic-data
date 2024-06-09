@@ -106,7 +106,7 @@ def train(data):
     return m # needs to be stored and then queried from the function below
 
 # predict
-def predict(text, country, ss_raw, m_raw):
+def predict(text, country, country_about, ss_raw, m_raw):
     """
     Description:
         With the user specified values, we predict the sentiment of an article.
@@ -128,7 +128,7 @@ def predict(text, country, ss_raw, m_raw):
 
     m = np.array(list(map(float, m_raw_array[1:-1].split(',')))) 
 
-    X = update_country_value(country, text, clean_ss(country, ss_raw))
+    X = update_country_value(country, text, clean_ss(country_about, ss_raw))
 
     return np.dot(X, m), sentiment
 

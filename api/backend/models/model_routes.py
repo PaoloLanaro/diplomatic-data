@@ -6,18 +6,17 @@ import pandas as pd
 
 models = Blueprint('models', __name__)
 
-@models.route('/prediction1/<text>/<country_origin>', methods=['GET'])
-def test_model_one(text, country_origin):
-    current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country_origin>/')
-    current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin}')
+@models.route('/prediction1/<text>/<country_origin>/<country_about>', methods=['GET'])
+def test_model_one(text, country_origin, country_about):
+    current_app.logger.info('model_routes.py: GET /prediction1/<text>/<country_origin>/<country_about>')
+    current_app.logger.info(f'text: {text} \ncountry_origin: {country_origin} \ncountry_about: {country_about}')
 
     beta_cursor = db.get_db().cursor()
-    # beta_val_query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
-    beta_val_query = 'SELECT beta_vals FROM weight_vector'
+    beta_val_query = 'SELECT beta_vals FROM weight_vector ORDER BY sequence_number DESC LIMIT 1'
     beta_cursor.execute(beta_val_query)
     beta_val = beta_cursor.fetchall()
 
-    current_app.logger.info(f"ss_query returns: {beta_val}")
+    current_app.logger.info(f"beta val returns: {beta_val}")
 
     # grabbing the ss values
     ss_cursor = db.get_db().cursor()
@@ -26,10 +25,13 @@ def test_model_one(text, country_origin):
     ss_cursor.execute(ss_query)
     ss_result = ss_cursor.fetchall()
 
-    sentiment = predict(text, country_origin, ss_result, beta_val)
+    sentiment = predict(text, country_origin, country_about, ss_result, beta_val)
+
     current_app.logger.info(f'printing out type {type(sentiment)}')
+    current_app.logger.info(f'printing out sentiment {sentiment}')
 
     the_response = make_response(jsonify({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]}))
+    current_app.logger.info(f'printing out the response in json {the_response}')
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
@@ -70,12 +72,17 @@ def train_prediction1():
 
 @models.route('/train_prediction2', methods=['GET']) # trains random forest
 def train_prediction2():
-    current_app.logger.info('model_routes.py: GET /train_prediction1')
-    returnVal = train()
-    current_app.logger.info(f'called train function from backend, response {returnVal}')
-    current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
+    current_app.logger.info('model_routes.py: GET /train_prediction1') 
 
-    response = make_response(jsonify(returnVal))
+    cursor = db.get_db().cursor()
+    query = 'SELECT content, country_written_about, sentiment FROM article;'
+    cursor.execute(query)
+
+    train_output = train(cursor.fetchall())
+    response = make_response(jsonify(train_output))
+
+    current_app.logger.info(f'responses from the train function: {response}')
+
     response.status_code = 200
     response.mimetype = 'application/json'
     return response
