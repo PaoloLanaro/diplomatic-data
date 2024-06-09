@@ -50,8 +50,10 @@ INSERT INTO users (user_id, created_at, gender, email, birthdate, first_name, us
 (47, '2020-06-20', 'F', 'kdizlie1a@bigcartel.com', '2000-02-20', 'Kalli', 'ksimes1a', 'Indonesia'),
 (48, '2023-03-24', 'M', 'tmcilwrick1b@amazon.de', '2000-04-17', 'Trent', 'tbroadbent1b', 'Portugal'),
 (49, '2022-08-05', 'M', 'bjuppe1c@uiuc.edu', '2003-05-12', 'Bruno', 'blaste1c', 'Philippines'),
-(50, '2021-07-29', 'F', 'abox1d@cargocollective.com', '2001-06-01', 'Audry', 'amccoole1d', 'Kazakhstan');
-
+(50, '2021-07-29', 'F', 'abox1d@cargocollective.com', '2001-06-01', 'Audry', 'amccoole1d', 'Kazakhstan'),
+(51, '2021-08-19', 'M', 'anton_muller@gmail.com', '1971-06-01', 'Anton', 'Müller', 'Germany'),
+(52, '2021-02-22', 'F', 'stepanov.kat@gazprom.com', '1987-06-01', 'Katerina', 'Stepanov', 'Russia'),
+(53, '2020-01-25', 'F', 'moni.jose@gmail.com', '2006-03-19', 'Monika', 'José', 'Unite States');
 
 INSERT INTO country (country_name, safety_index, country_code) VALUES
 ('United States', 0.535, 'us'),

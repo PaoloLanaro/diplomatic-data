@@ -100,6 +100,8 @@ def SideBarLinks(show_home=False):
         if st.sidebar.button("Logout & Home"):
             del st.session_state['role']
             del st.session_state['authenticated']
+            del st.session_state['user_id']
+
             if 'random_current_article' in st.session_state:
                 del st.session_state['random_current_article']
 

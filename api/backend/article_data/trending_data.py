@@ -28,7 +28,7 @@ def find_most_trendy():
     text = result['content']
     sentiment = result['sentiment']
     views_last_24_hours = result['views_last_24_hours']
-    current_app.logger.info(f'text={text}')
+    # current_app.logger.info(f'text={text}')
 
     # to convert the article content to a JSON response and return it to the client
     return jsonify({'content': text, 'sentiment': sentiment, 'views_last_24_hours': views_last_24_hours})

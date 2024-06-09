@@ -5,53 +5,86 @@ from backend.db_connection import db
 social = Blueprint('social', __name__)
 
 # to retrieve from the recently viewed tables
-@social.route("/recently_viewed", methods=["GET"])
-def get_trending():
+@social.route("/recently_viewed/<user_id>", methods=["GET"])
+def get_recently_viewed(user_id):
     current_app.logger.info('GET /recently_viewed route')
+    cursor = db.get_db().cursor()
+    
+    query = '''
+        SELECT * FROM article a JOIN
+        views v ON (a.article_id = v.article_id)
+        WHERE v.user_id = %s
+        ORDER BY v.view_date;
+    '''
+
+    # current_app.logger.info()
+    cursor.execute(query, user_id)
+    result = cursor.fetchall()
+    # current_app.logger.info(f'recently viewed result[0] = {result[0]}')
+
+    urls = []
+    for row in result:
+        d = {'url': row['article_link']}
+        urls.append(d)
+    current_app.logger.info(f'like urls = {urls}')
+
+    return jsonify(urls)
+
+# to retrieve from the likes table
+@social.route("/likes/<user_id>", methods=["GET"])
+def get_liked_articles(user_id):
+    current_app.logger.info("GET /likes route")
     cursor = db.get_db().cursor()
 
     query = '''
-        SELECT a.article_link FROM article a JOIN
-        views v ON (a.article_id = v.article_id)
-        WHERE v.user_id = anton_id
-        ORDER BY v.view_date
-        LIMIT 3;
+        SELECT * FROM article a JOIN
+        likes l ON (a.article_id = l.article_id)
+        WHERE l.user_id = %s
+        ORDER BY l.like_date;
     '''
 
+    cursor.execute(query, user_id)
+    result = cursor.fetchall()
+    # current_app.logger.info(f'likes result[0] = {result[0]}')
+    urls = []
+    for row in result:
+        d = {'url': row['article_link']}
+        urls.append(d)
+    current_app.logger.info(f'like urls = {urls}')
+
+    return jsonify(urls)
+
+# to retrieve from the saves table
+@social.route("/saves/<user_id>", methods=["GET"])
+def get_saved_articles(user_id):
+    current_app.logger.info("GET /saves route")
+    cursor = db.get_db().cursor()
+
+    query = '''
+        SELECT * FROM article a JOIN
+        saves s ON (a.article_id = s.article_id)
+        WHERE s.user_id = %s
+        ORDER BY s.save_date;
+    '''
+    current_app.logger.info(f'type: {type(user_id)}')
+
+    cursor.execute(query, user_id)
+    result = cursor.fetchall()
+    # current_app.logger.info(f"saves result={type(result[0])}")
+    urls = []
+    for row in result:
+        d = {'url': row['article_link']}
+        urls.append(d)
+    current_app.logger.info(f'saves urls = {urls}')
+
+    if len(urls) == 0:
+        urls.append("You haven't saved any articles yet")
+
+    return jsonify(urls)
 
 
 
-# to retrieve from the likes tables
-# @trending.route('/trending_data', methods=['GET'])
-# def find_most_trendy():
-#     current_app.logger.info('GET /trending_data route')
-#     cursor = db.get_db().cursor()
 
-#     query = '''
-#         SELECT *
-#         FROM article a 
-#         JOIN trending_articles t ON a.article_id = t.article_id 
-#         ORDER BY t.views_last_24_hours DESC
-#         LIMIT 1;
-#     '''
-    
-#     # object we are using to communicate with the database -> temporary connection to db 
-#     cursor.execute(query) 
-
-#     # get the result from the cursor executed query
-#     result = cursor.fetchone()
-
-#     # get the text from the article
-#     text = result['content']
-#     sentiment = result['sentiment']
-#     views_last_24_hours = result['views_last_24_hours']
-#     current_app.logger.info(f'text={text}')
-
-#     # to convert the article content to a JSON response and return it to the client
-#     return jsonify({'content': text, 'sentiment': sentiment, 'views_last_24_hours': views_last_24_hours})
-
-
-# to retireve fromm the shares tables
 
 # likes routes
 @social.route("/likes", methods=["POST"])
@@ -152,4 +185,44 @@ def remove_saves(savesID):
 
     return "removed saves entry"
 
+@social.route("/user_likes", methods=["POST"])
+def add_user_likes():
+    current_app.logger.info("POST /user_likes")
+    response = request.json
+    current_app.logger.info(f'response: {response}')
+    user_id = response['user_id']
+    article_id = response['article_id']
+    like_date = response['date_liked']
+    like_date = like_date[0] + ' ' + like_date[1]
 
+    add_likes_query = 'INSERT INTO likes (user_id, article_id, like_date) VALUES (%s, %s, %s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(add_likes_query, (user_id, article_id, like_date))
+    db.get_db().commit()
+
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+
+@social.route("/user_saves", methods=["POST"])
+def add_user_saves():
+    current_app.logger.info("POST /user_saves")
+    response = request.json
+    current_app.logger.info(f'response: {response}')
+    user_id = response['user_id']
+    article_id = response['article_id']
+    save_date = response['date_saved']
+    save_date = save_date[0] + ' ' + save_date[1]
+
+    current_app.logger.info(f'save_date: {save_date}')
+
+    add_likes_query = 'INSERT INTO saves (user_id, article_id, save_date) VALUES (%s, %s, %s)'
+    cursor = db.get_db().cursor()
+    cursor.execute(add_likes_query, (user_id, article_id, save_date))
+    db.get_db().commit()
+
+    response = make_response()
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response

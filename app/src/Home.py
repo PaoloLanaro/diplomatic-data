@@ -23,6 +23,7 @@ if st.button("Anton Müller, a Foreign Policy Advisor at the EU",
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'Foreign Policy Advisor'
     st.session_state['first_name'] = 'Anton'
+    st.session_state['user_id'] = 51
     st.switch_page('pages/00_Foreign_Policy_Advisor.py')
 
 # This routes to the page for our PR specialist persona (named Katerina)
@@ -33,6 +34,7 @@ if st.button('Katerina Stepanov, a PR Specialist at Gazprom Oil',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'PR Specialist'
     st.session_state['first_name'] = 'Katerina'
+    st.session_state['user_id'] = 52
     st.switch_page('pages/10_PR_Specialist_Home.py')
 
 # This routes to the page for our traveler persona (named Monika)
@@ -43,6 +45,7 @@ if st.button('Monika José, an unemployed traveler',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'Traveler'
     st.session_state['first_name'] = 'Monika'
+    st.session_state['user_id'] = 53
     st.switch_page('pages/20_Traveler_Home.py')
 
 # Switch to our sysadmin side where we can test and run the ML model
@@ -53,6 +56,7 @@ if st.button('Login as system administrator',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'sysadmin'
     st.session_state['first_name'] = 'Sysadmin'
+    st.session_state['user_id'] = 41
     st.switch_page('pages/30_SysAdmin_Home.py')
 
 
