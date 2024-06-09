@@ -33,10 +33,33 @@ unfiltered_words = st.text_input('Please enter some keywords for a search!', pla
 
 formatted_list_string = format_string(unfiltered_words)
 
-st.write(formatted_list_string)
+num_articles = 0
+article_idx = 0
+show_articles = False
+articles_json = []
 
 if st.button('Search for articles',
              type='primary',
              use_container_width=True):
-    requests.post('http://api:4000/article/articles', json=formatted_list_string)
+    articles = requests.post('http://api:4000/article/articles', json=formatted_list_string)
+    articles_json = articles.json()
+    if articles.status_code == 200:
+        show_articles = True
 
+    num_articles = len(articles_json)
+    
+if show_articles:
+    if num_articles != 0:
+        if st.button('Next article'):
+            article_idx += 1
+            if article_idx >= num_articles:
+                article_idx = 0
+        st.write('# Title')
+        st.write(f'#### Published on {articles_json[article_idx]["publication_date"]}')
+        st.write(f'{articles_json[article_idx]["url"]}')
+        st.divider()
+        st.write('### Article Content')
+        st.write(articles_json[article_idx]['content'])
+        st.write(f'#### From: {articles_json[article_idx]["country_name"]}')
+    else:
+        st.write('# --No articles matched your search terms--')

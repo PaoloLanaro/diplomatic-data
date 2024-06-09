@@ -166,20 +166,9 @@ CREATE TABLE IF NOT EXISTS forest_vector
     source_country  VARCHAR(50)
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+DROP TABLE IF EXISTS search_terms;
+CREATE TABLE IF NOT EXISTS search_terms
+(
+  sequence_number INT PRIMARY KEY AUTO_INCREMENT,
+  text TINYTEXT
+)

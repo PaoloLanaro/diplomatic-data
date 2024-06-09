@@ -94,14 +94,47 @@ def get_articles_matching_search():
     search_words = request.json
     # should return a python list of data
     current_app.logger.info(search_words)
-    # search for articles that have content that contains all search words
     # return those articles somehow?
     conditions = " AND ".join([f'content LIKE "%{keyword}%"' for keyword in search_words])
-    get_articles_query = f'SELECT content, publication_date, article_link AS url, country_written_from FROM article WHERE {conditions} LIMIT 10'
+    # Get atricles, publication dates, URLs, and country_names for articles that match all serach terms
+    get_articles_query = f'''
+    SELECT content, publication_date, article_link AS url, country_name 
+    FROM article 
+    JOIN country ON UPPER(country.country_code) = UPPER(article.country_written_from) 
+    WHERE {conditions} LIMIT 10'''
+
     current_app.logger.info(f'get_article_query: {get_articles_query}')
     cursor = db.get_db().cursor()
     cursor.execute(get_articles_query)
 
-    results = cursor.fetchall()
-    current_app.logger.info(f'results of query: {results}')
+    row_headers = [x[0] for x in cursor.description]
+    current_app.logger.info(f'row_headers: {row_headers}')
+    searched_articles = cursor.fetchall()
 
+    current_app.logger.info(f'json_data: {searched_articles}')
+    the_response = make_response(jsonify(searched_articles))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+    # row_headers = [x[0] for x in cursor.description]
+    # json_data = []
+    # theData = cursor.fetchall() 
+    # for row in theData:
+        # current_app.logger.info(f'current row: {row}')
+        # json_data.append(dict(zip(row_headers, row))) 
+    # current_app.logger.info(f'json_data: {json_data}')
+    # the_response = make_response(jsonify(json_data))
+    # the_response.status_code = 200
+    # return the_response
+    # results = cursor.fetchall()
+    # current_app.logger.info(f'results of query: {results}')
+
+    # row_headers = [x[0] for x in cursor.description]
+    # json_data = []
+    # for row in results:
+        # json_data.append(dict(zip(row_headers, row))) 
+    # response = make_response(jsonify(json_data))
+    # current_app.logger.info(f'response: {response}')
+    # response.status_code = 200
+    # return response
