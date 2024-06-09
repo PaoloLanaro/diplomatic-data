@@ -18,8 +18,8 @@ def clean(news_data):
         
     
     Returns:
-        X_raw (string): can be either 1-d or 2-d array containing information regarding the training X values
-        y_raw (string): a 1-d array whcich includes all corresponding response values to X
+        X (array): can be either 1-d or 2-d array containing information regarding the training X values
+        y (array): a 1-d array whcich includes all corresponding response values to X
     """
 
     # dropping unnseccassary columns

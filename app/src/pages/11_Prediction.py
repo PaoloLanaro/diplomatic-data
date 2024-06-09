@@ -43,5 +43,5 @@ with col2:
 month_as_num = months.index(month_name) + 1
 
 if st.button('Calculate Sentiment', type='primary', use_container_width=True):
-    sentiment = requests.get(f'http://api:4000/models/prediction1/{text}/{country}/{month_as_num}/{hour}')
+    sentiment = requests.get(f'http://api:4000/models/prediction1/{text}/{country}')
     st.write('The information of the article you provided indicates that it has a sentiment score of {sentiment}.')

@@ -22,14 +22,6 @@ def test_model_one(text, country_origin, country_query):
     json_data = []
     theData = cursor.fetchall()
 
-# rows = cursor.fetchall()
-
-# # Get column names from cursor.description
-# column_names = [desc[0] for desc in cursor.description]
-
-# # Create a DataFrame
-# df = pd.DataFrame(rows, columns=column_names)
-
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
     the_response = make_response(jsonify(json_data))
@@ -57,24 +49,24 @@ def test_model_two(possibleVar):
 @models.route('/train_prediction1', methods=['GET']) # trains lin reg
 def train_prediction1():
     current_app.logger.info('model_routes.py: GET /train_prediction1')
+    cursor = db.get_db().cursor()
 
     query = 'SELECT * FROM article'
-    cursor = db.get_db().cursor()
     cursor.execute(query)
     current_app.logger.info(f'executed query {query} succsefully')
     
     query_return = cursor.fetchall()
     current_app.logger.info(f'query_return type: {type(query_return)}')
-    # rows = cursor.fetchall()
-    # column_names = [desc[0] for desc in cursor.description]
-    # df = pd.DataFrame(rows, columns=column_names)
+    current_app.logger.info(f'query_return keys: {query_return[1].keys()}')
 
-    # current_app.logger.info(f'called train function from backend, response {returnVal}')
-    # current_app.logger.info(f'data type of returnVal is {type(returnVal)}')
+    # ss_query = 'SELECT * FROM country'
+    # cursor.execute(ss_query)
+    # ss_return = cursor.fetchall()
+    # current_app.logger.info(f'grabbed the ss: {ss_return[1].keys()}')
 
-    # in = train()
-
-    response = make_response(jsonify(penis))
+    train_response = train(query_return)
+    
+    response = make_response(jsonify(train_response))
     response.status_code = 200
     response.mimetype = 'application/json'
     return response
