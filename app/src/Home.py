@@ -56,6 +56,7 @@ if st.button('Login as system administrator',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'sysadmin'
     st.session_state['first_name'] = 'Sysadmin'
+    st.session_state['user_id'] = 41
     st.switch_page('pages/30_SysAdmin_Home.py')
 
 

@@ -192,7 +192,8 @@ def add_user_likes():
     current_app.logger.info(f'response: {response}')
     user_id = response['user_id']
     article_id = response['article_id']
-    like_date = response['like_date']
+    like_date = response['date_liked']
+    like_date = like_date[0] + ' ' + like_date[1]
 
     add_likes_query = 'INSERT INTO likes (user_id, article_id, like_date) VALUES (%s, %s, %s)'
     cursor = db.get_db().cursor()
@@ -211,7 +212,10 @@ def add_user_saves():
     current_app.logger.info(f'response: {response}')
     user_id = response['user_id']
     article_id = response['article_id']
-    save_date = response['save_date']
+    save_date = response['date_saved']
+    save_date = save_date[0] + ' ' + save_date[1]
+
+    current_app.logger.info(f'save_date: {save_date}')
 
     add_likes_query = 'INSERT INTO saves (user_id, article_id, save_date) VALUES (%s, %s, %s)'
     cursor = db.get_db().cursor()
