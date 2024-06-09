@@ -16,7 +16,6 @@ st.title("Profile Information")
 st.divider()
 
 st.write(f'### First Name: {st.session_state["first_name"]}')
-st.write(f'### Last Name: {st.session_state["last_name"]}')
 st.write(f'### Job Description: {st.session_state["role"]}')
 
 st.divider()
