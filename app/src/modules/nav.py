@@ -114,4 +114,6 @@ def SideBarLinks(show_home=False):
 
             if 'article_idx' in st.session_state:
                 del st.session_state['article_idx'] 
+            if 'articles' in st.session_state:
+                del st.session_state['articles']
             st.switch_page('Home.py')

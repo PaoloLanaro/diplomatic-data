@@ -148,11 +148,7 @@ DROP TABLE IF EXISTS weight_vector;
 CREATE TABLE IF NOT EXISTS weight_vector
 (
     sequence_number INT PRIMARY KEY AUTO_INCREMENT,
-    intercept       FLOAT,
-    word_count      FLOAT,
-    hour_of_day     FLOAT,
-    month_ts        FLOAT,
-    safety_ts       FLOAT
+    beta_vals       VARCHAR(1000)
 );
 
 DROP TABLE IF EXISTS forest_vector;
