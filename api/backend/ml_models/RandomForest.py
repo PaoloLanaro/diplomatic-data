@@ -21,33 +21,30 @@ def clean(news_data):
     Args:
         news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
         
-    
     Returns:
         X (array): can be either 1-d or 2-d array containing information regarding the training X values
         y (array): a 1-d array whcich includes all corresponding response values to X
     """
 
-    # drop the columns im not using
-    news_data.drop(['Unnamed: 0', 'date', 'url', 'Safety Index'], axis=1, inplace=True)
-    news_data.dropna(axis=0, inplace=True)
+    data = {
+        'sentiment': [], 
+        'word_count': [], 
+        'country_written_from': []
+    }
 
-    # adding word count
-    news_data['word_count'] = news_data['text'].apply(lambda x: len(x.split()))
+    for item in range(len(news_data) - 1):
+        data['sentiment'].append(news_data[item]['sentiment'])
+        data['country_written_about'].append(news_data[item]['country_written_about'])
+        data['word_count'].append(len(news_data[item]['content'].split()))
 
-    # drop the columns im not using
-    news_data.drop(['text'], axis=1, inplace=True)
-    news_data.dropna(axis=0, inplace=True)
+    df = pd.DataFrame().from_dict(data)
 
     # one hot encoding
-    news_data = pd.get_dummies(news_data, columns=['queried_country'], drop_first=True)
+    news_data = pd.get_dummies(news_data, columns=['country_written_about'], drop_first=True)
 
-    # X and y
-    X = news_data.drop(columns=['source_country']) 
-    y = news_data['source_country']
+    return df
 
-    return X, y
-
-def train(news_data):
+def train_forest(news_data):
     """
     Description: Training the model agh 
 
@@ -58,6 +55,11 @@ def train(news_data):
     Returns:
         source_country (string): the country that the model believes it came from
     """
+
+    df = clean(news_data)
+
+    y = df['country_written_about'].values
+    X = df.drop(columns=['country_written_about'])
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -74,7 +76,7 @@ def train(news_data):
     return classifier 
 
 
-def predict_rf(text, queried):
+def predict_forest(text, queried):
     """
     Description: Using the sentiment score, word count, and queried country, predicting the source country using 
 
