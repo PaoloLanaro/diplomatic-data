@@ -61,7 +61,6 @@ def create_app():
     app.register_blueprint(activity, url_prefix="/a")
     app.register_blueprint(models, url_prefix="/models")
     app.register_blueprint(article, url_prefix='/article')
-    app.register_blueprint(country, url_prefix='/country')
     app.register_blueprint(utils, url_prefix='/utils')
     
     # Don't forget to return the app! actually allows the api to function :P

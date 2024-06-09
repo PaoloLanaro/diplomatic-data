@@ -29,15 +29,15 @@ def PredictionNav():
 def ArticleViewNav():
     st.sidebar.page_link("pages/12_Article_View.py", label="View an article")
 
-def ApiTestNav():
-    st.sidebar.page_link("pages/99_API_Test.py", label="Test the API", icon='🛜')
-
 #### ------------------------ travellers page nav ---------------------------
 def TravelerHomeNav():
     st.sidebar.page_link("pages/20_Traveler_Home.py", label="Monika's Home", icon='🏄‍♀️')
 
 def UserPreferencesNav():
     st.sidebar.page_link("pages/21_User_Preferences.py", label="User Preferences") 
+
+def ArticleSearchNav():
+    st.sidebar.page_link("pages/22_Traveler_Search.py", label="Search for Articles")
 
 #### ------------------------ sysadmin page nav ------------------------------
 def SystemAdminHomeNav():
@@ -71,21 +71,22 @@ def SideBarLinks(show_home=False):
     if st.session_state["authenticated"]:
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
-        if st.session_state['role'] == 'foreign_policy_advisor':
+        if st.session_state['role'] == 'Foreign Policy Advisor':
             ForeignPolicyAdvHomeNav()
             ForeignPolicyProfileNav()
             ForeignPolicyArticleNav()
 
         # If the user role is usaid worker, show the Api Testing page
-        if st.session_state['role'] == 'pr_specialist':
+        if st.session_state['role'] == 'PR Specialist':
             PRHomeNav()
             PredictionNav()
             ArticleViewNav()
         
         # If the user is an administrator, give them access to the administrator pages
-        if st.session_state['role'] == 'traveler':
+        if st.session_state['role'] == 'Traveler':
             TravelerHomeNav()
             UserPreferencesNav()
+            ArticleSearchNav()
 
         if st.session_state['role'] == 'sysadmin':
             SystemAdminHomeNav()
