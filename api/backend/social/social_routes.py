@@ -4,6 +4,55 @@ from backend.db_connection import db
 
 social = Blueprint('social', __name__)
 
+# to retrieve from the recently viewed tables
+@social.route("/recently_viewed", methods=["GET"])
+def get_trending():
+    current_app.logger.info('GET /recently_viewed route')
+    cursor = db.get_db().cursor()
+
+    query = '''
+        SELECT a.article_link FROM article a JOIN
+        views v ON (a.article_id = v.article_id)
+        WHERE v.user_id = anton_id
+        ORDER BY v.view_date
+        LIMIT 3;
+    '''
+
+
+
+
+# to retrieve from the likes tables
+# @trending.route('/trending_data', methods=['GET'])
+# def find_most_trendy():
+#     current_app.logger.info('GET /trending_data route')
+#     cursor = db.get_db().cursor()
+
+#     query = '''
+#         SELECT *
+#         FROM article a 
+#         JOIN trending_articles t ON a.article_id = t.article_id 
+#         ORDER BY t.views_last_24_hours DESC
+#         LIMIT 1;
+#     '''
+    
+#     # object we are using to communicate with the database -> temporary connection to db 
+#     cursor.execute(query) 
+
+#     # get the result from the cursor executed query
+#     result = cursor.fetchone()
+
+#     # get the text from the article
+#     text = result['content']
+#     sentiment = result['sentiment']
+#     views_last_24_hours = result['views_last_24_hours']
+#     current_app.logger.info(f'text={text}')
+
+#     # to convert the article content to a JSON response and return it to the client
+#     return jsonify({'content': text, 'sentiment': sentiment, 'views_last_24_hours': views_last_24_hours})
+
+
+# to retireve fromm the shares tables
+
 # likes routes
 @social.route("/likes", methods=["POST"])
 def add_likes():

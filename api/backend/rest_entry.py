@@ -12,6 +12,7 @@ from backend.social.social_routes import social
 from backend.activity.activity_routes import activity
 from backend.models.model_routes import models
 from backend.article_data.article_data import article
+from backend.article_data.trending_data import trending
 import os
 from dotenv import load_dotenv
 
@@ -62,6 +63,7 @@ def create_app():
     app.register_blueprint(activity, url_prefix="/a")
     app.register_blueprint(models, url_prefix="/models")
     app.register_blueprint(article, url_prefix='/article')
+    app.register_blueprint(trending, url_prefix='/trending')
 
     return app
 
