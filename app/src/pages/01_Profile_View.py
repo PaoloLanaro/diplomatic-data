@@ -68,7 +68,6 @@ try:
     response = requests.get("http://api:4000/trending/trending_data")
     if response.status_code == 200:
         data = response.json()
-<<<<<<< HEAD
         st.markdown('## Check out the most trendy article from this week!')
         st.divider()
 
@@ -82,15 +81,7 @@ try:
         
         st.markdown('## Read more:')
         st.write(data['content'])
-=======
-        st.write("## Check out the most trendy article from this week!")
-        st.write("### Numbers of view last 24 hours")
-        st.write(data["views_last_24_hours"])
-        st.write("### Sentiment")
-        st.write(data["sentiment"])
-        st.write("### Content:")
-        st.write(data["content"])
->>>>>>> b86c28f46a7d10645be8199051ecf193420f44d0
+
     else:
         st.write("Could not find any trending articles :(")
 except Exception as e:

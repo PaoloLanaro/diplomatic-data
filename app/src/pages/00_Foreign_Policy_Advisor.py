@@ -20,3 +20,6 @@ if st.button("Add an article to our database!", type="primary", use_container_wi
 if st.button("View Articles based on your preferences!", type="primary", use_container_width=True):
     st.switch_page("pages/03_Foreign_Policy_Article_View.py")
 
+if st.button("Check out our random forest ML model!", type="primary", use_container_width=True):
+    st.switch_page("pages/04_Random_Forest.py")
+

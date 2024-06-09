@@ -34,9 +34,9 @@ def test_model_one(text, country_origin):
     the_response.mimetype = 'application/json'
     return the_response
 
-@models.route('/prediction2/<possibleVar>', methods=['GET'])
-def test_model_two(possibleVar):
-    current_app.logger.info('model_routes.py: GET /prediction2/<possibleVar>')
+@models.route('/prediction2/<text>/<queried_country>', methods=['GET'])
+def test_model_two(text, queried_country):
+    current_app.logger.info('model_routes.py: GET /prediction2/<text>/<queried_country>')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1;
     query = 'SELECT * from users;'

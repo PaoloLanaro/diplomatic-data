@@ -22,6 +22,9 @@ def ForeignPolicyArticleNav():
 def ForeignPolicyArticleViewNav():
     st.sidebar.page_link("pages/03_Foreign_Policy_Article_View.py", label="View an Article")
 
+def RandomForest():
+    st.sidebar.page_link("pages/04_Random_Forest.py", label="Random Forest ML")
+
 ## ------------------------ pr_specialist page nav ------------------------
 def PRHomeNav():
     st.sidebar.page_link("pages/10_PR_Specialist_Home.py", label="Katerina's Home", icon='👩‍💼')
