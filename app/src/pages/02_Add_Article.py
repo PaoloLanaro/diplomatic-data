@@ -71,7 +71,7 @@ if st.button("Add the article to Diplomatic Data Database!!", use_container_widt
     try:
         response = requests.post("http://api:4000/article/article_data", json=data)
         response.raise_for_status()  # Raise an HTTPError if the HTTP request returned an unsuccessful status code
-        st.write("You have submitted your article!")
+        st.success("You have submitted your article!")
         logger.info("Article submitted successfully.")
     except requests.exceptions.RequestException as e:
         logger.error(f"Error submitting article: {e}")

@@ -7,6 +7,13 @@ SideBarLinks()
 
 st.title("Country Sentiment Prediction")
 
+st.divider()
+
+st.write("""
+        NIA INPUT HERE
+         """)
+
+st.write('')
 # --------------- get countries w/o csv --------------------
 # you will have to change anywhere on this page that has something like df["Country"].
 # Don't forget to remove the import and line that does this
