@@ -6,6 +6,7 @@ import pandas as pd
 import random
 import os
 
+
 SideBarLinks(True)
 
 st.write("# About Diplomatic Data")
