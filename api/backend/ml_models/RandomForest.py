@@ -31,12 +31,13 @@ def clean(news_data):
         'content': [], 
         'sentiment': [],
         'country_written_about': [], 
+        'country_written_from': [], 
     }
 
     for item in range(len(news_data) - 1):
         data['content'].append(news_data[item]['content'])
-        data['sentiment'].append(news_data[item]['sentiment'])
         data['country_written_about'].append(news_data[item]['country_written_about'])
+        data['sentiment'].append(news_data[item]['sentiment'])
         data['country_written_from'].append(news_data[item]['country_written_from'])
 
     df = pd.DataFrame().from_dict(data)
@@ -107,6 +108,7 @@ def predict_rf(text, queried_country, news_data):
     """
 
     X_train, y_train = train_rf(news_data)
+    current_app.logger.info(f'checking output of train_rf {X_train} and {y_train}')
 
     # implement the random forest regressor
     rf = RandomForestClassifier(n_estimators=10, max_depth=3, random_state=42)
@@ -154,4 +156,4 @@ def predict_rf(text, queried_country, news_data):
     # calling the predictor
     prediction = classifier.predict(X)
 
-    return type(prediction)
+    return prediction

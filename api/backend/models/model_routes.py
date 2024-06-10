@@ -49,7 +49,7 @@ def test_model_two(text, queried_country):
     train_return = predict_rf(text, queried_country, x_data)
     current_app.logger.info(f'x data {train_return}')
 
-    the_response = make_response(jsonify(train_return))
+    the_response = make_response(jsonify(list(train_return)))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
