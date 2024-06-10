@@ -4,7 +4,6 @@ from modules.nav import SideBarLinks
 import requests
 import pandas as pd
 import random
-from dotenv import load_dotenv
 import os
 
 SideBarLinks(True)
