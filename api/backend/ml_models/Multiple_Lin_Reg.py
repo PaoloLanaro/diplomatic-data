@@ -12,7 +12,7 @@ def clean(news_data):
         news_data(list): list of json such that each item represents an article
 
     Returns:
-        dataframe(pd.DataFrame): containing the above info in readily accessible format
+        df(pd.DataFrame): containing the above info in readily accessible format to perform ml mdoel
     """
 
     # content, country_written_from, sentiment, country_written_about, safety_index
@@ -24,6 +24,7 @@ def clean(news_data):
         'safety_index': []
     }
 
+    # appending json information to dictionary
     for item in range(len(news_data) - 1):
         data['content'].append(news_data[item]['content'])
         data['country_written_from'].append(news_data[item]['country_written_from'])
@@ -33,7 +34,8 @@ def clean(news_data):
 
     df = pd.DataFrame().from_dict(data)
 
-    df['word_count'] = df['content'].apply(lambda x: len(x.split())) # adding word count
+    # adding word count
+    df['word_count'] = df['content'].apply(lambda x: len(x.split()))
 
     return df
 
@@ -49,11 +51,13 @@ def clean_ss(country, ss_data):
         safety_score (float): safety score of user's indicated country
     """
 
+    
     data = {
         'country_name': [], 
         'safety_index': []
     }
 
+    # adding the safety index for the user inputed country 
     for item in range(len(ss_data) - 1):
         data['country_name'].append(ss_data[item]['country_name'])
         data['safety_index'].append(ss_data[item]['safety_index'])
@@ -62,14 +66,15 @@ def clean_ss(country, ss_data):
 
     country_row = df[df['country_name'] == country]
 
-    return country_row['safety_index'].values[0]
+    safety_score = country_row['safety_index'].values[0]
+
+    return safety_score
 
 def train(data):
-    """takes in 2 raw training arrays and gives the vector containing the coefficients for the line of best fit
+    """ trains the multiple linear regression model to find prediction
     
     Args:
         data (json): return of the api request
-        ss_data(json): return of the ss request
     
     Returns:
         m (array): coefficents for the line of best fit
@@ -79,31 +84,35 @@ def train(data):
 
     current_app.logger.info(f"checking df cols: {df.columns}")
 
+    # extracting the categorical data not needed to standardize
     not_list = ['content', 'country_written_from', 'country_written_about']
     col_num_list = [col for col in df.columns if col not in not_list]
 
+    # standardizing
     for feat in col_num_list:
         df[feat] = ((df[feat] - df[feat].mean()) / df[feat].std()).round(3)
     
+    # one hot encoding
     df = pd.get_dummies(df, columns=['country_written_from'], drop_first=True)
 
+    # casting booleans as 0 or 1
     for col in df.select_dtypes(include='bool').columns:
         df[col] = df[col].astype(float)
 
+    # isolating y values
     y = df['sentiment'].values
 
+    # isolating x values
     df = df.drop(columns=['content', 'sentiment', 'country_written_about'])
-
     current_app.logger.info(f"checking df cols: {df.columns}")
-
     X_prep = (df).values
 
+    # implementing regression
     X = add_bias_column(X_prep)
-
     XtXinv = np.linalg.inv(np.matmul(X.T, X))
     m = np.matmul(XtXinv, np.matmul(X.T, y))
 
-    return m # needs to be stored and then queried from the function below
+    return m 
 
 # predict
 def predict(text, country, country_about, ss_raw, m_raw):
@@ -114,23 +123,29 @@ def predict(text, country, country_about, ss_raw, m_raw):
     Args:
         text(str): corpus for analysis of both library version of sentiment and for finding the word count as feature of model
         country (str): intended country of safety score for use in sentiment prediction, to be parsed for a value
-        m_pre_parse (str): weight vectors of the linear regression
+        country_about (str): country where safety score is calculated from
+        m_raw (str): weight vectors of the linear regression
+        ss_raw (str): safety score depending on user inputed country_about
 
     Returns:
-        dot prod (float): calculation of the provided x values with the m values
+        dot_prod (float): calculation of the provided x values with the m values
         sentiment(float): of a hypothetical article using textblob library
     """
 
-    # actual sentiment
+    # actual sentiment of text given by user
     sentiment = TextBlob(text).sentiment.polarity
 
     m_raw_array = m_raw[0]['beta_vals']
 
     m = np.array(list(map(float, m_raw_array[1:-1].split(',')))) 
 
+    # extracting users X values
     X = update_country_value(country, text, clean_ss(country_about, ss_raw))
 
-    return np.dot(X, m), sentiment
+    # finding prediciton
+    dot_prod = np.dot(X, m)
+
+    return dot_prod, sentiment
 
 # adding bias column
 def add_bias_column(X):
@@ -161,8 +176,17 @@ def add_bias_column(X):
 # getting a proper X array to multiply by
 def update_country_value(country, text, safety_score):
     """
-    Determines the X values that need to be inside multiplies. 
+    manual one hot encoding for users input
+
+    Args:
+        country (str): source country user inputed
+        text (str): database data
+        safety_score (str): of queried country
+    
+    Returns:
+        array (array): all of the X values
     """
+
     sc_col = ['safety_score', 'word_count','source_country_GB', 'source_country_au', 'source_country_be',
        'source_country_bh', 'source_country_bm', 'source_country_ca',
        'source_country_cn', 'source_country_de', 'source_country_eg',
@@ -178,18 +202,19 @@ def update_country_value(country, text, safety_score):
        'source_country_tv', 'source_country_us', 'source_country_uy',
        'source_country_uz']
     
-    array = np.zeros(41) # will always be of len 43 because the 'm' array is always 43 features
-    array = np.insert(array, 0, safety_score) # NEED SAFETY SCORE FROM WHEREVER
+    # creating the initial array
+    array = np.zeros(41) # will always be of len 41 because the 'm' array is always 43 features (then we add 2)
+    array = np.insert(array, 0, safety_score) 
     array = np.insert(array, 1, len(text.split())) 
 
     # Create the full column name for the country
     country_column = f'source_country_{country}'
-    # Check if the column exists in sc_col
+    
     if country_column in sc_col:
-        # Get the index of the country column
+        
         index = sc_col.index(country_column)
-        # Update the corresponding value in the array from 0 to 1
         array[index] = 1
     else:
         print(f"Country column '{country_column}' does not exist in the columns list.")
+
     return array
