@@ -12,10 +12,6 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-df = pd.DataFrame(pd.read_csv("./assets/safetycodes.csv"))
-
-sorted_country_names = df["Country"].sort_values().tolist()
-
 if 'sorted_country_names_1' not in st.session_state:
     shuffled_country_names_1 = sorted_country_names[:]
     random.shuffle(shuffled_country_names_1)
@@ -39,7 +35,7 @@ country_written_from = st.selectbox("What country are you writing from?", st.ses
 url = st.text_input("What is the url of your article?")
 
 
-if st.button("Add the article to World News Database!!"): 
+if st.button("Add the article to Diplomatic Data Database!!"): 
     data = {
             'YYYY-MM-DD': str(publication_date), 
             'HH:MM:SS': str(publication_time), 

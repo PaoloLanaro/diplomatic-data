@@ -14,7 +14,8 @@ def get_recently_viewed(user_id):
         SELECT * FROM article a JOIN
         views v ON (a.article_id = v.article_id)
         WHERE v.user_id = %s
-        ORDER BY v.view_date;
+        ORDER BY v.view_date DESC
+        LIMIT 5;
     '''
 
     # current_app.logger.info()
@@ -40,7 +41,7 @@ def get_liked_articles(user_id):
         SELECT * FROM article a JOIN
         likes l ON (a.article_id = l.article_id)
         WHERE l.user_id = %s
-        ORDER BY l.like_date;
+        ORDER BY l.like_date DESC;
     '''
 
     cursor.execute(query, user_id)
@@ -64,7 +65,7 @@ def get_saved_articles(user_id):
         SELECT * FROM article a JOIN
         saves s ON (a.article_id = s.article_id)
         WHERE s.user_id = %s
-        ORDER BY s.save_date;
+        ORDER BY s.save_date DESC;
     '''
     current_app.logger.info(f'type: {type(user_id)}')
 
@@ -81,10 +82,6 @@ def get_saved_articles(user_id):
         urls.append("You haven't saved any articles yet")
 
     return jsonify(urls)
-
-
-
-
 
 # likes routes
 @social.route("/likes", methods=["POST"])

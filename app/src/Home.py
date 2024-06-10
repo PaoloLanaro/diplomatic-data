@@ -10,7 +10,7 @@ st.set_page_config(layout = 'wide')
 st.session_state['authenticated'] = False # faking real passworded access
 SideBarLinks(show_home=True)
 
-st.title('World News')
+st.title('Diplomatic Data')
 
 st.write('\n\n')
 st.write('### Hello, which user would you like to login as?')

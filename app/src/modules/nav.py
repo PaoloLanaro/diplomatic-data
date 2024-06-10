@@ -61,7 +61,7 @@ def SideBarLinks(show_home=False):
     """    
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/diplo_logo.png", width = 250)
+    st.sidebar.image("assets/diplomatic_data_white_better.png", width = 250)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if 'authenticated' not in st.session_state:

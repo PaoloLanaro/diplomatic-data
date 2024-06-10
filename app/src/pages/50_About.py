@@ -9,11 +9,11 @@ import os
 
 SideBarLinks(True)
 
-st.write("# About World News")
+st.write("# About Diplomatic Data")
 
 st.markdown (
     """
-    The purpose of the World News Web App is to analyze global perceptions of countries by examining sentiment 
+    The purpose of the Diplomatic Data Web App is to analyze global perceptions of countries by examining sentiment 
     in news articles. By assessing the tone and sentiment of articles related to specific nations, our 
     goal is to identify and quantify media biases, thereby offering a deeper understanding of how these 
     biases shape international perceptions. The application employs sentiment analysis and linear regression 
