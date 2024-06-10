@@ -10,8 +10,11 @@ st.title("Country Sentiment Prediction")
 st.divider()
 
 st.write("""
-        NIA INPUT HERE
-         """)
+        For an article of your choice, enter the country it was written in and the country it was written about, 
+        along with the body of the article to have the sentiment score of the text determined. For writers interested in 
+        understanding the general global perception of an audience who may be reading their work, this feature is useful in
+        augmenting and tailoring arguments to be more persuasive than an inital guess may indicate. 
+        """)
 
 st.write('')
 # --------------- get countries w/o csv --------------------
@@ -64,6 +67,7 @@ if st.button("Calculate Sentiment", type="primary", use_container_width=True):
     sentiment_guess = round(sentiment['sentiment_guess'], 5)
     sentiment_actual = sentiment['sentiment_actual']
     st.write(
-        f"The information of the article you provided indicates that it has a sentiment score {sentiment_guess} of with an actual sentiment of {sentiment_actual}."
-    )
+        f"""The information of the article you provided has a predicted sentiment score of {sentiment_guess} 
+        which can be compared to a calculation of the sentiment by the TextBlob library that has a score of {sentiment_actual}.
+        """)
 
