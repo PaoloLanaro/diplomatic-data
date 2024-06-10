@@ -22,4 +22,3 @@ if st.button("View Articles based on your preferences!", type="primary", use_con
 
 if st.button("Check out our random forest ML model!", type="primary", use_container_width=True):
     st.switch_page("pages/04_Random_Forest.py")
-

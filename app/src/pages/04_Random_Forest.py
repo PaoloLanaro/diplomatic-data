@@ -32,7 +32,7 @@ with col2:
 
 if st.button('Predict what country this has been written from', type='primary', use_container_width=True):
     predicted_country = requests.get(f'http://api:4000/models/prediction2/{text}/{country}')
-    st.write(f'The predicted country is {predicted_country.json()}!')
+    st.write(f'The predicted country is {predicted_country}!')
     st.write("Is this correct? If not, we may need to train this thing better....")
 
 if st.button("Return to your personalized home", type="primary"):

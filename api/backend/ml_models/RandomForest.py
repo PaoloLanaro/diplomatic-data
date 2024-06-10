@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from backend.db_connection import db
+from flask import current_app
 import logging
 import os
 import sklearn
@@ -28,16 +29,15 @@ def clean(news_data):
 
     data = {
         'content': [], 
-        'country_written_from': [], 
         'sentiment': [],
-        'country_written_about': []
+        'country_written_about': [], 
     }
 
     for item in range(len(news_data) - 1):
         data['content'].append(news_data[item]['content'])
-        data['country_written_from'].append(news_data[item]['country_written_from'])
         data['sentiment'].append(news_data[item]['sentiment'])
         data['country_written_about'].append(news_data[item]['country_written_about'])
+        data['country_written_from'].append(news_data[item]['country_written_from'])
 
     df = pd.DataFrame().from_dict(data)
 
@@ -47,26 +47,10 @@ def clean(news_data):
     df.drop(['content'], axis=1, inplace=True)
     df.dropna(axis=0, inplace=True)
 
+    current_app.logger.info(f"here's the current dataframe for training {df.head()}")
+
     return df
 
-
-    # # drop the columns im not using
-    # df.drop(['Unnamed: 0', 'date', 'url', 'Safety Index'], axis=1, inplace=True)
-    # df.dropna(axis=0, inplace=True)
-
-
-    # # drop the columns im not using
-    # df.drop(['content'], axis=1, inplace=True)
-    # df.dropna(axis=0, inplace=True)
-
-    # # one hot encoding
-    # df = pd.get_dummies(news_data, columns=['country_written_about'], drop_first=True)
-
-    # # X and y
-    # X = news_data.drop(columns=['source_country']) 
-    # y = news_data['source_country']
-
-    # return X, y
 
 def extract_x_y(df):
     """cleans the data and extracts the X and y values that will be used for the model
@@ -74,25 +58,22 @@ def extract_x_y(df):
     Args:
         news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
         
-    
     Returns:
         X (array): can be either 1-d or 2-d array containing information regarding the training X values
         y (array): a 1-d array whcich includes all corresponding response values to X
     """
 
-
     # one hot encoding
     df = pd.get_dummies(df, columns=['country_written_about'], drop_first=True)
 
     # X and y
-    X = df.drop(columns=['source_country']) 
-    y = df['source_country']
-
+    X = df.drop(columns=['country_written_from']) 
+    y = df['country_written_from']
 
     return X, y
 
 
-def train(news_data):
+def train_rf(news_data):
     """
     Description: Training the model agh 
 
@@ -103,28 +84,17 @@ def train(news_data):
     Returns:
         source_country (string): the country that the model believes it came from
     """
-
     df = clean(news_data)
 
-    y = df['country_written_about'].values
-    X = df.drop(columns=['country_written_about'])
+    X, y = extract_x_y(df)
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # implement the random forest regressor
-    rf = RandomForestClassifier(n_estimators=10, max_depth=3, random_state=42)
-
-    # fit the model
-    rf.fit(X_train, y_train)
-
-    # fit the model
-    classifier = rf.fit(X_train, y_train)
-
-    return classifier 
+    return X_train, y_train
 
 
-def predict_rf(text, classifier):
+def predict_rf(text, queried_country, news_data):
     """
     Description: Using the sentiment score, word count, and queried country, predicting the source country 
 
@@ -136,6 +106,17 @@ def predict_rf(text, classifier):
         source_country (string): the country that the model believes it came from
     """
 
+    X_train, y_train = train_rf(news_data)
+
+    # implement the random forest regressor
+    rf = RandomForestClassifier(n_estimators=10, max_depth=3, random_state=42)
+
+    # fit the model
+    rf.fit(X_train, y_train)
+
+    # fit the model
+    classifier = rf.fit(X_train, y_train)
+
     # finding word count
     words = text.split()
     count = len(words)
@@ -144,13 +125,11 @@ def predict_rf(text, classifier):
     blob = TextBlob(text)
     sentiment = blob.sentiment.polarity
 
-    cursor = db.get_db().cursor()
-
     # somehow get the queried country. Idk 
-    # country = HERE
+    country = queried_country
 
     # the initial array for the classifier
-    initial_array = [sentiment, words, 0, 0, 0]
+    initial_array = [sentiment, count, 0, 0, 0]
 
     # making sure everything is good with the one hot encoding stuff, don't worry 
     def country_to_array(country):
@@ -165,12 +144,14 @@ def predict_rf(text, classifier):
 
     # calling the function for the one hot encoding
     country_to_array(country)
+    current_app.logger.info(f'initial array {initial_array}')
 
     # full array
     X = np.array([initial_array])
-
+    current_app.logger.info(f'getting the current X {X}')
+    current_app.logger.info(f'length of X {len(X)}')
 
     # calling the predictor
     prediction = classifier.predict(X)
 
-    return prediction
+    return type(prediction)

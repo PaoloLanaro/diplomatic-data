@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.ml_models.Multiple_Lin_Reg import predict, train
+from backend.ml_models.RandomForest import predict_rf, train_rf
 from backend.db_connection import db
 import pandas as pd
 
@@ -41,14 +42,14 @@ def test_model_two(text, queried_country):
     current_app.logger.info('model_routes.py: GET /prediction2/<text>/<queried_country>')
     cursor = db.get_db().cursor()
     # ORDER BY sequence_number DESC LIMIT 1;
-    query = 'SELECT * from users;'
+    query = 'SELECT content, country_written_about, sentiment, country_written_from FROM article;'
     cursor.execute(query)
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
+    x_data = cursor.fetchall()
+
+    train_return = predict_rf(text, queried_country, x_data)
+    current_app.logger.info(f'x data {train_return}')
+
+    the_response = make_response(jsonify(train_return))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
@@ -78,7 +79,11 @@ def train_prediction2():
     query = 'SELECT content, country_written_about, sentiment FROM article;'
     cursor.execute(query)
 
-    train_output = train(cursor.fetchall())
+    query_return = cursor.fetchall()
+    current_app.logger.info(f'return from the query {query_return}')
+
+    train_output = train_rf(query_return)
+    current_app.logger.info(f'grabbing the return of the trainer {train_output}')
     response = make_response(jsonify(train_output))
 
     current_app.logger.info(f'responses from the train function: {response}')

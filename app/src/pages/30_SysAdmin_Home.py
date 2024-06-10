@@ -31,10 +31,10 @@ if st.button('Train Model',
              use_container_width=True,
              key = 128):
     training = requests.get(f'http://api:4000/models/train_prediction2')
-    st.write(f'This is how we trained the random forst classifier. {training.json()}')
+    st.write(f'This is how we trained the random forest classifier. {training.json()}')
 
-if st.button('Test Predictions',
-             type = 'primary',
-             use_container_width=True,
-             key = 127):
-    st.switch_page('pages/33_Test_Model_Two.py')
+# if st.button('Test Predictions',
+#              type = 'primary',
+#              use_container_width=True,
+#              key = 127):
+#     st.switch_page('pages/33_Test_Model_Two.py')
