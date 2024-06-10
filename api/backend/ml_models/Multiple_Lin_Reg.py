@@ -85,7 +85,7 @@ def train(data):
     current_app.logger.info(f"checking df cols: {df.columns}")
 
     # extracting the categorical data not needed to standardize
-    not_list = ['content', 'country_written_from', 'country_written_about']
+    not_list = ['content', 'country_written_from', 'country_written_about', 'sentiment']
     col_num_list = [col for col in df.columns if col not in not_list]
 
     # standardizing
