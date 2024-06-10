@@ -1,7 +1,3 @@
-import logging
-
-logger = logging.getLogger()
-
 import streamlit as st
 from modules.home import Welcome
 from modules.nav import SideBarLinks

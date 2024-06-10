@@ -129,7 +129,7 @@ def get_articles_title_from_url(url):
     try:
         # Send a GET request to the URL
         current_app.logger.info(f'url: {url}')
-        response = requests.get(url)
+        response = requests.get(url, timeout=3)
         response.raise_for_status()  # Raise an error for bad status codes
 
         # Parse the HTML content using BeautifulSoup
