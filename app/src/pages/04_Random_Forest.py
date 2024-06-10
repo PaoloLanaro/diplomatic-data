@@ -14,7 +14,7 @@ st.title(f"Hello {st.session_state['first_name']}, Check out our ML model")
 st.divider()
 
 st.write("""This ML model is called a Random Forest Classifier. We ask that you provide the text of an article you 
-         are interestd in and the country your article is being writtenn about. Using your information, our model
+         are interested in and the country your article is being written about. Using your information, our model
          will do its best to predict the article's source country (the country it is being written from).""")
 
 
