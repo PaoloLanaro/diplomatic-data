@@ -20,7 +20,8 @@ From the `app` directory, one can find the main contents of the front end. The `
 
 Finally, the other main component of the project structure is the `database` folder which contains all of the information allowing for users to interact with articles and training data for the two machine learning models, amongst other features.
 
-`└───diplomatic-data
+```
+└───diplomatic-data
     ├───api
     │   └───backend
     │       ├───activity
@@ -39,7 +40,8 @@ Finally, the other main component of the project structure is the `database` fol
     │       ├───modules
     │       └───pages
     ├───database
-    └───fake_data`
+    └───fake_data
+```
 
 ## Improvements To Make & Current Limitations
 For future iterations of this app, there can be improvements upon the validity and accuracy of the ML models in terms of both the capacity of training data and general span.
