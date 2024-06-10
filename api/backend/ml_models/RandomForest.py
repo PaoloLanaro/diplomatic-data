@@ -34,6 +34,7 @@ def clean(news_data):
         'country_written_from': [], 
     }
 
+    # appending json information to dictionary
     for item in range(len(news_data) - 1):
         data['content'].append(news_data[item]['content'])
         data['country_written_about'].append(news_data[item]['country_written_about'])
@@ -42,9 +43,10 @@ def clean(news_data):
 
     df = pd.DataFrame().from_dict(data)
 
+    # adding word_count
     df['word_count'] = df['content'].apply(lambda x: len(x.split())) # adding word count
 
-    # drop the columns im not using
+    # text no longer needed
     df.drop(['content'], axis=1, inplace=True)
     df.dropna(axis=0, inplace=True)
 
@@ -54,10 +56,10 @@ def clean(news_data):
 
 
 def extract_x_y(df):
-    """cleans the data and extracts the X and y values that will be used for the model
+    """cleans the data and extracts the X and y values that will be used for training the model
     
     Args:
-        news_data (df): can be either 1-d or 2-d array containing information regarding the training X values
+        df (df): can be either 1-d or 2-d array containing information regarding the training X values
         
     Returns:
         X (array): can be either 1-d or 2-d array containing information regarding the training X values
@@ -76,17 +78,20 @@ def extract_x_y(df):
 
 def train_rf(news_data):
     """
-    Description: Training the model agh 
+    Description: Training the model 
 
     Args: 
-        text(string): text used to find the sentiment score and word count
-        queried(string): the country of interest that the article is related to
+        news_data(string): data in database used to train the model
 
     Returns:
-        source_country (string): the country that the model believes it came from
+        X_train (array): trained X values
+        y_train (array): trained y values
     """
+    
+    # cleaning
     df = clean(news_data)
 
+    # extracting X and y
     X, y = extract_x_y(df)
 
     # Split data into training and testing sets
@@ -101,10 +106,11 @@ def predict_rf(text, queried_country, news_data):
 
     Args: 
         text(string): text used to find the sentiment score and word count
-        classifier(idk): the rf classifier that was made in the training function
+        queried_country(string): country used to make prediction
+        news_data(string): data in database used to train the model
 
     Returns:
-        source_country (string): the country that the model believes it came from
+        prediction (string): the country that the model believes the user inputed text came from
     """
 
     X_train, y_train = train_rf(news_data)
@@ -127,9 +133,9 @@ def predict_rf(text, queried_country, news_data):
     blob = TextBlob(text)
     sentiment = blob.sentiment.polarity
 
-    # somehow get the queried country. Idk 
     country = queried_country
 
+    # manual one hot encoding
     # the initial array for the classifier
     initial_array = [sentiment, count, 0, 0, 0]
 
