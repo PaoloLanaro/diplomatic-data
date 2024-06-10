@@ -104,15 +104,15 @@ CREATE TABLE IF NOT EXISTS filter
     user_id               INT,
     start_date            DATE,
     end_date              DATE,
-    country_written_about VARCHAR(50),
-    country_written_from  VARCHAR(50),
+    country_traveling_to VARCHAR(50),
+    country_traveling_from  VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES users (user_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (country_written_about) REFERENCES country (country_name)
+    FOREIGN KEY (country_traveling_to) REFERENCES country (country_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (country_written_from) REFERENCES country (country_name)
+    FOREIGN KEY (country_traveling_from) REFERENCES country (country_name)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );

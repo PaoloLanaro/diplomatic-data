@@ -31,7 +31,7 @@ def test_model_one(text, country_origin, country_about):
     current_app.logger.info(f'printing out type {type(sentiment)}')
     current_app.logger.info(f'printing out sentiment {sentiment}')
 
-    the_response = make_response(jsonify({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]}))
+    the_response = make_response(jsonify(dict({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]})))
     current_app.logger.info(f'printing out the response in json {the_response}')
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
@@ -49,7 +49,7 @@ def test_model_two(text, queried_country):
     train_return = predict_rf(text, queried_country, x_data)
     current_app.logger.info(f'x data {train_return}')
 
-    the_response = make_response(jsonify(train_return))
+    the_response = make_response(jsonify(list(train_return)))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
@@ -76,15 +76,15 @@ def train_prediction2():
     current_app.logger.info('model_routes.py: GET /train_prediction1') 
 
     cursor = db.get_db().cursor()
-    query = 'SELECT content, country_written_about, sentiment FROM article;'
+    query = 'SELECT content, country_written_about, sentiment, country_written_from FROM article;'
     cursor.execute(query)
 
     query_return = cursor.fetchall()
     current_app.logger.info(f'return from the query {query_return}')
 
-    train_output = train_rf(query_return)
-    current_app.logger.info(f'grabbing the return of the trainer {train_output}')
-    response = make_response(jsonify(train_output))
+    train_return = train_rf(query_return)
+
+    response = make_response(jsonify(dict({'x_train': train_return[0].tolist(), 'y_train': train_return[1].tolist()})))
 
     current_app.logger.info(f'responses from the train function: {response}')
 
