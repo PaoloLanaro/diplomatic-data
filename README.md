@@ -3,14 +3,14 @@
 
 by [Paolo Lanaro](https://github.com/PaoloLanaro), [Sydney Schulz](https://github.com/sydneygschulz), [Nia Quinn](https://github.com/niaquinn), and [Milo Margolis](https://github.com/MiloMargolis)
 
-## To Clone the Repo
-- For the .env: change the password and file from .evn_template to just .env
-- In terminal:
-    - docker build
-    - docker compose up -d
-    - localhost:~
-    - wait a couple seconds for the docker to compile...
-    - check out our web app! 
+## To build this project follow the steps below
+
+- `git clone https://github.com/PaoloLanaro/diplomatic-data.git`
+- rename the `.env.template` file in api\ to `.env` and change the placeholder in the file
+- Then run the following docker commands in the root directory for this project:
+    - `docker build`
+    - `docker compose up -d`
+- Finally, open up `localhost:8501` in your browser!
 
 ## About
 This project was created over the course of Northeastern University's Summer 2024 Dialouge of Civilizations to Leuven, Belgium focused on the intersection of software development and AI in the context of international policy and regulation. Targeted at understanding the relationships between various news sources and their influences on global sentiments, this app highlights how different users may be able to analyze countries of interests. They can predict sentiment scores of articles, track articles, and more! We invite you to explore and find how the Diplomatic Data team can help serve your purposes.
