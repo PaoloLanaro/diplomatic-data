@@ -27,7 +27,7 @@ country = input_container.selectbox(
     "What country was this article written about?",
     country_names,
     index=None,
-    placeholder="United States",
+    placeholder="Country Name",
 )
 
 text = input_container.text_area(
