@@ -14,8 +14,12 @@ st.title(f"Hello {st.session_state['first_name']}, Check out our ML model")
 st.divider()
 
 st.write("""This ML model is called a Random Forest Classifier. We ask that you provide the text of an article you 
-         are interestd in and the country your article is being writtenn about. Using your information, our model
-         will do its best to predict the article's source country (the country it is being written from).""")
+         are interested in, and the country your article is being writtenn about.""")
+st.write("""
+         Using your information, our model will do its best to predict the article's source country (the country
+         it is being written from).
+         """)
+         
 
 
 country_list = requests.get('http://api:4000/utils/countries/sorted_list')
@@ -35,5 +39,3 @@ if st.button('Predict what country this has been written from', type='primary', 
     st.write(f'The predicted country is {predicted_country}!')
     st.write("Is this correct? If not, we may need to train this thing better....")
 
-if st.button("Return to your personalized home", type="primary"):
-    st.switch_page("pages/00_Foreign_Policy_Advisor.py")

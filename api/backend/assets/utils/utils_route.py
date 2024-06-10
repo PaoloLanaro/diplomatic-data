@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.ml_models.Linear_Perceptron import predict, train
 from backend.db_connection import db
 
 utils = Blueprint('utils', __name__)
