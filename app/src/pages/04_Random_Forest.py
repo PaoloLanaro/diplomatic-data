@@ -36,15 +36,6 @@ text = input_container.text_area(
     placeholder="Add the body of your article here.",
 )
 
-if st.button(
-    "Predict what country this has been written from",
-    type="primary",
-    use_container_width=True,
-):
-    predicted_country = requests.get(
-        f"http://api:4000/models/prediction2/{text}/{country}"
-    )
-    st.write(
-        f"The predicted country this article is written from is the {predicted_country.json()}!"
-    )
-    st.write("Is this correct? If not, we may need to train this thing better....")
+if st.button('Predict what country this has been written from', type='primary', use_container_width=True):
+    predicted_country = requests.get(f'http://api:4000/models/prediction2/{text}/{country}')
+    st.write(f'The predicted country this article is written from is the {predicted_country.json()[0].upper()}!')

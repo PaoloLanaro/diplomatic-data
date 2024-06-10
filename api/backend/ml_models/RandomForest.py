@@ -133,7 +133,6 @@ def predict_rf(text, queried_country, news_data):
     """
 
     X_train, y_train = train_rf(news_data)
-    current_app.logger.info(f'checking output of train_rf {X_train} and {y_train}')
 
     # implement the random forest regressor
     rf = RandomForestClassifier(n_estimators=10, max_depth=3, random_state=42)
@@ -171,12 +170,10 @@ def predict_rf(text, queried_country, news_data):
 
     # calling the function for the one hot encoding
     country_to_array(country)
-    current_app.logger.info(f'initial array {initial_array}')
 
     # full array
     X = np.array([initial_array])
     current_app.logger.info(f'getting the current X {X}')
-    current_app.logger.info(f'length of X {len(X)}')
 
     # calling the predictor
     prediction = classifier.predict(X)

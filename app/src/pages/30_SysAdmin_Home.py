@@ -1,5 +1,6 @@
 import streamlit as st
 from modules.nav import SideBarLinks
+import numpy as np
 
 st.set_page_config(layout="wide")
 
