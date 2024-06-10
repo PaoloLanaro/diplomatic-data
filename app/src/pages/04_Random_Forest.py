@@ -14,12 +14,8 @@ st.title(f"Hello {st.session_state['first_name']}, Check out our ML model")
 st.divider()
 
 st.write("""This ML model is called a Random Forest Classifier. We ask that you provide the text of an article you 
-         are interested in, and the country your article is being writtenn about.""")
-st.write("""
-         Using your information, our model will do its best to predict the article's source country (the country
-         it is being written from).
-         """)
-         
+         are interested in and the country your article is being written about. Using your information, our model
+         will do its best to predict the article's source country (the country it is being written from).""")
 
 
 country_list = requests.get('http://api:4000/utils/countries/sorted_list')

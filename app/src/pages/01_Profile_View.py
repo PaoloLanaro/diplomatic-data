@@ -87,7 +87,7 @@ try:
     response = requests.get("http://api:4000/trending/trending_data")
     if response.status_code == 200:
         data = response.json()
-        st.markdown('## Check out the most trendy article from this week!')
+        st.markdown('## Check out the most trendy article from this month!')
         st.divider()
 
         col1, col2 = st.columns(2)
