@@ -1,12 +1,10 @@
 import logging
-
 import requests
-
-logger = logging.getLogger()
-import pandas as pd
-from datetime import datetime, timedelta, date
+from datetime import datetime
 import streamlit as st
 from modules.nav import SideBarLinks
+
+logger = logging.getLogger()
 
 st.set_page_config(layout="wide")
 

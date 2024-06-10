@@ -1,13 +1,10 @@
 import logging
-
-logger = logging.getLogger()
-import pandas as pd
-
 import requests
-
 import streamlit as st
 from modules.nav import SideBarLinks
 from datetime import datetime, timedelta, date
+
+logger = logging.getLogger()
 
 st.set_page_config(layout="wide")
 
@@ -64,6 +61,8 @@ country_traveling_from = st.selectbox("Country Traveling From", country_names)
 if st.button(
     "Save results", use_container_width=True, type="primary", key="save_article"
 ):
+    # the start_date and end_date might have "possible unbound" LSP errors, but the user can see this
+    # button unless they have selected both of those dates from the date selector
     data = {
         "user_id": user_id,
         "start_date": start_date,
@@ -75,4 +74,4 @@ if st.button(
     if response.status_code == 200:
         st.success("Responses saved!!!")
     else:
-        st.error("Uh oh, something went wrong")
+        st.error("Uh oh, something went wrong.")

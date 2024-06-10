@@ -43,7 +43,9 @@ publication_time = st.time_input("What time did you write this?")
 
 
 content = st.text_input(
-    "Add all of the body text (the content) here", "Breaking news..."
+    "Add all of the body text (the content) here",
+    "Breaking news...",
+    placeholder="Add all of the body text (the content) here",
 )
 country_written_about = st.selectbox(
     "What country are you writing about?", st.session_state.sorted_country_names_1
@@ -53,8 +55,9 @@ country_written_from = st.selectbox(
 )
 url = st.text_input("What is the url of your article?")
 
+st.write("")
 
-if st.button("Add the article to Diplomatic Data Database!!"):
+if st.button("Add the article to Diplomatic Data Database!!", use_container_width=True):
     data = {
         "YYYY-MM-DD": str(publication_date),
         "HH:MM:SS": str(publication_time),
