@@ -81,7 +81,6 @@ try:
         
         st.markdown('## Read more:')
         st.write(data['content'])
-
     else:
         st.write("Could not find any trending articles :(")
 except Exception as e:

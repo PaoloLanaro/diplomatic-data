@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS country
     country_id   INT PRIMARY KEY AUTO_INCREMENT,
     country_name VARCHAR(50) UNIQUE NOT NULL,
     safety_index FLOAT,
-    country_code VARCHAR(2) UNIQUE NOT NULL
+    country_code VARCHAR(2) UNIQUE  NOT NULL
 );
 
 
@@ -165,10 +165,10 @@ CREATE TABLE IF NOT EXISTS forest_vector
 DROP TABLE IF EXISTS city_coordinates;
 CREATE TABLE IF NOT EXISTS city_coordinates
 (
-  coordinate_id INT PRIMARY KEY AUTO_INCREMENT,
-  latitude FLOAT,
-  longitude FLOAT,
-  city VARCHAR(100),
-  country_name VARCHAR(50),
-  FOREIGN KEY (country_name) REFERENCES country (country_code)
+    coordinate_id INT PRIMARY KEY AUTO_INCREMENT,
+    latitude      FLOAT,
+    longitude     FLOAT,
+    city          VARCHAR(100),
+    country_name  VARCHAR(50),
+    FOREIGN KEY (country_name) REFERENCES country (country_code)
 )
