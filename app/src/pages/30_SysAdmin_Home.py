@@ -22,13 +22,12 @@ st.write("\n\n")
 st.write("## Model 2 Maintenance")
 
 if st.button(
-    "Train Random Forest CLassifier Model",
+    "Train Random Forest Classifier Model",
     type="primary",
     use_container_width=True,
     key=128,
 ):
     training = requests.get("http://api:4000/models/train_prediction2")
-    st.write(training.json())
     st.write(
         f"This is how we trained the random forest classifier. Here's how we trained the X values:\n{training.json()['x_train']} and here are the y values they were trained against:\n{training.json()['y_train']}."
     )
