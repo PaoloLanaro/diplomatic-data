@@ -109,11 +109,12 @@ def train_rf(news_data):
     df.drop(['content'], axis=1, inplace=True)
     df.dropna(axis=0, inplace=True)
 
-    current_app.logger.info(f"here's the current dataframe for training {df.head()}")
     X, y = extract_x_y(df)
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    current_app.logger.info(f"here's the current X_train types: {type(X_train)} and y_train: {type(y_train)}")
 
     return X_train, y_train
 
