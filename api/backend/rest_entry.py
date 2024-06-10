@@ -12,6 +12,7 @@ from backend.models.model_routes import models
 from backend.article_data.article_data import article
 from backend.assets.utils.utils_route import utils
 from backend.article_data.trending_data import trending
+from backend.activity.preference_routes import preference
 import os
 from dotenv import load_dotenv
 
@@ -64,6 +65,7 @@ def create_app():
     app.register_blueprint(article, url_prefix='/article')
     app.register_blueprint(utils, url_prefix='/utils')
     app.register_blueprint(trending, url_prefix='/trending')
+    app.register_blueprint(preference, url_prefix='/preference')
     
     # Don't forget to return the app! actually allows the api to function :P (XD - nia)
     return app
