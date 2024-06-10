@@ -35,5 +35,3 @@ if st.button('Predict what country this has been written from', type='primary', 
     st.write(f'The predicted country this article is written from is the {predicted_country.json()[0]}!')
     st.write("Is this correct? If not, we may need to train this thing better....")
 
-if st.button("Return to your personalized home", type="primary"):
-    st.switch_page("pages/00_Foreign_Policy_Advisor.py")

@@ -22,8 +22,8 @@ def ForeignPolicyArticleNav():
 def ForeignPolicyArticleViewNav():
     st.sidebar.page_link("pages/03_Foreign_Policy_Article_View.py", label="View an Article")
 
-def RandomForest():
-    st.sidebar.page_link("pages/04_Random_Forest.py", label="Random Forest ML")
+def ForeignPolicyRandomForestNav():
+    st.sidebar.page_link("pages/04_Random_Forest.py", label="Country from article prediction")
 
 ## ------------------------ pr_specialist page nav ------------------------
 def PRHomeNav():
@@ -75,13 +75,13 @@ def SideBarLinks(show_home=False):
 
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
-
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state['role'] == 'Foreign Policy Advisor':
             ForeignPolicyAdvHomeNav()
             ForeignPolicyProfileNav()
             ForeignPolicyArticleNav()
             ForeignPolicyArticleViewNav()
+            ForeignPolicyRandomForestNav()
 
         # If the user role is usaid worker, show the Api Testing page
         if st.session_state['role'] == 'PR Specialist':

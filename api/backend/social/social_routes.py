@@ -207,6 +207,7 @@ def add_user_likes():
 
 @social.route("/user_views", methods=["POST"])
 def add_user_views():
+    current_app.logger.info('+------------------+')
     current_app.logger.info("POST /user_views")
     response = request.json
     current_app.logger.info(f'response: {response}')

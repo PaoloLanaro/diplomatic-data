@@ -31,7 +31,7 @@ def test_model_one(text, country_origin, country_about):
     current_app.logger.info(f'printing out type {type(sentiment)}')
     current_app.logger.info(f'printing out sentiment {sentiment}')
 
-    the_response = make_response(jsonify({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]}))
+    the_response = make_response(jsonify(dict({'sentiment_guess': sentiment[0], 'sentiment_actual': sentiment[1]})))
     current_app.logger.info(f'printing out the response in json {the_response}')
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
@@ -84,7 +84,7 @@ def train_prediction2():
 
     train_return = train_rf(query_return)
 
-    response = make_response(jsonify({'x_train': train_return[0], 'y_train': train_return[1]}))
+    response = make_response(jsonify(dict({'x_train': train_return[0].tolist(), 'y_train': train_return[1].tolist()})))
 
     current_app.logger.info(f'responses from the train function: {response}')
 
