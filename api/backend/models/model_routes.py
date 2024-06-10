@@ -76,15 +76,15 @@ def train_prediction2():
     current_app.logger.info('model_routes.py: GET /train_prediction1') 
 
     cursor = db.get_db().cursor()
-    query = 'SELECT content, country_written_about, sentiment FROM article;'
+    query = 'SELECT content, country_written_about, sentiment, country_written_from FROM article;'
     cursor.execute(query)
 
     query_return = cursor.fetchall()
     current_app.logger.info(f'return from the query {query_return}')
 
-    train_output = train_rf(query_return)
-    current_app.logger.info(f'grabbing the return of the trainer {train_output}')
-    response = make_response(jsonify(train_output))
+    train_return = train_rf(query_return)
+
+    response = make_response(jsonify({'x_train': train_return[0], 'y_train': train_return[1]}))
 
     current_app.logger.info(f'responses from the train function: {response}')
 

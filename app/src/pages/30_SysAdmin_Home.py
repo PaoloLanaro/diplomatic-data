@@ -26,15 +26,10 @@ if st.button('Train Multiple Linear Regression Model',
 st.write('\n\n')
 st.write('## Model 2 Maintenance')
 
-if st.button('Train Model',
+if st.button('Train Random Forest CLassifier Model',
              type = 'primary',
              use_container_width=True,
              key = 128):
     training = requests.get(f'http://api:4000/models/train_prediction2')
-    st.write(f'This is how we trained the random forest classifier. {training.json()}')
-
-# if st.button('Test Predictions',
-#              type = 'primary',
-#              use_container_width=True,
-#              key = 127):
-#     st.switch_page('pages/33_Test_Model_Two.py')
+    st.write(training)
+    # st.write(f"This is how we trained the random forest classifier. Here's how we trained the X values: {training[0]} and here are the y values they were trained against: {training[1]}")

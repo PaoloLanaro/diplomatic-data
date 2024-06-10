@@ -71,7 +71,7 @@ def extract_x_y(df):
     X = df.drop(columns=['country_written_from']) 
     y = df['country_written_from']
 
-    return X, y
+    return X.values, y.values
 
 
 def train_rf(news_data):
@@ -85,8 +85,29 @@ def train_rf(news_data):
     Returns:
         source_country (string): the country that the model believes it came from
     """
-    df = clean(news_data)
 
+    data = {
+        'content': [], 
+        'sentiment': [],
+        'country_written_about': [], 
+        'country_written_from': []
+    }
+
+    for item in range(len(news_data) - 1):
+        data['content'].append(news_data[item]['content'])
+        data['country_written_about'].append(news_data[item]['country_written_about'])
+        data['sentiment'].append(news_data[item]['sentiment'])
+        data['country_written_from'].append(news_data[item]['country_written_from'])
+
+    df = pd.DataFrame().from_dict(data)
+
+    df['word_count'] = df['content'].apply(lambda x: len(x.split())) # adding word count
+
+    # drop the columns im not using
+    df.drop(['content'], axis=1, inplace=True)
+    df.dropna(axis=0, inplace=True)
+
+    current_app.logger.info(f"here's the current dataframe for training {df.head()}")
     X, y = extract_x_y(df)
 
     # Split data into training and testing sets
