@@ -54,7 +54,9 @@ if st.button("Calculate Sentiment", type="primary", use_container_width=True):
     sentiment = requests.get(
         f"http://api:4000/models/prediction1/{text}/{country_from}/{country_about}"
     ).json()
+    sentiment_guess = round(sentiment['sentiment_guess'], 5)
+    sentiment_actual = sentiment['sentiment_actual']
     st.write(
-        f"The information of the article you provided indicates that it has a sentiment score {sentiment['sentiment_guess']} of with an actual sentiment of {sentiment['sentiment_actual']}."
+        f"The information of the article you provided indicates that it has a sentiment score {sentiment_guess} of with an actual sentiment of {sentiment_actual}."
     )
 
